@@ -1,4 +1,8 @@
-﻿<!-- DATATABLE CSS-->
+﻿@{
+    ViewData["Title"] = "LOGISTIKBOLAGET || Paketlista-" + DateTime.Now.ToString("yyyy-MM-dd");
+}
+@{ bool isAssigned = true; }
+<!-- DATATABLE CSS-->
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
 <link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
@@ -22,8 +26,11 @@
                 exportOptions: {  modifier: { page: 'current' } },
             },
             {
-                extend: 'pdf',
-                text: 'Pdf'
+                //extend: 'pdf',
+                extend: 'pdfHtml5',
+                text: 'Pdf',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
             },
             ],
             "language": {
@@ -34,7 +41,7 @@
                 "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
             },
             "processing": true,
-
+            "order": [[0, "asc"],[4, 'asc']]
         })
 
     });
@@ -59,7 +66,7 @@
     // < clock functionality END
 </script>
 <div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="nav navbar-fixed-top">        
+    <div class="nav navbar-fixed-top">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -90,7 +97,7 @@
                                 <li><a href="#">One more separated link</a></li>
                             </ul>
                         </li>
-                    </ul>                    
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Link</a></li>
                         <li class="dropdown">
@@ -115,197 +122,288 @@
             </span>
             <div class="clearfix"></div>
         </div>
-        <div class="x_content">           
-                            <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <table style="width:100%" id="deliverytable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th><h4>Namn</h4></th>
-                                            <th><h4>Adress</h4></th>
-                                            <th><h4>Postadress</h4></th>
-                                            <th><h4>Antal</h4></th>
-                                            <th><h4>Leverantör</h4></th>
-                                            <th><h4>KollieId</h4></th>
-                                            <th><h4>Artikel</h4></th>
-                                            <th><h4>Tilldelad</h4></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>White Away</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select1">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Elgiganten</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select2">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Elsa Beskov</td>
-                                            <td>Segelvägen 19</td>
-                                            <td>394 21</td>
-                                            <td>Huddinge</td>
-                                            <td>White Away</td>
-                                            <td>0718482548729SE</td>
-                                            <td>Electrolux Kylskåp</td>
-                                            <td>
-                                                <select class="dropdown" id="Select3">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jan Mårtensson</td>
-                                            <td>Abborrevägen 5</td>
-                                            <td>382 96</td>
-                                            <td>Nybro</td>
-                                            <td>Vinoteket</td>
-                                            <td>078295148529SE</td>
-                                            <td>Drycker</td>
-                                            <td>
-                                                <select class="dropdown" id="Select1">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Elgiganten</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select2">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Vinoteket</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select3">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Vinoteket</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select1">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Vinoteket</td>
-                                            <td>078282988529SE</td>
-                                            <td>Cylinda Diskmaskin</td>
-                                            <td>
-                                                <select class="dropdown" id="Select2">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Klas Knutsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>392 44</td>
-                                            <td>Nyköping</td>
-                                            <td>Jysk</td>
-                                            <td>078282988529SE</td>
-                                            <td>Sängar</td>
-                                            <td>
-                                                <select class="dropdown" id="Select3">
-                                                    <option>AAA111</option>
-                                                    <option>BBB222</option>
-                                                    <option>CCC333</option>
-                                                    <option>DDD444</option>
-                                                    <option>EEE555</option>
-                                                    <option>DDD666</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                               </div>
-                       
+        <div class="x_content">
+            <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <table style="width:100%" id="deliverytable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                    <thead>
+                        <tr class="text-center">
+                            <th><h5>Datum</h5></th>
+                            <th><h5>Antal</h5></th>
+                            <th><h5>Namn</h5></th>
+                            <th><h5>Adress</h5></th>
+                            <th><h5>Postadress</h5></th>
+                            <th><h5>Postnr</h5></th>
+                            <th><h5>Leverantör</h5></th>
+                            <th><h5>KollieId</h5></th>
+                            <th><h5>Artikel</h5></th>                            
+                            <th><h5>Tilldelad</h5></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>20161223</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>White Away</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>
+                            @{if (isAssigned != true)
+                                {
+                                 <td>
+                                <select class="dropdown" id="Select1">
+                                    <option>AAA111</option>
+                                    <option>BBB222</option>
+                                    <option>CCC333</option>
+                                    <option>DDD444</option>
+                                    <option>EEE555</option>
+                                    <option>DDD666</option>
+                                </select>
+                                 </td>
+                                }
+                                else
+                                {
+                                    <td>BBB222</td>
+                                }
+                                }
+                        </tr>
+                        <tr>
+                            <td>20161130</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Elgiganten</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161130</td>
+                            <td>1</td>
+                            <td>Elsa Beskov</td>
+                            <td>Segelvägen 19</td>
+                            <td>394 21</td>
+                            <td>Huddinge</td>
+                            <td>White Away</td>
+                            <td>0718482548729SE</td>
+                            <td>Electrolux Kylskåp</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161202</td>
+                            <td>1</td>
+                            <td>Jan Mårtensson</td>
+                            <td>Abborrevägen 5</td>
+                            <td>382 96</td>
+                            <td>Nybro</td>
+                            <td>Vinoteket</td>
+                            <td>078295148529SE</td>
+                            <td>Drycker</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161209</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Elgiganten</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161205</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Vinoteket</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>CCC333</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161121</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Vinoteket</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>DDD666</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161205</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Vinoteket</td>
+                            <td>078282988529SE</td>
+                            <td>Cylinda Diskmaskin</td>                            
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>BBB222</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>20161106</td>
+                            <td>1</td>
+                            <td>Klas Knutsson</td>
+                            <td>Björkkvistsgatan 3</td>
+                            <td>392 44</td>
+                            <td>Nyköping</td>
+                            <td>Jysk</td>
+                            <td>078282988529SE</td>
+                            <td>Sängar</td>                           
+                            @{if (isAssigned != true)
+                                {
+                                    <td>
+                                        <select class="dropdown" id="Select1">
+                                            <option>AAA111</option>
+                                            <option>BBB222</option>
+                                            <option>CCC333</option>
+                                            <option>DDD444</option>
+                                            <option>EEE555</option>
+                                            <option>DDD666</option>
+                                        </select>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>BBB222</td><!--SÄTT TILLDELAD BIL-->
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
