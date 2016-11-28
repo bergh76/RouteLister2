@@ -1,0 +1,325 @@
+﻿<!-- DATATABLE CSS-->
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
+<!-- END DATATABLE CSS-->
+<!-- DATATABLE BUTTONS CSS-->
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
+<!-- END DATATABLE BUTTONS CSS-->
+
+<script type="text/javascript">
+    // < datatables API start 
+    $(document).ready(function () {
+        $('#deliverytable').DataTable({
+            dom: 'B<"clear"><lf<t>ip>',
+            buttons: [{ extend: 'copy', text: 'Kopiera', },
+                {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: {  modifier: { page: 'current' } },
+            },
+            {
+                extend: 'pdf',
+                text: 'Pdf'
+            },
+            ],
+            "language": {
+                "lengthMenu": "Visa _MENU_ rader per sida",
+                "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+                "info": "_PAGE_ av _PAGES_",
+                "infoEmpty": "Datatabellen är tom",
+                "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+            },
+            "processing": true,
+
+        })
+
+    });
+    // datatables API end
+
+    // < clock functionality START
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML =
+            h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
+    // < clock functionality END
+</script>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="nav navbar-fixed-top">        
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <span class="h3">
+                <i class="fa fa-list-ol"></i> Paketlista - @DateTime.Now.ToString("yyyy-MM-dd")<span class="pull-right" id="clock"></span><br />
+            </span>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">           
+                            <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                <table style="width:100%" id="deliverytable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th><h4>Namn</h4></th>
+                                            <th><h4>Adress</h4></th>
+                                            <th><h4>Postadress</h4></th>
+                                            <th><h4>Antal</h4></th>
+                                            <th><h4>Leverantör</h4></th>
+                                            <th><h4>KollieId</h4></th>
+                                            <th><h4>Artikel</h4></th>
+                                            <th><h4>Tilldelad</h4></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>White Away</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select1">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Elgiganten</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select2">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Elsa Beskov</td>
+                                            <td>Segelvägen 19</td>
+                                            <td>394 21</td>
+                                            <td>Huddinge</td>
+                                            <td>White Away</td>
+                                            <td>0718482548729SE</td>
+                                            <td>Electrolux Kylskåp</td>
+                                            <td>
+                                                <select class="dropdown" id="Select3">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jan Mårtensson</td>
+                                            <td>Abborrevägen 5</td>
+                                            <td>382 96</td>
+                                            <td>Nybro</td>
+                                            <td>Vinoteket</td>
+                                            <td>078295148529SE</td>
+                                            <td>Drycker</td>
+                                            <td>
+                                                <select class="dropdown" id="Select1">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Elgiganten</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select2">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Vinoteket</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select3">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Vinoteket</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select1">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Vinoteket</td>
+                                            <td>078282988529SE</td>
+                                            <td>Cylinda Diskmaskin</td>
+                                            <td>
+                                                <select class="dropdown" id="Select2">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Klas Knutsson</td>
+                                            <td>Björkkvistsgatan 3</td>
+                                            <td>392 44</td>
+                                            <td>Nyköping</td>
+                                            <td>Jysk</td>
+                                            <td>078282988529SE</td>
+                                            <td>Sängar</td>
+                                            <td>
+                                                <select class="dropdown" id="Select3">
+                                                    <option>AAA111</option>
+                                                    <option>BBB222</option>
+                                                    <option>CCC333</option>
+                                                    <option>DDD444</option>
+                                                    <option>EEE555</option>
+                                                    <option>DDD666</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                               </div>
+                       
+        </div>
+    </div>
+</div>
+<!-- DATATABELS -->
+<script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<!-- END DATATABELS -->
+<!-- DATATABEL-BUTTONS -->
+<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
+<script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
+<!-- END DATATABEL-BUTTONS -->

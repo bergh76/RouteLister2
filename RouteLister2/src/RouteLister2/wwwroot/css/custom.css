@@ -6,6 +6,10 @@
     font-weight: 400;
     line-height: 1.471;
 }
+/*ADMIN GUI*/
+.navbar {
+    border-radius: 0px;
+}
 .clearfix:after, form:after {
     content: ".";
     display: block;
