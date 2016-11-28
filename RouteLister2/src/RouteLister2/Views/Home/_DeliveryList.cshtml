@@ -1,0 +1,193 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@*<!--JQUERY -->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<!--JQUERY -->*@
+<!-- DATATABLE CSS-->
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
+<!-- END DATATABLE CSS-->
+<!-- DATATABLE BUTTONS CSS-->
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
+<!-- END DATATABLE BUTTONS CSS-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "bFilter": false,
+            "paging": false,
+            "processing": true,
+            "info": false
+        })
+    });
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML =
+            h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
+</script>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <span class="h3">
+                <i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now.ToString("yyyy-MM-dd")<span class="pull-right" id="clock"></span><br />
+                <a data-toggle="modal" data-target="#exampleModal">
+                
+                    <!--Needs some real data to work - JUST A MOCKUP -->
+                    @{ var count = 4;}
+                    @if(count != 0)
+                    {   
+                        <i class="fa fa-envelope fa-lg message-envelope animated jello"><span class="badge message-count">@count</span></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-envelope fa-lg message-envelope-empty"></i>
+                    }
+                </a>
+
+            </span>
+            <!--MODAL FOR MESSAGES-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                        </div>
+                        <div class="modal-body">
+                            @{
+                                Html.RenderPartial("_Message");
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Send message</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <!-- start accordion -->
+            <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel">
+                    <div class="panel-heading collapsed col-md-12">
+                        <div class="col-lg-8 pull-left">
+                            <p class="h5 text-left">1. Klas Knutsson, Björkkvistsgatan 3, 392 44 Nyköping </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="fa fa-info-circle fa-2x"></i>
+                            </span>
+                            <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                            <span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>
+                            <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+                        </div>
+                    </div>
+                    <div id="collapseOne" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <!--Customer Detail Data Start-->
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <p><h6>Namn: Klas Knutsson</h6></p>
+                                    <p><h6>Address: Björkkvistsgatan 3</h6> </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><h6>Postadress: 392 44</h6> </p>
+                                    <p><h6>Stad: Nyköping</h6></p>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <p><h6><i class="fa fa-phone"></i> #1: 0499 - 12 34 56</h6> </p>
+                                    <p><h6><i class="fa fa-phone"></i> #2: 0703 - 22 33 44</h6></p>
+                                </div>
+                                <div class="col-md-12">
+                                    <h5>Typ av leverans: <strong>Curbside</strong></h5>
+                                </div>
+                            </div><!--Customer Detail Data End-->
+
+                            <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th><h4>Antal</h4></th>
+                                            <th><h4>KollieId</h4></th>
+                                            <th><h4>Artikel</h4></th>
+                                            <th><h4>Plockad</h4></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><h5>1</h5></td>
+                                            <td><h5>078282988529SE</h5></td>
+                                            <td><h5>Cylinda Diskmaskin</h5></td>
+                                            <td>
+                                                <div class="slideThree">
+                                                    <input type="checkbox" value="None" id="slideThree1" name="check2" />
+                                                    <label for="slideThree1"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>1</h5></td>
+                                            <td><h5>072776576429SE</h5></td>
+                                            <td><h5>Cylinda Spishäll</h5></td>
+                                            <td>
+                                                <div class="slideThree">
+                                                    <input type="checkbox" value="None" id="slideThree2" name="check2" />
+                                                    <label for="slideThree2"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>1</h5></td>
+                                            <td><h5>075545988529SE</h5></td>
+                                            <td><h5>Electrolux Double Kyl/Frys</h5></td>
+                                            <td>
+                                                <div class="slideThree">
+                                                    <input type="checkbox" value="None" id="slideThree3" name="check3" />
+                                                    <label for="slideThree3"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span class="h4 pull-right">Total antal kollie 3 st</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- end of accordion -->
+        </div>
+    </div>
+</div>
+        <!-- DATATABELS -->
+<script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+<!-- END DATATABELS -->
+<!-- DATATABEL-BUTTONS -->
+<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
+<script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
+<script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
+<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
+<!-- END DATATABEL-BUTTONS -->
