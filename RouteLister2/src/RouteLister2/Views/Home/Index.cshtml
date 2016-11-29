@@ -22,10 +22,10 @@ else
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Email" class="col-md-2 control-label"></label>
+                    <label asp-for="User" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input asp-for="User" class="form-control" />
+                        <span asp-validation-for="User" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -50,9 +50,6 @@ else
                         <button type="submit" class="btn btn-default">Log in</button>
                     </div>
                 </div>
-                <p>
-                    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
-                </p>
                 <p>
                     <a asp-action="ForgotPassword">Forgot your password?</a>
                 </p>

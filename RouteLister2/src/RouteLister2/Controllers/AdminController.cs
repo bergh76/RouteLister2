@@ -12,14 +12,18 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RouteLister2.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         // GET: /<controller>/
         [Authorize(Roles ="Admin")]
+        //[Route("Admin")]
         public IActionResult Index()
         { 
             //ToDo: return custom errorpage if user not allowed
             return View();
         }
+       
     }
+
 }

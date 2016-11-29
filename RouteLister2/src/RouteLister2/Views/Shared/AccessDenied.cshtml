@@ -1,0 +1,61 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "LOGISTIKBOLAGET | ERROR";
+}
+
+@{
+    ViewBag.Title = "Access denied due to insufficient permissions";
+}
+    <div class="wrapper row2 error-container-box animated shake">
+    <div id="container" class="clear">
+        <section id="fof" class="clear">
+            @*<div class="hgroup">
+        <h1 class="text-danger">403</h1>
+        <h2 class="text-danger">Error ! <span>Page Not Accessable</span></h2>
+    </div>
+    <p class="text-danger">You have no permission to access this page</p>*@
+            <img class="img-responsive" src="~/images/E_Img/403.png" />
+            <p><a href="javascript:history.go(-1)">&laquo; Go Back</a> / <a href="htt://localhost:5000/Home/">Go Home &raquo;</a></p>
+
+
+            @*<form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="User" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="User" class="form-control" />
+                        <span asp-validation-for="User" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Log in</button>
+                    </div>
+                </div>
+                <p>
+                    <a asp-action="ForgotPassword">Forgot your password?</a>
+                </p>
+            </form>*@
+
+            <!-- ####################################################################################################### -->
+        </section>
+        <!-- ####################################################################################################### -->
+        <!-- ####################################################################################################### -->
+        <!-- ####################################################################################################### -->
+        <!-- ####################################################################################################### -->
+    </div>
+</div>
