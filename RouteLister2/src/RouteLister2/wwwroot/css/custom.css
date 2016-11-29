@@ -403,10 +403,17 @@ h2 {
 
 
 
-/* Chat design */
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 *, *:before, *:after {
   box-sizing: border-box;
+}
+
+
+.chat-container {
+  margin: 0 auto;
+  width: 750px;
+  background: #444753;
+  border-radius: 5px;
 }
 
 .people-list {
@@ -451,16 +458,16 @@ h2 {
 }
 
 .chat {
-  /*width: 490px;*/
-  /*float: left;*/
+  width: 490px;
+  float: left;
   background: #F2F5F8;
-  border-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   color: #434651;
 }
 .chat .chat-header {
   padding: 20px;
   border-bottom: 2px solid white;
-    border-radius: 5px;
 }
 .chat .chat-header img {
   float: left;
@@ -486,28 +493,8 @@ h2 {
 .chat .chat-history {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
-  border-radius: 5px;
   overflow-y: scroll;
   height: 575px;
-}
-.message-envelope{
-    color: lawngreen;
-}
-.message-envelope-empty{
-    color: #00244f;
-    opacity: 0.8;
-}
-.message-count{
-    font-family: 'Segoe UI';
-}
-.badge{
-    margin-top:-15px;
-    margin-left: -10px;
-    background: #00244f;
-    font-size: 14px;
-    color: #fff;
-    opacity: 0.8;
-
 }
 .chat .chat-history .message-data {
   margin-bottom: 15px;
@@ -522,7 +509,7 @@ h2 {
   line-height: 26px;
   font-size: 16px;
   border-radius: 7px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   width: 90%;
   position: relative;
 }
@@ -616,21 +603,4 @@ h2 {
   content: " ";
   clear: both;
   height: 0;
-}
-/* ERROR MESSAGE GUI*/
-
-#fof{display:block; width:100%;line-height:1.6em; text-align:center;background-image: url()}
-#fof .hgroup{text-transform:uppercase;}
-#fof .hgroup h1{margin-bottom:25px; font-family: Corbel; font-size:8.0em;}
-#fof .hgroup h1 span{display:inline-block; margin-left:5px; padding:2px; border:1px solid #CCCCCC; overflow:hidden;}
-#fof .hgroup h1 span strong{display:inline-block; padding:0 20px 20px; border:1px solid #CCCCCC; font-weight:normal;}
-#fof .hgroup h2{font-size:60px;}
-#fof .hgroup h2 span{display:block; font-size:30px;}
-#fof p{margin:25px 0 0 0; padding:0; font-size:16px;}
-#fof p:first-child{margin-top:0;}
-
-.error-container-box{
-
-   border-radius: 8px;
-    background: rgba(255,255,255,0.6)
 }

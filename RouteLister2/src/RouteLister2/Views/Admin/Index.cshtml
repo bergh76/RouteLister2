@@ -90,12 +90,15 @@
                                 <li><a href="#">Visa Listor</a></li>
                                 <li><a href="#">Visa Historia</a></li>
                                 <li><a asp-area="" asp-controller="Admin" asp-action="ShowCarLists">Visa Bilar och Lista</a></li>
+
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Historia</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">One more separated link</a></li>
                             </ul>
                         </li>
+                        <li><a asp-area="" asp-controller="Admin" asp-action="Message">Meddelande</a></li>
+
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Link</a></li>
@@ -104,6 +107,7 @@
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Account" asp-action="Register"><span><i class="fa fa-user-plus"></i> Skapa användare</span></a>
                                 <li><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Redigera användare</a></li>
+
                             </ul>
                         </li>
                     </ul>
@@ -120,19 +124,19 @@
         </div>
         <div class="x_content">
             <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                <table style="width:100%" id="deliverytable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
                     <thead>
                         <tr class="text-center">
-                            <th><h5>Datum</h5></th>
-                            <th><h5>Antal</h5></th>
-                            <th><h5>Namn</h5></th>
-                            <th><h5>Adress</h5></th>
-                            <th><h5>Postadress</h5></th>
-                            <th><h5>Postnr</h5></th>
-                            <th><h5>Leverantör</h5></th>
-                            <th><h5>KollieId</h5></th>
-                            <th><h5>Artikel</h5></th>                            
-                            <th><h5>Tilldelad</h5></th>
+                            <th><h6>Datum</h6></th>
+                            <th><h6>Antal</h6></th>
+                            <th><h6>Namn</h6></th>
+                            <th><h6>Adress</h6></th>
+                            <th><h6>Postadress</h6></th>
+                            <th><h6>Postnr</h6></th>
+                            <th><h6>Leverantör</h6></th>
+                            <th><h6>KollieId</h6></th>
+                            <th><h6>Artikel</h6></th>                            
+                            <th><h6>Tilldelad</h6></th>
                             <th></th>
                         </tr>
                     </thead>
