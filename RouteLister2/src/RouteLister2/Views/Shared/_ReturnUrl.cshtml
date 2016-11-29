@@ -1,0 +1,15 @@
+﻿@{
+    string action = "Index";
+    string controllerName = "Home";
+    if (ViewContext.RouteData.Values["action"] != null)
+    {
+
+        action = (string)ViewContext.RouteData.Values["action"];
+    }
+    if (ViewContext.RouteData.Values["controller"] != null)
+    {
+
+        controllerName = (string)ViewContext.RouteData.Values["controller"];
+    }
+    ViewBag.returnUrl= Url.Action(action, controllerName);
+}

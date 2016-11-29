@@ -1,0 +1,64 @@
+﻿@model RouteLister2.Models.Destination
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+
+
+<form asp-action="Create" asp-controller="Destination">
+    <div class="form-horizontal">
+        <h4>Destination</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewBag.AddressDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="AddressId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="AddressId" asp-items="@ViewBag.AddressDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.Address) tillgänglig, klicka
+               
+                <a href="@Url.Action("Create","Address")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.Address) 
+            </p>
+        }
+        @if (@ViewBag.ContactDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="ContactId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="ContactId" asp-items="@ViewBag.ContactDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x=>x.Contact) tillgänglig, klicka
+                <a href="@Url.Action("Create","Contact")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.Contact)
+            </p>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

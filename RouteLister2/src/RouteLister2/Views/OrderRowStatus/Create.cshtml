@@ -1,0 +1,35 @@
+﻿@model RouteLister2.Models.OrderRowStatus
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+
+
+<form asp-action="Create" asp-controller="OrderRowStatus">
+    <div class="form-horizontal">
+        <h4>OrderRowStatus</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+      
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+            </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

@@ -1,0 +1,39 @@
+﻿@model RouteLister2.Models.OrderStatus
+<form asp-action="Edit" asp-controller="OrderStatus">
+    <div class="form-horizontal">
+        <h4>OrderStatus</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Priority" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Priority" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group hidden">
+            <label asp-for="Id" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Id">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>

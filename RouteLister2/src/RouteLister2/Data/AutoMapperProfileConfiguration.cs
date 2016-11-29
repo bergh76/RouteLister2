@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RouteLister2.Models;
+using RouteLister2.Models.OrderRowViewModels;
 using RouteLister2.Models.RouteListerViewModels;
 using System.Linq;
 
@@ -39,6 +40,13 @@ namespace RouteLister2.Data
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == "Plockad"))
                 ;
+            CreateMap<RouteList, RouteListEditViewModel>()
+                .ForMember(x => x.Title, y => y.MapFrom(z => z.Title))
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
+                .ForMember(x => x.VehicleId, y => y.MapFrom(z => z.VehicleId))
+                .ForAllOtherMembers(x => x.Ignore());
+                ;
+
         }
 
     }

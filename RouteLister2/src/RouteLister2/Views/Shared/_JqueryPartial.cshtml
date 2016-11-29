@@ -1,0 +1,11 @@
+﻿<environment names="Development">
+    <!--JQUERY -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <!--JQUERY -->
+</environment>
+<environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+    </script>
+</environment>
