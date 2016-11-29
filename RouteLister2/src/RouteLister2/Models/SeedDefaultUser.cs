@@ -19,11 +19,14 @@ namespace RouteLister2.Models
             _context = context;
         }
 
+        private static string[] GetRoles()
+        {
+            return new string[] { "Admin", "User", "Editor", "Buyer", "Business", "Seller", "Subscriber" };
+        }
         public async void SeedAdminUser()
         {
             var dbContext = _serviceProvider.GetService<ApplicationDbContext>();
-
-            string[] roles = new string[] { "Admin", "User", "Editor", "Buyer", "Business", "Seller", "Subscriber" };
+            string[] roles = GetRoles();
             foreach (string role in roles)
             {
                 var roleStore = new RoleStore<IdentityRole>(dbContext);
@@ -55,9 +58,9 @@ namespace RouteLister2.Models
             }
 
             await AssignRoles(_serviceProvider, user.Email, roles);
-
             await dbContext.SaveChangesAsync();
         }
+
 
         public static async Task<IdentityResult> AssignRoles(IServiceProvider services, string email, string[] roles)
         {

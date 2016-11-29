@@ -18,12 +18,16 @@ namespace RouteLister2.Controllers
     {
          // GET: /<controller>/
         [Authorize(Roles ="Admin")]
-        //[Route("Admin")]
+        [Route("Admin")]
         public IActionResult Index()
         {
-
             return View();
         }
+        public IActionResult ShowCarLists()
+        {
+            return View();
+        }
+
        
     }
 

@@ -21,24 +21,28 @@ namespace RouteLister2.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private IServiceProvider _serviceProvider;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            [FromServices]ApplicationDbContext context,
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IServiceProvider serviceProvicer
+            )
         {
-                _context = context;
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _serviceProvider = serviceProvicer;
         }
 
         //
@@ -105,15 +109,18 @@ namespace RouteLister2.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string role, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                //ToDo: add user to role and 
-                //var addRole = await _userManager.AddToRoleAsync(user.Id, "Administrator");
+                //ToDo: add user to role and   
+                string tempRole = role;
+                string[] roleArray = new string[] { tempRole };
+                var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
+                await SeedDefaultUser.AssignRoles(_serviceProvider, user.Email, roleArray);
 
                 if (result.Succeeded)
                 {
