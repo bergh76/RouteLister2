@@ -9,7 +9,15 @@ namespace RouteLister2.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Role")]
+        public string UserRole { get; set; }
+
+        [Required]
         [EmailAddress]
+        [Display(Name = "User")]
+        public string UserName { get; set; }
+
+        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
