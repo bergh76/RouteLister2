@@ -14,19 +14,11 @@ namespace RouteLister2.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ApplicationDbContext _context;
-        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
-        {
-            _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
         // GET: /<controller>/
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Index()
-        {
+        public IActionResult Index()
+        { 
+            //ToDo: return custom errorpage if user not allowed
             return View();
         }
     }
