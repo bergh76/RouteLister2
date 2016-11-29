@@ -11,12 +11,14 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Models;
 using RouteLister2.Models.AccountViewModels;
 using RouteLister2.Services;
+using RouteLister2.Data;
 
 namespace RouteLister2.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -24,12 +26,14 @@ namespace RouteLister2.Controllers
         private readonly ILogger _logger;
 
         public AccountController(
+            [FromServices]ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
+                _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -91,6 +95,7 @@ namespace RouteLister2.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
