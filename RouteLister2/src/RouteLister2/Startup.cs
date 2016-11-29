@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Data;
 using RouteLister2.Models;
 using RouteLister2.Services;
+using AutoMapper;
 
 namespace RouteLister2
 {
@@ -54,6 +55,15 @@ namespace RouteLister2
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            AutoMapper.IConfigurationProvider configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfileConfiguration>();
+
+            });
+            var mapper = configuration.CreateMapper();
+
+
+            services.AddTransient(sp => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
