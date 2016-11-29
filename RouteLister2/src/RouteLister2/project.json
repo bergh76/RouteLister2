@@ -2,7 +2,7 @@
   "userSecretsId": "aspnet-RouteLister2-c5c229ed-34be-4fb7-bb6e-3aeba0c49dd6",
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.1.0-preview1-001100-00",
+      "version": "1.1.0",
       "type": "platform"
     },
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
@@ -32,8 +32,8 @@
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0"
-  },
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
+    "AutoMapper": "5.2.0" },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",
@@ -43,7 +43,7 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "imports": [
         "dotnet5.6",
         "portable-net45+win8"
