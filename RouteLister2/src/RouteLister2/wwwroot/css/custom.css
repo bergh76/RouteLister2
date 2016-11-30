@@ -7,9 +7,9 @@
     line-height: 1.471;
 }
 /*ADMIN GUI*/
-.navbar {
+/*.navbar {
     border-radius: 0px;
-}
+}*/
 .clearfix:after, form:after {
     content: ".";
     display: block;
