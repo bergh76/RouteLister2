@@ -13,6 +13,7 @@ using RouteLister2.Data;
 using RouteLister2.Models;
 using RouteLister2.Services;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace RouteLister2
 {
@@ -55,15 +56,34 @@ namespace RouteLister2
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            
+            //AutoMapper Service
             AutoMapper.IConfigurationProvider configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<AutoMapperProfileConfiguration>();
 
             });
-            var mapper = configuration.CreateMapper();
-            //Unit of work
+            services.AddTransient(sp => configuration.CreateMapper());
+            
+            //Unit of work service
             services.AddTransient<UnitOfWork>();
-            services.AddTransient(sp => mapper);
+
+            //Things needed for SignalR, like a ContractResolver
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new SignalRContractResolver();
+
+            var serializer = JsonSerializer.Create(settings);
+
+            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
+                         provider => serializer,
+                         ServiceLifetime.Transient));
+
+            //SignalR
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

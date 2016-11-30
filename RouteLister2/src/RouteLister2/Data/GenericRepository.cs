@@ -19,7 +19,7 @@ namespace RouteLister2.Data
             this.dbSet = context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> GetIncluded(
+        public virtual IQueryable<TEntity> GetIncluded(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
         {
@@ -36,11 +36,11 @@ namespace RouteLister2.Data
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query);
             }
             else
             {
-                return query.ToList();
+                return query;
             }
         }
 
@@ -137,7 +137,7 @@ namespace RouteLister2.Data
 
      
 
-        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -147,11 +147,11 @@ namespace RouteLister2.Data
             }
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query);
             }
             else
             {
-                return query.ToList();
+                return query;
             }
         }
 

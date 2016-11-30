@@ -9,9 +9,9 @@ namespace RouteLister2.Data
     public interface IGenericRepository<TEntity>
     {
         TEntity Get(object id);
-        IEnumerable<TEntity> GetIncluded(Expression<Func<TEntity, bool>> filter = null,
+        IQueryable<TEntity> GetIncluded(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included);
-        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+        IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
         void Insert(TEntity entity);
         void Delete(object id);
@@ -24,6 +24,7 @@ namespace RouteLister2.Data
         Task DeleteAsync(object id);
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
+
 
     }
 }
