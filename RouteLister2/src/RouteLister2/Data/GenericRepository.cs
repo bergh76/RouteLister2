@@ -19,7 +19,7 @@ namespace RouteLister2.Data
             this.dbSet = context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> GetFiltered(
+        public virtual IEnumerable<TEntity> GetIncluded(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
         {
@@ -81,7 +81,7 @@ namespace RouteLister2.Data
             return await _dbContext.FindAsync<TEntity>(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
+        public async Task<IEnumerable<TEntity>> GetAsyncIncluded(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
         {
             IQueryable<TEntity> query = dbSet;
 
