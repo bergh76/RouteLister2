@@ -1,7 +1,6 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
 <!-- DATATABLE CSS-->
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
@@ -9,7 +8,10 @@
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
 <!-- END DATATABLE CSS-->
-
+<!-- DATATABLE BUTTONS CSS-->
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
+<!-- END DATATABLE BUTTONS CSS-->
 <script type="text/javascript">
     $(document).ready(function () {
         $('#myTable').DataTable({
@@ -118,7 +120,7 @@
                             </div><!--Customer Detail Data End-->
 
                             <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                                <table id="myTable" class="table table-width table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
                                     <thead>
                                         <tr class="text-center">
                                             <th><h4>Antal</h4></th>

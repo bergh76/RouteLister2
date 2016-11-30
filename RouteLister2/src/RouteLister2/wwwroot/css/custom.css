@@ -70,7 +70,22 @@ h2 {
     display: block;
     margin-bottom: 5px;
 }
-
+.table-width{
+    width: 100%!important;
+}
+.table-useradmin {
+    margin: 2px;
+    width: 100%;
+    max-width: 100%;
+}
+.panel-heading-useradmin {
+    /*border-bottom: 1px solid transparent;*/
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.panel-body-useradmin {
+    padding: 0;
+}
 .x_content {
     padding: 0 5px 6px;
     position: relative;
@@ -457,9 +472,26 @@ h2 {
   color: #92959E;
 }
 
+.message-envelope{
+    color: lawngreen;
+}
+.message-envelope-empty{
+    color: #00244f;
+    opacity: 0.8;
+}
+.message-count{
+    font-family: 'Segoe UI';
+}
+.badge{
+    margin-top:-15px;
+    margin-left: -10px;
+    background: #00244f;
+    font-size: 14px;
+    color: #fff;
+    opacity: 0.8;
+
+}
 .chat {
-  width: 490px;
-  float: left;
   background: #F2F5F8;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
