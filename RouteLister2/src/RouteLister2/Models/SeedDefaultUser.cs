@@ -13,9 +13,9 @@ namespace RouteLister2.Models
         private ApplicationDbContext _context;
         private IServiceProvider _serviceProvider;
 
-        public SeedDefaultUser(ApplicationDbContext context, IServiceProvider serviceProvicer)
+        public SeedDefaultUser(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvicer;
+            _serviceProvider = serviceProvider;
             _context = context;
         }
 
@@ -70,6 +70,5 @@ namespace RouteLister2.Models
 
             return result;
         }
-
     }
 }
