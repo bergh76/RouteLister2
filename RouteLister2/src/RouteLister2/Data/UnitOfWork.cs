@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,20 +10,21 @@ namespace RouteLister2.Data
     {
         private ApplicationDbContext _context;
         private IDictionary<string, object> _repositories = new Dictionary<string, object>();
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork([FromServices] ApplicationDbContext context)
         {
             _context = context;
         }
         public GenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : class
         {
             string type = typeof(TEntity).ToString();
-            var exist = (GenericRepository<TEntity>)_repositories[type];
-            if (exist == null)
+            
+            if (!_repositories.ContainsKey(type))
             {
-                exist = new GenericRepository<TEntity>(_context);
-                _repositories.Add(type, exist);
+
+                GenericRepository<TEntity> repo = new GenericRepository<TEntity>(_context);
+                _repositories.Add(type, repo);
             }
-            return exist;
+            return (GenericRepository<TEntity>)_repositories[type];
         }
     }
 }

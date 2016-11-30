@@ -61,8 +61,8 @@ namespace RouteLister2
 
             });
             var mapper = configuration.CreateMapper();
-
-
+            //Unit of work
+            services.AddTransient<UnitOfWork>();
             services.AddTransient(sp => mapper);
         }
 
