@@ -39,6 +39,10 @@ namespace RouteLister2.Data
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == "Plockad"))
                 ;
+            CreateMap<Vehicle, RouteListViewModel>()
+                .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))
+                .ForAllOtherMembers(x => x.Ignore())
+                ;
         }
 
     }
