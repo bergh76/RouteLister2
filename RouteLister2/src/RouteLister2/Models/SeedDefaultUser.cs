@@ -10,65 +10,65 @@ namespace RouteLister2.Models
 {
     public class SeedDefaultUser
     {
-        private ApplicationDbContext _context;
-        private IServiceProvider _serviceProvider;
+        //private ApplicationDbContext _context;
+        //private IServiceProvider _serviceProvider;
 
-        public SeedDefaultUser(ApplicationDbContext context, IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-            _context = context;
-        }
+        //public SeedDefaultUser(ApplicationDbContext context, IServiceProvider serviceProvider)
+        //{
+        //    _serviceProvider = serviceProvider;
+        //    _context = context;
+        //}
 
-        private static string[] GetRoles()
-        {
-            return new string[] { "Admin", "User", "Editor", "Buyer", "Business", "Seller", "Subscriber" };
-        }
-        public async void SeedAdminUser()
-        {
-            var dbContext = _serviceProvider.GetService<ApplicationDbContext>();
-            string[] roles = GetRoles();
-            foreach (string role in roles)
-            {
-                var roleStore = new RoleStore<IdentityRole>(dbContext);
-                if (!dbContext.Roles.Any(r => r.Name == role))
-                {
-                    await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
-                }
-            }
+        //private static string[] GetRoles()
+        //{
+        //    return new string[] { "Admin", "User", "Editor", "Buyer", "Business", "Seller", "Subscriber" };
+        //}
+        //public async void SeedAdminUser()
+        //{
+        //    var dbContext = _serviceProvider.GetService<ApplicationDbContext>();
+        //    string[] roles = GetRoles();
+        //    foreach (string role in roles)
+        //    {
+        //        var roleStore = new RoleStore<IdentityRole>(dbContext);
+        //        if (!dbContext.Roles.Any(r => r.Name == role))
+        //        {
+        //            await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
+        //        }
+        //    }
 
-            var user = new ApplicationUser
-            {
-                UserName = "default",
-                NormalizedUserName = "DEFAULT",
-                Email = "default@default.se",
-                NormalizedEmail = "DEFAULT@DEFAULT.SE",
-                EmailConfirmed = true,
-                LockoutEnabled = false,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
+        //    var user = new ApplicationUser
+        //    {
+        //        UserName = "default",
+        //        NormalizedUserName = "DEFAULT",
+        //        Email = "default@default.se",
+        //        NormalizedEmail = "DEFAULT@DEFAULT.SE",
+        //        EmailConfirmed = true,
+        //        LockoutEnabled = false,
+        //        SecurityStamp = Guid.NewGuid().ToString()
+        //    };
 
-            if (!dbContext.Users.Any(u => u.UserName == user.UserName))
-            {
-                var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "Asdf1234*");
-                user.PasswordHash = hashed;
-                var userStore = new UserStore<ApplicationUser>(dbContext);
-                var result = userStore.CreateAsync(user);
+        //    if (!dbContext.Users.Any(u => u.UserName == user.UserName))
+        //    {
+        //        var password = new PasswordHasher<ApplicationUser>();
+        //        var hashed = password.HashPassword(user, "Asdf1234*");
+        //        user.PasswordHash = hashed;
+        //        var userStore = new UserStore<ApplicationUser>(dbContext);
+        //        var result = userStore.CreateAsync(user);
 
-            }
+        //    }
 
-            await AssignRoles(_serviceProvider, user.Email, roles);
-            await dbContext.SaveChangesAsync();
-        }
+        //    await AssignRoles(_serviceProvider, user.Email, roles);
+        //    await dbContext.SaveChangesAsync();
+        //}
 
 
-        public static async Task<IdentityResult> AssignRoles(IServiceProvider services, string email, string[] roles)
-        {
-            UserManager<ApplicationUser> _userManager = services.GetService<UserManager<ApplicationUser>>();
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
-            var result = await _userManager.AddToRolesAsync(user, roles);
+        //public static async Task<IdentityResult> AssignRoles(IServiceProvider services, string email, string[] roles)
+        //{
+        //    UserManager<ApplicationUser> _userManager = services.GetService<UserManager<ApplicationUser>>();
+        //    ApplicationUser user = await _userManager.FindByEmailAsync(email);
+        //    var result = await _userManager.AddToRolesAsync(user, roles);
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

@@ -11,7 +11,7 @@ function startTime() {
     var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
-    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+    if (i < 10) { i = "0" + i; }  // add zero in front of numbers < 10
     return i;
 }
 /* Formatting function for row details - modify as you need */
@@ -70,11 +70,11 @@ $(document).ready(function () {
         "ajax": "../testdata/testdatatables.json",
         "columns": [
             {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
+    "className": 'details-control',
+    "orderable": false,
+    "data": null,
+    "defaultContent": ''
+},
             { "data": "Datum" },
             { "data": "Antal" },
             { "data": "Namn" },
@@ -91,13 +91,13 @@ $(document).ready(function () {
                 "data": null,
                 "defaultContent": ''
             }
-        ],
+        ],
         dom: 'B<"clear"><lf<t>ip>',
-        buttons: [{ extend: 'copy', text: 'Kopiera', },
+        buttons: [{ extend: 'copy', text: 'Kopiera' },
             {
                 extend: 'excel',
                 text: 'Excel',
-                exportOptions: { modifier: { page: 'current' } },
+                exportOptions: { modifier: { page: 'current' } }
             },
             {
                 //extend: 'pdf',
@@ -105,7 +105,7 @@ $(document).ready(function () {
                 text: 'Pdf',
                 orientation: 'landscape',
                 pageSize: 'LEGAL'
-            },
+            }
         ],
         "language": {
             "lengthMenu": "Visa _MENU_ rader per sida",
@@ -116,7 +116,7 @@ $(document).ready(function () {
         },
         "processing": true,
         "order": [[1, "asc"], [6, 'asc']]
-    })
+    });
     console.log(table);
     $('#carOne tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');

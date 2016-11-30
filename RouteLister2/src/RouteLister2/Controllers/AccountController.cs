@@ -120,7 +120,7 @@ namespace RouteLister2.Controllers
                 string tempRole = role;
                 string[] roleArray = new string[] { tempRole };
                 var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
-                await SeedDefaultUser.AssignRoles(_serviceProvider, user.Email, roleArray);
+                //await SeedDefaultUser.AssignRoles(_serviceProvider, user.Email, roleArray);
 
                 if (result.Succeeded)
                 {
