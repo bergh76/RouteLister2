@@ -1,10 +1,4 @@
 ﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    var time = DateTime.Now.ToString("HH:mm:ss");
-}
 <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
@@ -19,12 +13,11 @@
                 <input id="textInput" class="form-control placeholder" type="text" placeholder="Enter your status..." />
             </div>
             <div class="col-sm-2">
-                <input value="@time" id="time" hidden />
+                <input value="" id="time" hidden />
                 <button id="publishPostButton" class="btn btn-success"><i class="fa fa-mail-forward"></i>Skicka!</button>
             </div>
         </div>
     </div>
-    @*<input id="userNameInput" type="text" placeholder="Enter your user name..." />*@
 </section>
 <div class="chat">
     <div class="chat-header clearfix">
@@ -52,17 +45,16 @@
 
             function addPost(post) {
                 $("#postsList").append(
-                    '<div><span class="pull-left"><i class="fa fa-circle me"></i><strong>' + post.userName + '</strong><span class="text-muted">' + post.time + ' </span></span></span><br>'
+                    '<div><span class="pull-left"><i class="fa fa-circle me"></i><span class="text-muted">&nbsp' + post.time + ' </span><strong>&nbsp' + post.userName + '</strong></span></span><br>'
                         + '<div class="message-data">'
                             + '<span class="message other-message float-right">' + post.text + '</span>'
                         + ' </div>'
                         + '<span><button class="btn btn-success btn-margin-20">OK</button></span>'
-                    +'</div>'
+                    + '</div>'
                     );
             }
 
             var hub = $.connection.postsHub;
-
             hub.client.publishPost = addPost;
 
             $("#publishPostButton").click(function () {
