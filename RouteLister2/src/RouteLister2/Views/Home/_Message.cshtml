@@ -6,7 +6,9 @@
     var time = DateTime.Now.ToString("HH:mm:ss");
 }
 <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
-
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
 <section class="btn-margin-20">
     <div class="col-md-12">
         <div class="form-group">
@@ -22,7 +24,7 @@
             </div>
         </div>
     </div>
-        @*<input id="userNameInput" type="text" placeholder="Enter your user name..." />*@
+    @*<input id="userNameInput" type="text" placeholder="Enter your user name..." />*@
 </section>
 <div class="chat">
     <div class="chat-header clearfix">
@@ -68,7 +70,7 @@
                     userName: $("#userNameInput").val() || "Guest",
                     text: $("#textInput").val(),
                     time: $("#time").val(),
-                   
+
                 };
                 console.log(time)
 
@@ -84,7 +86,3 @@
         </script>
     </div>
 </div>
-@section Scripts{
-    <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-}

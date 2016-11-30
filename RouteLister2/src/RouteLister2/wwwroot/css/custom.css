@@ -418,17 +418,10 @@ h2 {
 
 
 
+/* Chat design */
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 *, *:before, *:after {
   box-sizing: border-box;
-}
-
-
-.chat-container {
-  margin: 0 auto;
-  width: 750px;
-  background: #444753;
-  border-radius: 5px;
 }
 
 .people-list {
@@ -472,34 +465,17 @@ h2 {
   color: #92959E;
 }
 
-.message-envelope{
-    color: lawngreen;
-}
-.message-envelope-empty{
-    color: #00244f;
-    opacity: 0.8;
-}
-.message-count{
-    font-family: 'Segoe UI';
-}
-.badge{
-    margin-top:-15px;
-    margin-left: -10px;
-    background: #00244f;
-    font-size: 14px;
-    color: #fff;
-    opacity: 0.8;
-
-}
 .chat {
+  /*width: 490px;*/
+  /*float: left;*/
   background: #F2F5F8;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
   color: #434651;
 }
 .chat .chat-header {
   padding: 20px;
   border-bottom: 2px solid white;
+    border-radius: 5px;
 }
 .chat .chat-header img {
   float: left;
@@ -525,8 +501,28 @@ h2 {
 .chat .chat-history {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
+  border-radius: 5px;
   overflow-y: scroll;
   height: 575px;
+}
+.message-envelope{
+    color: lawngreen;
+}
+.message-envelope-empty{
+    color: #00244f;
+    opacity: 0.8;
+}
+.message-count{
+    font-family: 'Segoe UI';
+}
+.badge{
+    margin-top:-15px;
+    margin-left: -10px;
+    background: #00244f;
+    font-size: 14px;
+    color: #fff;
+    opacity: 0.8;
+
 }
 .chat .chat-history .message-data {
   margin-bottom: 15px;
@@ -541,7 +537,7 @@ h2 {
   line-height: 26px;
   font-size: 16px;
   border-radius: 7px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   width: 90%;
   position: relative;
 }
@@ -636,3 +632,4 @@ h2 {
   clear: both;
   height: 0;
 }
+

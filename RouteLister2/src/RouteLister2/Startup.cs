@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Data;
 using RouteLister2.Models;
 using RouteLister2.Services;
+using Newtonsoft.Json;
+using RouteLister2.SignalR;
 
 namespace RouteLister2
 {
@@ -49,6 +51,21 @@ namespace RouteLister2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // SignalR
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new SignalRContractResolver();
+
+            var serializer = JsonSerializer.Create(settings);
+
+            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
+                         provider => serializer,
+                         ServiceLifetime.Transient));
+            services.AddSingleton<IPostRepository, PostRepository>();
+
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+            });
             services.AddMvc();
 
             // Add application services.
@@ -87,7 +104,12 @@ namespace RouteLister2
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "api",
+                    template: "api/{controller}/{action}/{id?}");
             });
+            app.UseWebSockets();
+            app.UseSignalR();
         }
     }
 }
