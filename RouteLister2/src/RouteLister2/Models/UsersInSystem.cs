@@ -13,6 +13,7 @@ namespace RouteLister2.Models
         //public ApplicationUser User { get; set; }
         private static ApplicationDbContext _context;
         public IEnumerable<ApplicationUser> _users { get; set; }
+        public IEnumerable<string> _role { get; set; }
         public UsersInSystem(ApplicationDbContext context)
         {
             _context = context;
@@ -21,6 +22,11 @@ namespace RouteLister2.Models
         public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
         {
             return _context.Users;
+        }
+
+        public async Task<IEnumerable<string>> GetRoles()
+        {
+            return _context.Roles.Select(x => x.Name).ToList();
         }
     }
 }

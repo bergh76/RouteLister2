@@ -21,6 +21,7 @@ namespace RouteLister2.ViewComponents
         {
             UsersInSystem users = new UsersInSystem(_context);
             users._users =  await users.GetAllUsers();
+            users._role =  await users.GetRoles();
             return View(users);
         }
     }

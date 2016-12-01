@@ -9,12 +9,14 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Models;
 using RouteLister2.Models.ManageViewModels;
 using RouteLister2.Services;
+using RouteLister2.Data;
 
 namespace RouteLister2.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -22,12 +24,14 @@ namespace RouteLister2.Controllers
         private readonly ILogger _logger;
 
         public ManageController(
+            ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -83,6 +87,42 @@ namespace RouteLister2.Controllers
                 }
             }
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        }
+
+        public async Task<IActionResult> DeleteUser(RemoveLoginViewModel account, string Id, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            ManageMessageId? message = ManageMessageId.Error;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(Id);
+                if (user != null)
+                {
+                    var result = await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        message = ManageMessageId.RemoveLoginSuccess;
+
+                    }
+                }
+                ViewBag["Removed"] = "Användaren togs bort!";
+                return RedirectToLocal(returnUrl);
+
+            }
+            return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(AccountController.Register), "Account");
+            }
         }
 
         //
