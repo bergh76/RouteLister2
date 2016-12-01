@@ -1,0 +1,71 @@
+﻿@model RouteLister2.Models.UsersInSystem
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                <span class="h4">
+                    <i class="fa fa-users text-primary"></i> Befintliga användare
+                    <span class="pull-right">
+                        <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </span>
+                </span>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    @foreach (var item in Model._users)
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading-useradmin" role="tab" id="heading @item.Id">
+                                <table class="table-useradmin table-width table-hover">
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
+                                            </td>
+                                            <td>@item.UserName</td>
+                                            <td>sätt in roll här</td>
+                                            <td>@item.Email</td>
+                                            <td>@item.PhoneNumber</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="@item.Id" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading @item.Id">
+                                <div class="panel-body-useradmin margintop-20 col-lg-offset-1">
+                                    <form>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="@item.UserName" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="@item.Roles" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="@item.PhoneNumber" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="@item.Email" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="button" class="btn btn-success" value="Spara" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
