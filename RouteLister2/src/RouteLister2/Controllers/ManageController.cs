@@ -22,7 +22,7 @@ namespace RouteLister2.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-
+        public static string _messageRemove { get; set; } //meddelande att hämta
         public ManageController(
             ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
@@ -103,10 +103,9 @@ namespace RouteLister2.Controllers
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         message = ManageMessageId.RemoveLoginSuccess;
-
+                        _messageRemove = "Användaren är borttagen"; //Testar att skicka meddelande till vyn
                     }
                 }
-                ViewBag["Removed"] = "Användaren togs bort!";
                 return RedirectToLocal(returnUrl);
 
             }

@@ -116,10 +116,12 @@ namespace RouteLister2.Controllers
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                //ToDo: add user to role and   
+               
+                // Gets role from View and pars to Array  
                 string tempRole = role;
                 string[] roleArray = new string[] { tempRole };
                 var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
+                // Calls the method for setting the role to actual useraccount
                 await SeedDefaultUser.AssignRoles(_serviceProvider, user.Email, roleArray);
 
                 if (result.Succeeded)
@@ -455,6 +457,11 @@ namespace RouteLister2.Controllers
         {
             return View("~/Views/Shared/AccessDenied.cshtml");
         }
+
+        public IActionResult Error()
+        {
+            return View("Error");
+        }
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -470,14 +477,43 @@ namespace RouteLister2.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
+        //private IActionResult RedirectToLocalRolebased(string returnUrl, string result)
+        //{
+        //    var user = GetCurrentUserAsync();
+        //    var loginRole = _userManager.GetRolesAsync(user.Id);
+        //    if (Url.IsLocalUrl(returnUrl))
+        //    {
+        //        return Redirect(returnUrl);
+        //    }
+        //    else
+        //    {
+        //        if (user.IsFaulted)
+        //        {
+        //            return RedirectToAction("Error");
+        //        }
+        //        //ToDo: Rolebased user login
+        //        //var id = _userManager.IsInRoleAsync(user, "Admin");
+        //        //if (user..IsInRole != "Admin")
+        //        return RedirectToAction(nameof(AccountController.Register), "Account");
+        //    }
+        //}
         private IActionResult RedirectToLocal(string returnUrl)
         {
+            var user = GetCurrentUserAsync();
+            //var loginRole = _userManager.GetRolesAsync(user.Id);
             if (Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
             else
             {
+                if (user.IsFaulted)
+                {
+                    return RedirectToAction("Error");
+                }
+                //ToDo: Rolebased user login
+                //var id = _userManager.IsInRoleAsync(user, "Admin");
+                //if (user..IsInRole != "Admin")
                 return RedirectToAction(nameof(AccountController.Register), "Account");
             }
         }

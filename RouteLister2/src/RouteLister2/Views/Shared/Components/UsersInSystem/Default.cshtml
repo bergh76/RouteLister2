@@ -8,7 +8,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
             <h4 class="panel-title">
                 <span class="h4">
-                    <i class="fa fa-users text-primary"></i> Befintliga användare<span class="animated fadeOut">@ViewBag.Removed</span>
+                    <i class="fa fa-users text-primary"></i> Befintliga användare<span class="h6 text-danger animated fadeOut"> @Model._message</span>
                     <span class="pull-right">
                         <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-chevron-down"></i>
@@ -45,7 +45,9 @@
                                                     <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
                                                 </td>
                                                 <td style="width:15%">@item.UserName</td>
-                                                <td style="width:15%">@item.Roles.Select(x => x.UserId).FirstOrDefault()</td>
+
+                                                <td style="width:15%">sätt in roll här</td>
+
                                                 <td style="width:20%">@item.Email</td>
                                                 <td style="width:15%">@item.PhoneNumber</td>
                                                 @if (item.LockoutEnabled != true)

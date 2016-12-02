@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "LOGISTIKBOLAGET || Paketlista-" + DateTime.Now.ToString("yyyy-MM-dd");
-}
+}        
 <!-- DATATABLE CSS-->
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
 <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
@@ -37,7 +37,7 @@
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
                         <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                            <table cellspacing="0" id="carOne" class="display table table-width dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
+                            <table id="carOne" class="table table-width dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
                                 <thead>
                                     <tr>
                                         <th></th>

@@ -21,7 +21,7 @@ namespace RouteLister2.Models
 
         private static string[] GetRoles()
         {
-            return new string[] { "Admin", "User", "Editor", "Buyer", "Business", "Seller", "Subscriber" };
+            return new string[] { "Admin", "User" }; // add the users to seed "Editor", "Buyer", "Business", "Seller", "Subscriber" };
         }
         public async void SeedAdminUser()
         {

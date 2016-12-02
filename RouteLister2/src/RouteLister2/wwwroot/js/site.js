@@ -70,12 +70,7 @@ $(document).ready(function () {
             { "data": "KollieId" },
             { "data": "Artikel" },
             { "data": "Tilldelad" },
-            {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            }
+
         ],
         dom: 'B<"clear"><lf<t>ip>',
         buttons: [{ extend: 'copy', text: 'Kopiera', },
