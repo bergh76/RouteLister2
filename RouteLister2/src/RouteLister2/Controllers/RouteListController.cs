@@ -44,6 +44,17 @@ namespace RouteLister2.Controllers
             return View(result);
         }
 
+        public async Task<IActionResult> List(string id)
+        {
+
+            var result = await _unitOfWork.GenericRepository<RouteList>().GetIncluded(
+                included: x => x.ApplicationUser,
+                filter: x => x.ApplicationUser.RegistrationNumber == id
+                ).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            return View(result);
+        }
+
+
         //Example SignalR flow action
         //If this method returns false, the client does not change its status. If true, the client is allowed to change its status
         //Ideally one should return a object with why the client wasn't allowed to change status for more detailed message to the user

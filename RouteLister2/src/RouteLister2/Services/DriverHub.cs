@@ -11,12 +11,6 @@ namespace RouteLister2.Services
 {
     public class DriverHub : Hub<IDriverHub>
     {
-        private UnitOfWork _unitOfWork;
-
-        public DriverHub([FromServices] UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
         public override async Task OnConnected()
         {
             //Set connectionID for connected clients only
@@ -47,5 +41,6 @@ namespace RouteLister2.Services
                 await base.OnReconnected();
             }
         }
+
     }
 }

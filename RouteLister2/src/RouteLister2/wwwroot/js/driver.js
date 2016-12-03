@@ -13,6 +13,14 @@ signalRClient.client.newUserAdded = function (newUser) {
     addUser(newUser);
 }
 
+signalRClient.client.changeOrderRowStatus = function (orderRowId) {
+    addUser(orderRowId);
+}
+
+function changeOrderRowStatus(orderRowId) {
+
+}
+
 $("#messageBox").focus();
 
 $("#sendMessage").click(function () {
@@ -20,6 +28,9 @@ $("#sendMessage").click(function () {
     $("#messageBox").val("");
     $("#messageBox").focus();
 });
+
+
+
 
 $("#messageBox").keyup(function (event) {
     if (event.keyCode == 13)

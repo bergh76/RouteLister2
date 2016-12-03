@@ -16,7 +16,7 @@ namespace RouteLister2.Data
     {
         private ApplicationDbContext _context;
         private IDictionary<string, object> _repositories = new Dictionary<string, object>();
-        public UnitOfWork([FromServices] ApplicationDbContext context)
+        public UnitOfWork([FromServices] ApplicationDbContext context, [FromServices] Oc)
         {
             _context = context;
         }

@@ -1,0 +1,42 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
+
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now <span class="pull-right" id="clock"></span></span>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <!-- start accordion -->
+            <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                @if (Model != null)
+                {
+                    @if (Model.Orders != null)
+                {
+                        @for (int i = 0; i < Model.Orders.Count; i++)
+                        {
+                            <div class="panel">
+                                <div class="panel-heading collapsed col-md-12">
+                                    <div class="col-lg-8 pull-left">
+                                        <p class="h5 text-left">@i @Model.Orders[i].Description</p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseOne@(Model.Orders[i].OrderId)" aria-expanded="false" aria-controls="collapseTwo">
+                                            <i class="fa fa-info-circle fa-2x"></i>
+                                        </span>
+                                        <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                        <span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>
+                                        <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+                                    </div>
+                                </div>
+                                @Html.Partial("_Order", Model.Orders[i])
+                            </div>
+                        }
+                    }
+                }
+            </section>
+            <!-- end of accordion -->
+        </div>
+    </div>
+</div>

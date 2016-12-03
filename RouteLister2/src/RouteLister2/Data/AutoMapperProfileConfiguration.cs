@@ -10,7 +10,7 @@ namespace RouteLister2.Data
 
         public AutoMapperProfileConfiguration() : base()
         {
-
+           
             CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
@@ -19,6 +19,7 @@ namespace RouteLister2.Data
 
             //Real test right here
             CreateMap<Order, OrderDetailViewModel>()
+
                 .ForMember(x => x.TotalCount, opt => opt.MapFrom(t => t.OrderRows.Sum(z => z.Count)))
                 .ForMember(x => x.OrderId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Address, opt => opt.MapFrom(t => t.Destination.Address.Street))
@@ -28,6 +29,7 @@ namespace RouteLister2.Data
                 .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(t => t.Destination.Contact.PhoneNumbers.Select(y => y.Number)))
                 .ForMember(x => x.PostNumber, opt => opt.MapFrom(t => t.Destination.Address.PostNumber))
                 .ForMember(x => x.DeliveryTypeName, opt => opt.MapFrom(t => t.OrderType.Name))
+                //.AfterMap((x, y) => y.RowNumber = y.RowNumber + 1)
                 ;
 
 

@@ -1,4 +1,4 @@
-﻿@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
+﻿@model IEnumerable<RouteLister2.Models.RouteListerViewModels.RouteListViewModel>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -25,32 +25,14 @@
         return i;
     }
 </script>
-
-<div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="x_panel">
-        <div class="x_title">
-            <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now <span class="pull-right" id="clock"></span></span>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <!-- start accordion -->
-            <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-                @if (Model != null)
-                {
-                    @if (Model.Orders != null)
-                {
-                        @for (int i = 0; i < Model.Orders.Count; i++)
-                        {
-                            
-                        }
-                    }
-                }
-            </section>
-            <!-- end of accordion -->
-        </div>
-    </div>
-</div>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        @Html.Partial("_RouteList", item)
+    }
+}
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_SignalRScripsPartial"); }
-    
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+
 }

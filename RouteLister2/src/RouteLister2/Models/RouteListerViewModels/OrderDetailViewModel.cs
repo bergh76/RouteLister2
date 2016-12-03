@@ -7,6 +7,8 @@ namespace RouteLister2.Models.RouteListerViewModels
 {
     public class OrderDetailViewModel
     {
+
+     
         public string Address { get; set; }
         public string City { get; set; }
         public string Description { get {
@@ -27,5 +29,6 @@ namespace RouteLister2.Models.RouteListerViewModels
         public string DeliveryTypeName { get; set; }
         public int TotalCount { get; set; }
         public List<OrderRowViewModel> OrderRows { get; set; }
+        public int RowNumber { get; set; }
     }
 }
