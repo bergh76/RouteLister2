@@ -9,8 +9,8 @@ namespace RouteLister2.Models
     {
         public int Id { get; set; }
         public IEnumerable<Order> Orders { get; set; }
-        public Vehicle Vehicle { get; set; }
-        public int VehicleId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserId { get; set; }
         public string Title { get;set;}
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }

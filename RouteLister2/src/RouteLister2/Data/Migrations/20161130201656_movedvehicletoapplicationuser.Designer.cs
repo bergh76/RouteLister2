@@ -8,8 +8,8 @@ using RouteLister2.Data;
 namespace RouteLister2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161130160033_AddedNavigationListToVehicle")]
-    partial class AddedNavigationListToVehicle
+    [Migration("20161130201656_movedvehicletoapplicationuser")]
+    partial class movedvehicletoapplicationuser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,8 @@ namespace RouteLister2.Data.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("RegistrationNumber");
 
                     b.Property<string>("SecurityStamp");
 
@@ -355,6 +357,8 @@ namespace RouteLister2.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<DateTime>("Assigned");
 
                     b.Property<DateTime>("Created");
@@ -363,25 +367,31 @@ namespace RouteLister2.Data.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("VehicleId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("RouteLists");
                 });
 
-            modelBuilder.Entity("RouteLister2.Models.Vehicle", b =>
+            modelBuilder.Entity("RouteLister2.Models.UserConnectionStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("RegistrationNumber");
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<string>("Reason");
+
+                    b.Property<bool>("Status");
+
+                    b.Property<DateTime>("TimeStamp");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("UsersConnectionStatus");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -485,10 +495,16 @@ namespace RouteLister2.Data.Migrations
 
             modelBuilder.Entity("RouteLister2.Models.RouteList", b =>
                 {
-                    b.HasOne("RouteLister2.Models.Vehicle", "Vehicle")
+                    b.HasOne("RouteLister2.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("RouteLists")
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("RouteLister2.Models.UserConnectionStatus", b =>
+                {
+                    b.HasOne("RouteLister2.Models.ApplicationUser")
+                        .WithMany("UserConnectionHistory")
+                        .HasForeignKey("ApplicationUserId");
                 });
         }
     }

@@ -32,7 +32,7 @@ namespace RouteLister2.Data
         public DbSet<OrderStatus> OrderStatus { get; set; }
         public DbSet<OrderType> OrderType { get; set; }
         public DbSet<Parcel> Parcels { get; set; }
-        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
+        public DbSet<UserConnectionStatus> UsersConnectionStatus { get; set; }
     }
 }

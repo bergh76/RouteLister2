@@ -1,0 +1,15 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.OrderRowViewModel
+<tr id="@Html.IdFor(x => x.OrderRowId)@Model.OrderRowId">
+    <td class="@Html.IdFor(x => x.Count)"><h5>@Model.Count</h5></td>
+    <td class="@Html.IdFor(x => x.ParcelNumber)"><h5>@Model.ParcelNumber</h5></td>
+    <td class="@Html.IdFor(x => x.ParcelName)"><h5>@Model.ParcelName</h5></td>
+    <td>
+        <div class="slideThree">
+            <input type="checkbox" value=@Model.OrderRowStatus class="@Html.IdForModel()@Html.IdFor(x => x.OrderRowStatus)" name="check2" id="slideThree@(Model.OrderRowId.ToString())" />
+            <label for="slideThree@(Model.OrderRowId.ToString())"></label>
+
+        </div>
+
+    </td>
+
+</tr>

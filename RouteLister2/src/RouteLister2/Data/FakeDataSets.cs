@@ -16,19 +16,19 @@ namespace RouteLister2.Data
 
             model.Orders = new List<Order>() { OrderFactory() };
             model.Title = "TestDeliveryList";
-            model.Vehicle = VehicleFactory();
-            model.VehicleId = model.Vehicle.Id;
+            model.ApplicationUser = ApplicationUserFactory();
+            model.ApplicationUserId = model.ApplicationUser.Id;
             model.Modified = DateTime.Now;
             model.Created = DateTime.Parse("1999-01-01");
             model.Assigned = DateTime.Now;
             return model;
         }
 
-        public static Vehicle VehicleFactory()
+        public static ApplicationUser ApplicationUserFactory()
         {
-            Vehicle model = new Vehicle()
+            ApplicationUser model = new ApplicationUser()
             {
-                Id = Id,
+                Id = Id.ToString(),
                 RegistrationNumber = "xxx111"
             };
             return model;

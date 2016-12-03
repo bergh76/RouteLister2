@@ -38,8 +38,8 @@ namespace RouteLister2.Controllers
         {
 
             var result = _unitOfWork.GenericRepository<RouteList>().GetIncluded(
-                included: x => x.Vehicle, 
-                filter: x => x.Vehicle.RegistrationNumber == id
+                included: x => x.ApplicationUser, 
+                filter: x => x.ApplicationUser.RegistrationNumber == id
                 ).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).FirstOrDefault();
             return View(result);
         }
@@ -61,11 +61,11 @@ namespace RouteLister2.Controllers
             //Bizniz layah at work
             if (_unitOfWork.ChangeStatusOnOrderRow(id))
             {
-                _connectionManager.GetHubContext<RouteListHub>().Clients.User(clientId).ChangeStatus(id);
+                _connectionManager.GetHubContext<DriverHub>().Clients.User(clientId).ChangeStatus(id);
             }
             else
             {
-                _connectionManager.GetHubContext<RouteListHub>().Clients.User(clientId).SendMessage("Cant touch this,dumdumdum psch");
+                _connectionManager.GetHubContext<DriverHub>().Clients.User(clientId).SendMessage("Cant touch this,dumdumdum psch");
             }
         }
 

@@ -13,7 +13,7 @@ namespace RouteLister2.Data
 
             CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
-                .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.Vehicle.RegistrationNumber))
+                .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
                 .ForMember(x => x.Assigned, opt => opt.MapFrom(t => t.Assigned))
                 ;
 
@@ -37,9 +37,9 @@ namespace RouteLister2.Data
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus))
                 .ForMember(x => x.ParcelName, opt => opt.MapFrom(t => t.Parcel.Name))
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
-                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == "Plockad"))
+                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue))
                 ;
-            CreateMap<Vehicle, RouteListViewModel>()
+            CreateMap<ApplicationUser, RouteListViewModel>()
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))
                 .ForAllOtherMembers(x => x.Ignore())
                 ;

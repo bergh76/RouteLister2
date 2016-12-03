@@ -1,0 +1,56 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "bFilter": false,
+            "paging": false,
+            "processing": true,
+            "info": false
+        })
+    });
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML =
+            h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
+</script>
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now <span class="pull-right" id="clock"></span></span>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <!-- start accordion -->
+            <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                @if (Model != null)
+                {
+                    @if (Model.Orders != null)
+                {
+                        @for (int i = 0; i < Model.Orders.Count; i++)
+                        {
+                            
+                        }
+                    }
+                }
+            </section>
+            <!-- end of accordion -->
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScripsPartial"); }
+    
+}

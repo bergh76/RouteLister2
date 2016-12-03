@@ -33,8 +33,10 @@ namespace RouteLister2.Data
             return (GenericRepository<TEntity>)_repositories[type];
         }
 
-        private static readonly string OrderRowStatusTrue = "Plockad";
-        private static readonly string OrderRowStatusFalse = "I Lager";
+
+
+        public static readonly string OrderRowStatusTrue = "Plockad";
+        public static readonly string OrderRowStatusFalse = "I Lager";
         /// <summary>
         /// Changes status on a order row. Current two existing statuses should be "Plockad" and "I Lager"
         /// In this particular case, orders can only be changed to be either "Plockad or "In Storage"
@@ -77,7 +79,26 @@ namespace RouteLister2.Data
                 throw e;
             }
             return result;
-
+        }
+        /// <summary>
+        /// inserts connection statusupdate for users
+        /// </summary>
+        /// <returns></returns>
+        public bool UpdateUserStatus(string name, bool isOnline)
+        {
+            bool result = false;
+            try
+            {
+                ApplicationUser user = GenericRepository<ApplicationUser>().GetIncluded(filter: x => x.UserName == name, included: x => x.UserConnectionHistory).FirstOrDefault();
+                GenericRepository<UserConnectionStatus>().Insert(new UserConnectionStatus() { Status = isOnline, ApplicationUserId = user.Id });
+                result = true;
+            }
+            catch (Exception e)
+            {
+                //Not sure this is needed since error handling is the controllers responsibility not bizniz layah, hence the throw
+                throw e;
+            }
+            return result;
         }
     }
 }

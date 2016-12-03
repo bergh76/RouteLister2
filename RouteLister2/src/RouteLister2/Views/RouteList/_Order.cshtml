@@ -1,0 +1,81 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.OrderDetailViewModel
+
+<div class="panel">
+    <div class="panel-heading collapsed col-md-12">
+        <div class="col-lg-8 pull-left">
+            <p class="h5 text-left">@(i + 1) @Model.Description</p>
+        </div>
+        <div class="col-lg-4">
+            <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseOne@(@i)" aria-expanded="false" aria-controls="collapseTwo">
+                <i class="fa fa-info-circle fa-2x"></i>
+            </span>
+            <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+            <span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>
+            <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+        </div>
+    </div>
+
+    <div id="collapseOne@(@i)" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+        <div class="panel-body">
+            <!--Customer Detail Data Start-->
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <p><h6>@Html.NameFor(x => x.Orders[i].Name): @Model.Orders[i].Name</h6></p>
+                    <p><h6>@Html.NameFor(x => x.Orders[i].Address): @Model.Orders[i].Address</h6> </p>
+                </div>
+                <div class="col-md-4">
+                    <p><h6>@Html.NameFor(x => x.Orders[i].PostNumber): @Model.Orders[i].PostNumber</h6> </p>
+                    <p><h6>@Html.NameFor(x => x.Orders[i].City): @Model.Orders[i].City</h6></p>
+
+                </div>
+                <div class="col-md-4">
+                    @if (Model.Orders[i].PhoneNumbers != null)
+                    {
+                        @for (int j = 0; j < Model.Orders[i].PhoneNumbers.Count; j++)
+                        {
+                            <p><h6><i class="fa fa-phone"></i> #@(j + 1): @Model.Orders[i].PhoneNumbers[j]</h6> </p>
+                        }
+                    }
+                </div>
+                <div class="col-md-12">
+                    <h5>@Html.NameFor(x => x.Orders[i].DeliveryTypeName): <strong>@Model.Orders[i].DeliveryTypeName</strong></h5>
+                </div>
+            </div><!--Customer Detail Data End-->
+
+            <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                    <thead>
+                        <tr class="text-center">
+                            <th><h4>Antal</h4></th>
+                            <th><h4>KollieId</h4></th>
+                            <th><h4>Artikel</h4></th>
+                            <th><h4>Plockad</h4></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int k = 0; k < Model.Orders[i].OrderRows.Count; k++)
+                        {
+                            <tr id="@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowId)@Model.Orders[i].OrderRows[k].OrderRowId">
+                                <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].Count)"><h5>@Model.Orders[i].OrderRows[k].Count</h5></td>
+                                <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model.Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelName)"><h5>@Model.Orders[i].OrderRows[k].ParcelName</h5></td>
+                                <td>
+                                    <div class="slideThree">
+                                        <input type="checkbox" value=@Model.Orders[i].OrderRows[k].OrderRowStatus class="@Html.IdForModel()@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowStatus)" name="check2" id="slideThree@(Model.Orders[i].OrderRows[k].OrderRowId.ToString()+k.ToString())" />
+                                        <label for="slideThree@(Model.Orders[i].OrderRows[k].OrderRowId.ToString()+k.ToString())"></label>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                <span class="h4 pull-right">Total antal kollie @Model.Orders[i].TotalCount st</span>
+            </div>
+
+        </div>
+    </div>
+</div>
