@@ -12,8 +12,6 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Data;
 using RouteLister2.Models;
 using RouteLister2.Services;
-using Newtonsoft.Json;
-using RouteLister2.SignalR;
 
 namespace RouteLister2
 {
@@ -51,33 +49,36 @@ namespace RouteLister2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // SignalR
-            var settings = new JsonSerializerSettings();
-            settings.ContractResolver = new SignalRContractResolver();
+            //ToDo: Setup claimsservice
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("EmployeeOnly", 
+            //        policy => policy.RequireClaim("User"));
+            //    options.AddPolicy("AdminOnly", 
+            //        policy => policy.RequireClaim("Admin"));
+            //});
 
-            var serializer = JsonSerializer.Create(settings);
 
-            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
-                         provider => serializer,
-                         ServiceLifetime.Transient));
-            services.AddSingleton<IPostRepository, PostRepository>();
-
-            services.AddSignalR(options =>
-            {
-                options.Hubs.EnableDetailedErrors = true;
-            });
             services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            //services.AddTransient<SeedDefaultUser>();
+            services.AddTransient<SeedDefaultUser>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,IServiceProvider serviceProvider)//, SeedDefaultUser seeder)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IServiceProvider serviceProvider, 
+            SeedDefaultUser seeder
+            )
         {
-            //seeder.SeedAdminUser();
+
+            seeder.SeedAdminUser();
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -92,7 +93,7 @@ namespace RouteLister2
                 app.UseExceptionHandler("/Home/Error");
             }
             // seed default user
-            
+
             app.UseStaticFiles();
 
             app.UseIdentity();
@@ -104,12 +105,7 @@ namespace RouteLister2
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    name: "api",
-                    template: "api/{controller}/{action}/{id?}");
             });
-            app.UseWebSockets();
-            app.UseSignalR();
         }
     }
 }

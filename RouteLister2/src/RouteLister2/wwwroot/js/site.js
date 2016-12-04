@@ -1,4 +1,5 @@
 ﻿// Write your Javascript code.
+
 function startTime() {
     var today = new Date();
     var h = today.getHours();
@@ -11,10 +12,31 @@ function startTime() {
     var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
-    if (i < 10) { i = "0" + i; }  // add zero in front of numbers < 10
+    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
     return i;
 }
-/* Formatting function for row details - modify as you need */
+/* DATATABLES FOR USER ROUTLISTER */
+//
+//
+//
+$(document).ready(function () {
+    $('#myTable').DataTable({
+        "bFilter": false,
+        "paging": false,
+        "processing": true,
+        "info": false
+    })
+});
+/* DATATABLES FOR USER ROUTLISTER - END*/
+//
+//
+//
+
+
+/* DATATABLES FOR ADMIN ROUTLISTER */
+//
+//
+//
 function format(d) {
     // `d` is the original data object for the row
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
@@ -70,11 +92,11 @@ $(document).ready(function () {
         "ajax": "../testdata/testdatatables.json",
         "columns": [
             {
-    "className": 'details-control',
-    "orderable": false,
-    "data": null,
-    "defaultContent": ''
-},
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
             { "data": "Datum" },
             { "data": "Antal" },
             { "data": "Namn" },
@@ -85,19 +107,14 @@ $(document).ready(function () {
             { "data": "KollieId" },
             { "data": "Artikel" },
             { "data": "Tilldelad" },
-            {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            }
-        ],
+
+        ],
         dom: 'B<"clear"><lf<t>ip>',
-        buttons: [{ extend: 'copy', text: 'Kopiera' },
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
             {
                 extend: 'excel',
                 text: 'Excel',
-                exportOptions: { modifier: { page: 'current' } }
+                exportOptions: { modifier: { page: 'current' } },
             },
             {
                 //extend: 'pdf',
@@ -105,7 +122,7 @@ $(document).ready(function () {
                 text: 'Pdf',
                 orientation: 'landscape',
                 pageSize: 'LEGAL'
-            }
+            },
         ],
         "language": {
             "lengthMenu": "Visa _MENU_ rader per sida",
@@ -116,7 +133,7 @@ $(document).ready(function () {
         },
         "processing": true,
         "order": [[1, "asc"], [6, 'asc']]
-    });
+    })
     console.log(table);
     $('#carOne tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
@@ -136,181 +153,181 @@ $(document).ready(function () {
 });
 // datatables API end
 
-//// < datatables VEHICLE 2 API start
-//$(document).ready(function () {
-//    $('#carTwo').DataTable({
-//        dom: 'B<"clear"><lf<t>ip>',
-//        buttons: [{ extend: 'copy', text: 'Kopiera', },
-//            {
-//                extend: 'excel',
-//                text: 'Excel',
-//                exportOptions: { modifier: { page: 'current' } },
-//            },
-//        {
-//            //extend: 'pdf',
-//            extend: 'pdfHtml5',
-//            text: 'Pdf',
-//            orientation: 'landscape',
-//            pageSize: 'LEGAL'
-//        },
-//        ],
-//        "language": {
-//            "lengthMenu": "Visa _MENU_ rader per sida",
-//            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-//            "info": "_PAGE_ av _PAGES_",
-//            "infoEmpty": "Datatabellen är tom",
-//            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-//        },
-//        "processing": true,
-//        "order": [[0, "asc"], [4, 'asc']]
-//    })
+// < datatables VEHICLE 2 API start
+$(document).ready(function () {
+    $('#carTwo').DataTable({
+        dom: 'B<"clear"><lf<t>ip>',
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: { modifier: { page: 'current' } },
+            },
+        {
+            //extend: 'pdf',
+            extend: 'pdfHtml5',
+            text: 'Pdf',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        ],
+        "language": {
+            "lengthMenu": "Visa _MENU_ rader per sida",
+            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+            "info": "_PAGE_ av _PAGES_",
+            "infoEmpty": "Datatabellen är tom",
+            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+        },
+        "processing": true,
+        "order": [[0, "asc"], [4, 'asc']]
+    })
 
-//});
-//// datatables API end
-//// < datatables VEHICLE 3 API start
-//$(document).ready(function () {
-//    $('#carThree').DataTable({
-//        dom: 'B<"clear"><lf<t>ip>',
-//        buttons: [{ extend: 'copy', text: 'Kopiera', },
-//            {
-//                extend: 'excel',
-//                text: 'Excel',
-//                exportOptions: { modifier: { page: 'current' } },
-//            },
-//        {
-//            //extend: 'pdf',
-//            extend: 'pdfHtml5',
-//            text: 'Pdf',
-//            orientation: 'landscape',
-//            pageSize: 'LEGAL'
-//        },
-//        ],
-//        "language": {
-//            "lengthMenu": "Visa _MENU_ rader per sida",
-//            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-//            "info": "_PAGE_ av _PAGES_",
-//            "infoEmpty": "Datatabellen är tom",
-//            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-//        },
-//        "processing": true,
-//        "order": [[0, "asc"], [4, 'asc']]
-//    })
+});
+// datatables API end
+// < datatables VEHICLE 3 API start
+$(document).ready(function () {
+    $('#carThree').DataTable({
+        dom: 'B<"clear"><lf<t>ip>',
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: { modifier: { page: 'current' } },
+            },
+        {
+            //extend: 'pdf',
+            extend: 'pdfHtml5',
+            text: 'Pdf',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        ],
+        "language": {
+            "lengthMenu": "Visa _MENU_ rader per sida",
+            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+            "info": "_PAGE_ av _PAGES_",
+            "infoEmpty": "Datatabellen är tom",
+            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+        },
+        "processing": true,
+        "order": [[0, "asc"], [4, 'asc']]
+    })
 
-//});
-//// datatables API end
-//// < datatables VEHICLE 4 API start
-//$(document).ready(function () {
-//    $('#carFour').DataTable({
-//        dom: 'B<"clear"><lf<t>ip>',
-//        buttons: [{ extend: 'copy', text: 'Kopiera', },
-//            {
-//                extend: 'excel',
-//                text: 'Excel',
-//                exportOptions: { modifier: { page: 'current' } },
-//            },
-//        {
-//            //extend: 'pdf',
-//            extend: 'pdfHtml5',
-//            text: 'Pdf',
-//            orientation: 'landscape',
-//            pageSize: 'LEGAL'
-//        },
-//        ],
-//        "language": {
-//            "lengthMenu": "Visa _MENU_ rader per sida",
-//            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-//            "info": "_PAGE_ av _PAGES_",
-//            "infoEmpty": "Datatabellen är tom",
-//            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-//        },
-//        "processing": true,
-//        "order": [[0, "asc"], [4, 'asc']]
-//    })
+});
+// datatables API end
+// < datatables VEHICLE 4 API start
+$(document).ready(function () {
+    $('#carFour').DataTable({
+        dom: 'B<"clear"><lf<t>ip>',
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: { modifier: { page: 'current' } },
+            },
+        {
+            //extend: 'pdf',
+            extend: 'pdfHtml5',
+            text: 'Pdf',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        ],
+        "language": {
+            "lengthMenu": "Visa _MENU_ rader per sida",
+            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+            "info": "_PAGE_ av _PAGES_",
+            "infoEmpty": "Datatabellen är tom",
+            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+        },
+        "processing": true,
+        "order": [[0, "asc"], [4, 'asc']]
+    })
 
-//});
-//// datatables API end
+});
+// datatables API end
 
-//// < datatables VEHICLE 5 API start
-//$(document).ready(function () {
-//    $('#carFive').DataTable({
-//        dom: 'B<"clear"><lf<t>ip>',
-//        buttons: [{ extend: 'copy', text: 'Kopiera', },
-//            {
-//                extend: 'excel',
-//                text: 'Excel',
-//                exportOptions: { modifier: { page: 'current' } },
-//            },
-//        {
-//            //extend: 'pdf',
-//            extend: 'pdfHtml5',
-//            text: 'Pdf',
-//            orientation: 'landscape',
-//            pageSize: 'LEGAL'
-//        },
-//        ],
-//        "language": {
-//            "lengthMenu": "Visa _MENU_ rader per sida",
-//            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-//            "info": "_PAGE_ av _PAGES_",
-//            "infoEmpty": "Datatabellen är tom",
-//            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-//        },
-//        "processing": true,
-//        "order": [[0, "asc"], [4, 'asc']]
-//    })
+// < datatables VEHICLE 5 API start
+$(document).ready(function () {
+    $('#carFive').DataTable({
+        dom: 'B<"clear"><lf<t>ip>',
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: { modifier: { page: 'current' } },
+            },
+        {
+            //extend: 'pdf',
+            extend: 'pdfHtml5',
+            text: 'Pdf',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        ],
+        "language": {
+            "lengthMenu": "Visa _MENU_ rader per sida",
+            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+            "info": "_PAGE_ av _PAGES_",
+            "infoEmpty": "Datatabellen är tom",
+            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+        },
+        "processing": true,
+        "order": [[0, "asc"], [4, 'asc']]
+    })
 
-//});
-//// datatables API end
-//// < datatables VEHICLE 6 API start
-//$(document).ready(function () {
-//    $('#carSix').DataTable({
-//        dom: 'B<"clear"><lf<t>ip>',
-//        buttons: [{ extend: 'copy', text: 'Kopiera', },
-//            {
-//                extend: 'excel',
-//                text: 'Excel',
-//                exportOptions: { modifier: { page: 'current' } },
-//            },
-//        {
-//            //extend: 'pdf',
-//            extend: 'pdfHtml5',
-//            text: 'Pdf',
-//            orientation: 'landscape',
-//            pageSize: 'LEGAL'
-//        },
-//        ],
-//        "language": {
-//            "lengthMenu": "Visa _MENU_ rader per sida",
-//            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-//            "info": "_PAGE_ av _PAGES_",
-//            "infoEmpty": "Datatabellen är tom",
-//            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-//        },
-//        "processing": true,
-//        "order": [[0, "asc"], [4, 'asc']]
-//    })
+});
+// datatables API end
+// < datatables VEHICLE 6 API start
+$(document).ready(function () {
+    $('#carSix').DataTable({
+        dom: 'B<"clear"><lf<t>ip>',
+        buttons: [{ extend: 'copy', text: 'Kopiera', },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: { modifier: { page: 'current' } },
+            },
+        {
+            //extend: 'pdf',
+            extend: 'pdfHtml5',
+            text: 'Pdf',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        ],
+        "language": {
+            "lengthMenu": "Visa _MENU_ rader per sida",
+            "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+            "info": "_PAGE_ av _PAGES_",
+            "infoEmpty": "Datatabellen är tom",
+            "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+        },
+        "processing": true,
+        "order": [[0, "asc"], [4, 'asc']]
+    })
 
-//});
-//// datatables API end
+});
+// datatables API end
 
-//// ROUTELIST START //
-//document.getElementById("carOne").addEventListener("click", function (e) {
-//    if (e.target.tagName === "A") {
-//        e.preventDefault();
-//        var row = e.target.parentNode.parentNode;
-//        while ((row = nextTr(row)) && !/\bparent\b/.test(row.className))
-//            toggle_it(row);
-//    }
-//});
+// ROUTELIST START //
+document.getElementById("carOne").addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+        e.preventDefault();
+        var row = e.target.parentNode.parentNode;
+        while ((row = nextTr(row)) && !/\bparent\b/.test(row.className))
+            toggle_it(row);
+    }
+});
 
-//function nextTr(row) {
-//    while ((row = row.nextSibling) && row.nodeType != 1);
-//    return row;
-//}
+function nextTr(row) {
+    while ((row = row.nextSibling) && row.nodeType != 1);
+    return row;
+}
 
-//function toggle_it(item) {
-//    if (/\bopen\b/.test(item.className))
-//        item.className = item.className.replace(/\bopen\b/, " ");
-//    else
-//        item.className += " open";
-//}
+function toggle_it(item) {
+    if (/\bopen\b/.test(item.className))
+        item.className = item.className.replace(/\bopen\b/, " ");
+    else
+        item.className += " open";
+}

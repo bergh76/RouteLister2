@@ -13,6 +13,7 @@ namespace RouteLister2.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -23,6 +24,6 @@ namespace RouteLister2.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<Post> Post { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

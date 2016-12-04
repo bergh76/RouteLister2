@@ -13,12 +13,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RouteLister2.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
+    //[Route("Admin")]
     public class AdminController : Controller
     {
          // GET: /<controller>/
-        [Authorize(Roles ="Admin")]
-        [Route("Admin")]
+        //[Authorize(Roles ="Admin")]
+       
         public IActionResult Index()
         {
             return View();
