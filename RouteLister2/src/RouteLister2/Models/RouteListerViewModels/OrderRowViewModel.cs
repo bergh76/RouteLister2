@@ -7,6 +7,7 @@ namespace RouteLister2.Models.RouteListerViewModels
 {
     public class OrderRowViewModel
     {
+        public int OrderId { get; set; }
         public int OrderRowId { get; set; }
         public int Count { get; set; }
         public bool OrderRowStatus { get; set; }

@@ -12,5 +12,6 @@ namespace RouteLister2.Models
         public IEnumerable<RouteList> RouteLists { get; set; }
         public IEnumerable<UserConnectionStatus> UserConnectionHistory { get; set; }
         public string RegistrationNumber { get; set; }
+        public string ConnectionId { get; set; }
     }
 }

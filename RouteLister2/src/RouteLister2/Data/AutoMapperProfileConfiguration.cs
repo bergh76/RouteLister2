@@ -14,8 +14,8 @@ namespace RouteLister2.Data
             CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
-                .ForMember(x => x.Assigned, opt => opt.MapFrom(t => t.Assigned))
-                ;
+                .ForMember(x => x.Assigned, opt => opt.MapFrom(t => t.Assigned)
+                );
 
             //Real test right here
             CreateMap<Order, OrderDetailViewModel>()
@@ -29,8 +29,9 @@ namespace RouteLister2.Data
                 .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(t => t.Destination.Contact.PhoneNumbers.Select(y => y.Number)))
                 .ForMember(x => x.PostNumber, opt => opt.MapFrom(t => t.Destination.Address.PostNumber))
                 .ForMember(x => x.DeliveryTypeName, opt => opt.MapFrom(t => t.OrderType.Name))
-                //.AfterMap((x, y) => y.RowNumber = y.RowNumber + 1)
+                .ForMember(x => x.RouteListId, opt => opt.MapFrom(t => t.RouteListId))
                 ;
+           
 
 
             CreateMap<OrderRow, OrderRowViewModel>()
@@ -40,6 +41,7 @@ namespace RouteLister2.Data
                 .ForMember(x => x.ParcelName, opt => opt.MapFrom(t => t.Parcel.Name))
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue))
+                .ForMember(x => x.OrderId, opt => opt.MapFrom(t => t.OrderId))
                 ;
             CreateMap<ApplicationUser, RouteListViewModel>()
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))

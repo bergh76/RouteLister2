@@ -15,11 +15,12 @@ namespace RouteLister2.Data
 
         public GenericRepository(DbContext context)
         {
-            this._dbContext = context;
-            this.dbSet = context.Set<TEntity>();
+            _dbContext = context;
+            dbSet = _dbContext.Set<TEntity>();
         }
 
         public virtual IQueryable<TEntity> GetIncluded(
+            
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
         {
@@ -52,6 +53,7 @@ namespace RouteLister2.Data
         public virtual void Insert(TEntity entity)
         {
             dbSet.Add(entity);
+            _dbContext.SaveChanges();
         }
 
         public virtual void Delete(object id)
@@ -59,6 +61,7 @@ namespace RouteLister2.Data
              
             TEntity entityToDelete = _dbContext.Find<TEntity>(id);
             Delete(entityToDelete);
+            _dbContext.SaveChanges();
         }
 
         public virtual void Delete(TEntity entityToDelete)
@@ -74,6 +77,7 @@ namespace RouteLister2.Data
         {
             dbSet.Attach(entityToUpdate);
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            _dbContext.SaveChanges();
         }
 
         public async Task<TEntity> GetAsync(object id)
@@ -107,18 +111,11 @@ namespace RouteLister2.Data
         public async Task DeleteAsync(object id)
         {
             TEntity entityToDelete = await _dbContext.FindAsync<TEntity>(id);
-            await DeleteAsync(entityToDelete);
+            Delete(entityToDelete);
             await _dbContext.SaveChangesAsync();
         }
-        private async Task DeleteAsync(TEntity entity)
-        {
 
-            if (_dbContext.Entry(entity).State == EntityState.Detached)
-            {
-                dbSet.Attach(entity);
-            }
-            await Task.Run(()=>dbSet.Remove(entity));
-        }
+
 
 
         public async Task InsertAsync(TEntity entity)
