@@ -7,6 +7,9 @@
     line-height: 1.471;
 }
 /*ADMIN GUI*/
+.btn-no-margin-t{
+    margin-top: 0;
+}
 .margintop-20{
     margin-top: 20px;
 }
@@ -79,7 +82,7 @@ h2 {
     width: 100%!important;
 }
 .table-useradmin {
-    margin: 2px;
+    margin: 2px 2px 2px 2px;
     width: 100%;
     max-width: 100%;
 }

@@ -25,5 +25,6 @@ namespace RouteLister2.Data
         }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Post> Post { get; set; }
     }
 }

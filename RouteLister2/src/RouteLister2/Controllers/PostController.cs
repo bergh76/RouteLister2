@@ -18,7 +18,7 @@ public class PostsController : Controller
     [HttpGet]
     public List<Post> GetPosts()
     {
-        //_connectionManager.GetHubContext<PostsHub>();
+        _connectionManager.GetHubContext<PostsHub>();
         return _postRepository.GetAll();
     }
 

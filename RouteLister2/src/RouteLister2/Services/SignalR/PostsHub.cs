@@ -18,9 +18,9 @@ namespace RouteLister2.SignalR
 
         public void Send(string userName, string text, string time)
         {
-            Clients.Caller.publishPost(userName, text, time);
+            //Clients.Caller.publishPost(userName, text, time);
 
-            //Clients.All.publishPost(userName, text, time);
+            Clients.All.publishPost(userName, text, time);
         }
 
         public void Connect(string newUser)
