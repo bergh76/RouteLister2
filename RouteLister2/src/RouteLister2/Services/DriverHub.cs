@@ -15,12 +15,13 @@ namespace RouteLister2.Services
     public class DriverHub : Hub<IDriverHub>
     {
         private UnitOfWork _unitOfWork;
-        private UserManager<ApplicationUser> _userManager;
 
-        public DriverHub([FromServices] UnitOfWork unitOfWork, [FromServices] UserManager<ApplicationUser> userManager)
+
+        public DriverHub([FromServices] UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
+            
+            //_userManager = userManager;
         }
 
         public async Task<bool> Connect()
@@ -62,7 +63,8 @@ namespace RouteLister2.Services
             var userName = Context.User.Identity.Name;
             if (userName != null)
             {
-                ApplicationUser user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
+                //ApplicationUser user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
+                ApplicationUser user = (await _unitOfWork.GenericRepository<ApplicationUser>().GetAsyncIncluded(filter: x => x.UserName == Context.User.Identity.Name)).FirstOrDefault();
                 if (user != null)
                 {
                     if (status)
@@ -75,8 +77,11 @@ namespace RouteLister2.Services
                         await Clients.Client(Context.ConnectionId).SetConnectionId(null);
                         user.ConnectionId = null;
                     }
-                    await _userManager.UpdateAsync(user);
-                    await Clients.Client(Context.ConnectionId).SetConnectionStatus(status);
+
+                    //await _userManager.UpdateAsync(user);
+                    await _unitOfWork.GenericRepository<ApplicationUser>().UpdateAsync(user);
+                    await Clients.Caller.SetConnectionStatus(status);
+                    //await Clients.Client(Context.ConnectionId).SetConnectionStatus(status);
                 }
             }
         }
@@ -86,7 +91,8 @@ namespace RouteLister2.Services
             var userName = Context.User.Identity.Name;
             if (userName != null)
             {
-                ApplicationUser user = await _userManager.FindByNameAsync(userName);
+                //ApplicationUser user = await _userManager.FindByNameAsync(userName);
+                ApplicationUser user = (await _unitOfWork.GenericRepository<ApplicationUser>().GetAsyncIncluded(filter: x => x.UserName == Context.User.Identity.Name)).FirstOrDefault();
                 if (user != null)
                 {
                     return true;
@@ -101,7 +107,7 @@ namespace RouteLister2.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task ChangeStatusOnOrderRow(int id)
+        public async Task ChangeStatusOnOrderRow(int id, string idRef)
         {
             //Return value
             if (await IsUserValid())
@@ -110,29 +116,32 @@ namespace RouteLister2.Services
                 {
                     //Transaction begins
                     //Gets model
-                    var model = _unitOfWork.GenericRepository<OrderRow>().Get(id);
+                    var model = (await _unitOfWork.GenericRepository<OrderRow>().GetAsyncIncluded(included:x=>x.OrderRowStatus,filter:x=>x.Id==id)).FirstOrDefault();
                     //Checks if there is a model
                     if (model != null)
                     {
+                        bool status = false;
                         //Translates orderstatus name to boolean
-                        string status = UnitOfWork.OrderRowStatusFalse;
-                        if (model.OrderRowStatus.Name != UnitOfWork.OrderRowStatusFalse)
+                     
+                        if(model.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue)
                         {
-                            status = UnitOfWork.OrderRowStatusTrue;
-                            //Changes id to correct one if nothing is out of order(like the status is not either of the alternatives)
-                            model.OrderRowStatusId = _unitOfWork.GenericRepository<OrderRowStatus>().GetIncluded(filter: x => x.Name == status).Select(x => x.Id).FirstOrDefault();
+                            model.OrderRowStatusId = _unitOfWork.GenericRepository<OrderRowStatus>().GetIncluded(filter: x => x.Name == UnitOfWork.OrderRowStatusFalse).Select(x => x.Id).FirstOrDefault();
+                            await _unitOfWork.GenericRepository<OrderRow>().UpdateAsync(model);
+                            status = false;
                         }
-                        else if (model.OrderRowStatus.Name != UnitOfWork.OrderRowStatusTrue)
+                        else if (status = model.OrderRowStatus.Name == UnitOfWork.OrderRowStatusFalse)
                         {
-                            //Do nothing since string is already set, and bool is already false
+                            model.OrderRowStatusId = _unitOfWork.GenericRepository<OrderRowStatus>().GetIncluded(filter: x => x.Name == UnitOfWork.OrderRowStatusTrue).Select(x => x.Id).FirstOrDefault();
+                            await _unitOfWork.GenericRepository<OrderRow>().UpdateAsync(model);
+                            status = true;
                         }
                         else
                         {
-                            //Do nothing since default is false;
+                            //Notify client something some other status prevents them from changing status
                         }
 
                         //Push change to client
-                        await Clients.Caller.ChangeStatusOnOrderRow(id);
+                        await Clients.Caller.ChangeClientRowStatus(idRef, status);
                     }
 
                 }
@@ -151,13 +160,11 @@ namespace RouteLister2.Services
         /// <returns></returns>
         public async Task UpdateUserStatus(string name, bool isOnline)
         {
-
-
-
             try
             {
                 var userName = Context.User.Identity.Name;
-                ApplicationUser user = await _userManager.FindByNameAsync(userName);
+                //ApplicationUser user = await _userManager.FindByNameAsync(userName);
+                ApplicationUser user = (await _unitOfWork.GenericRepository<ApplicationUser>().GetAsyncIncluded(filter: x => x.UserName == Context.User.Identity.Name)).FirstOrDefault();
 
                 if (user == null)
                 {

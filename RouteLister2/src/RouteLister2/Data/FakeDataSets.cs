@@ -116,6 +116,7 @@ namespace RouteLister2.Data
         public static OrderRow OrderRowFactory()
         {
             OrderRow model = new OrderRow();
+            model.OrderId = Id;
             model.Id = Id;
             model.OrderRowStatus = OrderRowStatusFactory();
             model.OrderRowStatusId = model.OrderRowStatus.Id;

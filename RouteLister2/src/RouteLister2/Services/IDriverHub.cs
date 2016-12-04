@@ -10,14 +10,8 @@ namespace RouteLister2.Services
     public interface IDriverHub
     {
         Task SetConnectionStatus(bool status);
-        Task UpdateClient(RouteListViewModel clientModel);
-        Task UpdateClient(OrderRow clientModel);
-        Task UpdateClient(OrderRowViewModel clientModel);
-        Task ChangeStatusOnOrderRow(int id);
-
-
-        Task ChangeRowStatus(int id);
-        Task Message(Message message);
+        Task ChangeStatusOnOrderRow(int id, string idRef);
         Task SetConnectionId(string connectionId);
+        Task ChangeClientRowStatus(string idRef,bool status);
     }
 }

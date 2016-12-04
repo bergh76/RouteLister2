@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RouteLister2.Data;
 using RouteLister2.Models;
@@ -161,6 +164,44 @@ namespace RouteList2XUnitTests
                                  ParcelName = orderRow.Parcel.Name,
                                  ParcelNumber = orderRow.Parcel.ParcelNumber
                              };
+                orderRowViewModelResult = result.FirstOrDefault();
+
+                //Assert
+                ReflectEvaluateObjectProperties(orderRowViewModel, orderRowViewModelResult);
+
+            }
+        }
+
+
+        [Fact]
+        public void TestingProjectTo()
+        {
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfileConfiguration>();
+
+            });
+            RouteList deliveryList = FakeDataSets.DeliveryListFactory();
+            //Arrange
+            OrderRowViewModel orderRowViewModel = new OrderRowViewModel()
+            {
+                OrderId=FakeDataSets.Id,
+                OrderRowId = FakeDataSets.Id,
+                Count = FakeDataSets.OrderRowFactory().Count,
+                ParcelNumber = FakeDataSets.ParcelFactory().ParcelNumber,
+                ParcelName = FakeDataSets.ParcelFactory().Name,
+                //will probably want to add status like broken, so bool might be off the table
+                OrderRowStatus = FakeDataSets.OrderRowFactory().OrderRowStatus.Name == "Plockad"
+            };
+            //TODO
+            //Act
+            using (var context = new ApplicationDbContext(CreateNewContextOptions()))
+            {
+                context.RouteLists.Add(deliveryList);
+                context.SaveChanges();
+                OrderRowViewModel orderRowViewModelResult = null;
+                var result = context.OrderRows.Where(x => x.Id == FakeDataSets.OrderRowFactory().Id).ProjectTo<OrderRowViewModel>(configuration);
+                            
                 orderRowViewModelResult = result.FirstOrDefault();
 
                 //Assert

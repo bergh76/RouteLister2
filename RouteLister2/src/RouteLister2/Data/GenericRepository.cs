@@ -45,9 +45,15 @@ namespace RouteLister2.Data
             }
         }
 
-        public virtual TEntity Get(object id)
+        public virtual TEntity Get(int id)
         {
-            return _dbContext.Find<TEntity>(id);
+            TEntity entity = _dbContext.Find<TEntity>(id);
+            return entity;
+        }
+        public virtual TEntity Get(string id)
+        {
+            TEntity entity = _dbContext.Find<TEntity>(id);
+            return entity;
         }
 
         public virtual void Insert(TEntity entity)
@@ -56,9 +62,16 @@ namespace RouteLister2.Data
             _dbContext.SaveChanges();
         }
 
-        public virtual void Delete(object id)
+        public virtual void Delete(int id)
         {
              
+            TEntity entityToDelete = _dbContext.Find<TEntity>(id);
+            Delete(entityToDelete);
+            _dbContext.SaveChanges();
+        }
+        public virtual void Delete(string id)
+        {
+
             TEntity entityToDelete = _dbContext.Find<TEntity>(id);
             Delete(entityToDelete);
             _dbContext.SaveChanges();
@@ -80,9 +93,17 @@ namespace RouteLister2.Data
             _dbContext.SaveChanges();
         }
 
-        public async Task<TEntity> GetAsync(object id)
+        public async Task<TEntity> GetAsync(int id)
         {
-            return await _dbContext.FindAsync<TEntity>(id);
+            
+            TEntity entity = await _dbContext.FindAsync<TEntity>(id);
+            return entity;
+        }
+        public async Task<TEntity> GetAsync(string id)
+        {
+
+            TEntity entity = await _dbContext.FindAsync<TEntity>(id);
+            return entity;
         }
 
         public async Task<IEnumerable<TEntity>> GetAsyncIncluded(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included)
@@ -108,7 +129,13 @@ namespace RouteLister2.Data
             }
         }
 
-        public async Task DeleteAsync(object id)
+        public async Task DeleteAsync(int id)
+        {
+            TEntity entityToDelete = await _dbContext.FindAsync<TEntity>(id);
+            Delete(entityToDelete);
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task DeleteAsync(string id)
         {
             TEntity entityToDelete = await _dbContext.FindAsync<TEntity>(id);
             Delete(entityToDelete);

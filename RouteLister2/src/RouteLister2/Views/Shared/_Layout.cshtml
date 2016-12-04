@@ -32,7 +32,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">RouteLister</a><span class="status-text pull-left">[online <span class="fa fa-circle online"></span><span class="fa fa-circle offline-dim"></span>]</span>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">RouteLister</a>
+                    <span class="pull-left">
+                        <span class="status-text" id="status-text">  [online</span> 
+                        <span class="fa fa-circle online">
+                        </span><span class="fa fa-circle offline-dim"></span>
+                    <span class="status-text">]</span>
+                </span>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

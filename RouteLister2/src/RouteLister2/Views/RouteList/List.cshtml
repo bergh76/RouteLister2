@@ -78,20 +78,28 @@
                                                             @for (int k = 0; k < Model[f].Orders[i].OrderRows.Count; k++)
                                                             {
                                                                 <tr>
-                                                                    <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)" >@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
+                                                                    <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
                                                                     <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
-                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)" ><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
-                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)" ><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
                                                                     <td>
                                                                         <div class="slideThree">
-                                                                            <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderId name="check2" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
+                                                                            @{
+                                                                                var isChecked = "checked='checked'";
+                                                                                @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
+                                                                                {
+                                                                                    isChecked = null;
+
+                                                                                }
+                                                                            }
+                                                                            <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
                                                                             <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
                                                                         </div>
                                                                     </td>
 
                                                                 </tr>
-                                                                
-                                                            }
+
+                                                                                }
                                                         </tbody>
                                                     </table>
                                                     <span class="h4 pull-right">Total antal kollie @Model[f].Orders[i].TotalCount st</span>
@@ -100,16 +108,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                }
-                            }
-                        }
+                                                                                }
+                                                                                }
+                                                                                }
                     </section>
                     <!-- end of accordion -->
                 </div>
             </div>
         </div>
-    }
-}
+                                                                                }
+                                                                                }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
     <script type="text/javascript">
@@ -122,24 +130,15 @@
         //        "info": false
         //    })
         //});
-        //Adding listeners.
-        //OrderRowLineListener
-        @*$(".slideThree > input").click(function (event) {
-            //Stops client from changing anything before server has done so
-            routeLister.stop(event);
-            ///sets the idName that client funktion uses + token to change later on
-            routeLister.orderRow.setNameId = "@Html.IdFor(x=>x.OrderRowStatus)";
-            routeLister.orderRow.server("@Model.OrderRowId");
-
-
-        });*@
         //Onclick function for changing status on orderrows
         $(".slideThree > input").click(function (event) {
-            
-
             routeLister.orderRow.server(event);
-
         });
+        $(".status-text").click(function (event) {
+            console.log("teeest");
+            routeLister.setConnectionStatus.client(false);
+        });
+
         function startTime() {
             var today = new Date();
             var h = today.getHours();
