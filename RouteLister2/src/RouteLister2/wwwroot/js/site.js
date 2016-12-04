@@ -1,5 +1,42 @@
 ﻿// Write your Javascript code.
-/* Formatting function for row details - modify as you need */
+
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('clock').innerHTML =
+        h + ":" + m + ":" + s;
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+    return i;
+}
+/* DATATABLES FOR USER ROUTLISTER */
+//
+//
+//
+$(document).ready(function () {
+    $('#myTable').DataTable({
+        "bFilter": false,
+        "paging": false,
+        "processing": true,
+        "info": false
+    })
+});
+/* DATATABLES FOR USER ROUTLISTER - END*/
+//
+//
+//
+
+
+/* DATATABLES FOR ADMIN ROUTLISTER */
+//
+//
+//
 function format(d) {
     // `d` is the original data object for the row
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +

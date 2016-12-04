@@ -49,17 +49,35 @@ namespace RouteLister2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //ToDo: Setup claimsservice
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("EmployeeOnly", 
+            //        policy => policy.RequireClaim("User"));
+            //    options.AddPolicy("AdminOnly", 
+            //        policy => policy.RequireClaim("Admin"));
+            //});
+
+
             services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<SeedDefaultUser>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,IServiceProvider serviceProvider, SeedDefaultUser seeder)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IServiceProvider serviceProvider, 
+            SeedDefaultUser seeder
+            )
         {
+
             seeder.SeedAdminUser();
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -75,7 +93,7 @@ namespace RouteLister2
                 app.UseExceptionHandler("/Home/Error");
             }
             // seed default user
-            
+
             app.UseStaticFiles();
 
             app.UseIdentity();

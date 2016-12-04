@@ -60,7 +60,9 @@ h2 {
 .btn-margin-20 {
       margin-bottom: 20px;
 }
-
+.btn-margin-r-4{
+    margin-right: 4px;
+}
 .accordion .panel {
     margin-bottom: 10px;
     border-radius: 5px;
@@ -82,12 +84,15 @@ h2 {
     max-width: 100%;
 }
 .panel-heading-useradmin {
-    /*border-bottom: 1px solid transparent;*/
+    border-bottom: 1px solid transparent;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
 .panel-body-useradmin {
     padding: 0;
+}
+.panel-default-useradmin {
+    border-color: transparent;
 }
 .x_content {
     padding: 0 5px 6px;

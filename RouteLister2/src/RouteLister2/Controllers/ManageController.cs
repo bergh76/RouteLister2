@@ -251,6 +251,20 @@ namespace RouteLister2.Controllers
             return View();
         }
 
+
+        public async Task<IActionResult> SetNewPassWord(UserSettings setPass,ApplicationUser user, string userId, string pw)
+        {
+            if (ModelState.IsValid)
+            {
+                await setPass.SetNewPassword(_context,user, userId, pw);
+                ViewBag[""] = "Lösenordet är ändrat";
+                return RedirectToAction(nameof(AccountController.Register), "Account");
+
+            }
+
+            return View();
+        }
+
         //
         // POST: /Manage/ChangePassword
         [HttpPost]

@@ -3,6 +3,7 @@ using RouteLister2.Controllers;
 using RouteLister2.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,10 +18,11 @@ namespace RouteLister2.Models
 
         public IEnumerable<ApplicationUser> _users { get; set; }
         public IEnumerable<string> _role { get; set; }
-        public string _userRole { get; set; }
 
         // Hack might need a ViewModel for populating Roles with userdata.
-        //// Need a workaround
+        //// Need a workaround 
+        public string _userRole { get; set; }
+
         public string UserRoles {
             get {
                 var result = from u in _context.Users

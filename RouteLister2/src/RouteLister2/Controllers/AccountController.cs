@@ -12,6 +12,7 @@ using RouteLister2.Models;
 using RouteLister2.Models.AccountViewModels;
 using RouteLister2.Services;
 using RouteLister2.Data;
+using System.Security.Principal;
 
 namespace RouteLister2.Controllers
 {
@@ -34,6 +35,7 @@ namespace RouteLister2.Controllers
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IServiceProvider serviceProvicer
+
             )
         {
             _context = context;
@@ -71,7 +73,10 @@ namespace RouteLister2.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    // Standard redirect at login
+                    //return RedirectToLocal(returnUrl);
+
+                    return RedirectRoleToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -91,6 +96,26 @@ namespace RouteLister2.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private IActionResult RedirectRoleToLocal(string returnUrl)
+        {
+            //var user = await _userManager.FindByIdAsync(User.);
+
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+
+                //ToDo: Rolebased user login
+                // Might need claims to function
+                if (User.IsInRole("Admin"))
+                    //if (user..IsInRole != "Admin")
+                    return RedirectToAction(nameof(AccountController.Register), "Account");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
 
         //
@@ -122,7 +147,7 @@ namespace RouteLister2.Controllers
                 string[] roleArray = new string[] { tempRole };
                 var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
                 // Calls the method for setting the role to actual useraccount
-                await SeedDefaultUser.AssignRoles(_serviceProvider, user.Email, roleArray);
+                await UserSettings.AssignRoles(_userManager,user.Email, roleArray);
 
                 if (result.Succeeded)
                 {
@@ -132,9 +157,10 @@ namespace RouteLister2.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(AccountController.Register), "Account");
+                    //return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
@@ -477,44 +503,15 @@ namespace RouteLister2.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        //private IActionResult RedirectToLocalRolebased(string returnUrl, string result)
-        //{
-        //    var user = GetCurrentUserAsync();
-        //    var loginRole = _userManager.GetRolesAsync(user.Id);
-        //    if (Url.IsLocalUrl(returnUrl))
-        //    {
-        //        return Redirect(returnUrl);
-        //    }
-        //    else
-        //    {
-        //        if (user.IsFaulted)
-        //        {
-        //            return RedirectToAction("Error");
-        //        }
-        //        //ToDo: Rolebased user login
-        //        //var id = _userManager.IsInRoleAsync(user, "Admin");
-        //        //if (user..IsInRole != "Admin")
-        //        return RedirectToAction(nameof(AccountController.Register), "Account");
-        //    }
-        //}
         private IActionResult RedirectToLocal(string returnUrl)
         {
-            var user = GetCurrentUserAsync();
-            //var loginRole = _userManager.GetRolesAsync(user.Id);
             if (Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
             else
             {
-                if (user.IsFaulted)
-                {
-                    return RedirectToAction("Error");
-                }
-                //ToDo: Rolebased user login
-                //var id = _userManager.IsInRoleAsync(user, "Admin");
-                //if (user..IsInRole != "Admin")
-                return RedirectToAction(nameof(AccountController.Register), "Account");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
 
