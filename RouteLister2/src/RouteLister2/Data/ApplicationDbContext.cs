@@ -13,7 +13,6 @@ namespace RouteLister2.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -23,7 +22,17 @@ namespace RouteLister2.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
-
-        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Address> Address { get; set; }
+        public DbSet<RouteList> RouteLists { get; set; }
+        public DbSet<Destination> Destinations { get; set; }
+        public DbSet<OrderRow> OrderRows { get; set; }
+        public DbSet<OrderRowStatus> OrderRowStatus { get; set; }
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+        public DbSet<OrderType> OrderType { get; set; }
+        public DbSet<Parcel> Parcels { get; set; }
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
+        public DbSet<UserConnectionStatus> UsersConnectionStatus { get; set; }
     }
 }

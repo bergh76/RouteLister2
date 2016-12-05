@@ -9,5 +9,9 @@ namespace RouteLister2.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public IEnumerable<RouteList> RouteLists { get; set; }
+        public IEnumerable<UserConnectionStatus> UserConnectionHistory { get; set; }
+        public string RegistrationNumber { get; set; }
+        public string ConnectionId { get; set; }
     }
 }

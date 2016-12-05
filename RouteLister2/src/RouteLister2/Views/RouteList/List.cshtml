@@ -1,0 +1,160 @@
+﻿@model List<RouteLister2.Models.RouteListerViewModels.RouteListViewModel>
+
+@if (Model != null)
+{
+    @for (int f = 0; f < Model.Count(); f++)
+    {
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now <span class="pull-right" id="clock"></span></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <!-- start accordion -->
+                    <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                        @if (Model[f] != null)
+                    {
+
+                            @if (Model[f].Orders != null)
+                        {
+                                @for (int i = 0; i < Model[f].Orders.Count; i++)
+                                {
+                                    <div class="panel">
+                                        <div hidden id="@Html.IdFor(x=>x[f].Orders[i])">@Model[f].Orders[i]</div>
+                                        <div class="panel-heading collapsed col-md-12">
+                                            <div class="col-lg-8 pull-left">
+                                                <p class="h5 text-left">@(i + 1) @Model[f].Orders[i].Description</p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse@(Html.IdFor(x=>x[f].Orders[i]))" aria-expanded="false" aria-controls="collapseTwo">
+                                                    <i class="fa fa-info-circle fa-2x"></i>
+                                                </span>
+                                                <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                                <span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>
+                                                <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="collapse@(Html.IdFor(x=>x[f].Orders[i]))" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                            <div class="panel-body">
+                                                <!--Customer Detail Data Start-->
+                                                <div class="col-md-12">
+                                                    <div class="col-md-4">
+                                                        <p><h6>@Html.NameFor(x => x[f].Orders[i].Name): @Model[f].Orders[i].Name</h6></p>
+                                                        <p><h6>@Html.NameFor(x => x[f].Orders[i].Address): @Model[f].Orders[i].Address</h6> </p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p><h6>@Html.NameFor(x => x[f].Orders[i].PostNumber): @Model[f].Orders[i].PostNumber</h6> </p>
+                                                        <p><h6>@Html.NameFor(x => x[f].Orders[i].City): @Model[f].Orders[i].City</h6></p>
+
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @if (Model[f].Orders[i].PhoneNumbers != null)
+                                                        {
+                                                            @for (int j = 0; j < Model[f].Orders[i].PhoneNumbers.Count; j++)
+                                                            {
+                                                                <p><h6><i class="fa fa-phone"></i> #@(j + 1): @Model[f].Orders[i].PhoneNumbers[j]</h6> </p>
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <h5>@Html.NameFor(x => x[f].Orders[i].DeliveryTypeName): <strong>@Model[f].Orders[i].DeliveryTypeName</strong></h5>
+                                                    </div>
+                                                </div><!--Customer Detail Data End-->
+
+                                                <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                                    <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <th><h4>Antal</h4></th>
+                                                                <th><h4>KollieId</h4></th>
+                                                                <th><h4>Artikel</h4></th>
+                                                                <th><h4>Plockad</h4></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @for (int k = 0; k < Model[f].Orders[i].OrderRows.Count; k++)
+                                                            {
+                                                                <tr>
+                                                                    <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
+                                                                    <td>
+                                                                        <div class="slideThree">
+                                                                            @{
+                                                                                var isChecked = "checked='checked'";
+                                                                                @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
+                                                                                {
+                                                                                    isChecked = null;
+
+                                                                                }
+                                                                            }
+                                                                            <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
+                                                                            <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
+                                                                        </div>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                                }
+                                                        </tbody>
+                                                    </table>
+                                                    <span class="h4 pull-right">Total antal kollie @Model[f].Orders[i].TotalCount st</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                                                                }
+                                                                                }
+                                                                                }
+                    </section>
+                    <!-- end of accordion -->
+                </div>
+            </div>
+        </div>
+                                                                                }
+                                                                                }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+    <script type="text/javascript">
+
+        //$(document).ready(function () {
+        //    $('#myTable').DataTable({
+        //        "bFilter": false,
+        //        "paging": false,
+        //        "processing": true,
+        //        "info": false
+        //    })
+        //});
+        //Onclick function for changing status on orderrows
+        $(".slideThree > input").click(function (event) {
+            routeLister.orderRow.server(event);
+        });
+        $(".status-text").click(function (event) {
+            console.log("teeest");
+            routeLister.setConnectionStatus.client(false);
+        });
+
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('clock').innerHTML =
+                h + ":" + m + ":" + s;
+            var t = setTimeout(startTime, 500);
+        }
+        function checkTime(i) {
+            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+            return i;
+        }
+    </script>
+
+
+}

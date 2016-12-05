@@ -1,0 +1,53 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.OrderDetailViewModel
+
+
+
+<div id="collapseOne@(Model.OrderId)" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+    <div class="panel-body">
+        <!--Customer Detail Data Start-->
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <p><h6>@Html.NameFor(x => x.Name): @Model.Name</h6></p>
+                <p><h6>@Html.NameFor(x => x.Address): @Model.Address</h6> </p>
+            </div>
+            <div class="col-md-4">
+                <p><h6>@Html.NameFor(x => x.PostNumber): @Model.PostNumber</h6> </p>
+                <p><h6>@Html.NameFor(x => x.City): @Model.City</h6></p>
+
+            </div>
+            <div class="col-md-4">
+                @if (Model.PhoneNumbers != null)
+                {
+                    @for (int j = 0; j < Model.PhoneNumbers.Count; j++)
+                    {
+                        <p><h6><i class="fa fa-phone"></i> #@(j + 1): @Model.PhoneNumbers[j]</h6> </p>
+                    }
+                }
+            </div>
+            <div class="col-md-12">
+                <h5>@Html.NameFor(x => x.DeliveryTypeName): <strong>@Model.DeliveryTypeName</strong></h5>
+            </div>
+        </div><!--Customer Detail Data End-->
+
+        <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+            <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                <thead>
+                    <tr class="text-center">
+                        <th><h4>Antal</h4></th>
+                        <th><h4>KollieId</h4></th>
+                        <th><h4>Artikel</h4></th>
+                        <th><h4>Plockad</h4></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int k = 0; k < Model.OrderRows.Count; k++)
+                    {
+                        @Html.Partial("_OrderRowLine", Model.OrderRows[k])
+                    }
+                </tbody>
+            </table>
+            <span class="h4 pull-right">Total antal kollie @Model.TotalCount st</span>
+        </div>
+
+    </div>
+</div>
