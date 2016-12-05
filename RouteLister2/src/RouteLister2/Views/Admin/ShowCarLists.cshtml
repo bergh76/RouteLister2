@@ -14,16 +14,54 @@
         <section class="panel-group">
             <section class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
-                    <h4 class="panel-title">
+                    <div class="panel-title">
                         <span class="h4">
                             <i class="fa fa-truck fa-flip-horizontal"></i> LISTA FORDON AAA111 - @DateTime.Now.ToString("yyyy-MM-dd")
+                            @*<span class="btn btn-sm btn-success"><i class="fa fa-phone"></i></span>
+                            <span class="btn btn-sm btn-primary"><i class="fa fa-map-o"></i></span>
+                            <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle"></i></span>*@
+                            <a data-toggle="modal" data-target="#exampleModal">
+
+                                <!--Needs some real data to work - JUST A MOCKUP -->
+                                @{ var count = 4;}
+                                @if (count != 0)
+                                {
+                                    <i class="fa fa-envelope fa-lg message-envelope animated jello"><span class="badge message-count">@count</span></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-envelope fa-lg message-envelope-empty"></i>
+                                }
+                            </a>
+
                             <span class="pull-right">
                                 <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                     <i class="fa fa-chevron-down"></i>
                                 </a>
                             </span>
                         </span>
-                    </h4>
+                        <!--MODAL FOR MESSAGES-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        @{
+                                            Html.RenderPartial("_Message");
+                                        }
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Send message</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
@@ -36,7 +74,7 @@
                                     <td style="width:15%">value4</td>
                                     <th style="width:15%">value5</th>
                                     <th style="width:15%">value6</th>
-                                    <th style="width:5%"></th>
+                                    <th style="width:5%">Edit</th>
                                 </tr>
                             </thead>
                         </table>
@@ -141,9 +179,26 @@
                 <div class="panel-heading" role="tab" id="headingTwo">
                     <h4 class="panel-title">
                         <span class="h4">
-                            <i class="fa fa-truck fa-flip-horizontal"></i> LISTA FORDON BBB222 - @DateTime.Now.ToString("yyyy-MM-dd")
+                            <i class="fa fa-truck fa-flip-horizontal"></i> LISTA FORDON AAA111 - @DateTime.Now.ToString("yyyy-MM-dd")
+                            @*<span class="btn btn-sm btn-success"><i class="fa fa-phone"></i></span>
+            <span class="btn btn-sm btn-primary"><i class="fa fa-map-o"></i></span>
+            <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle"></i></span>*@
+                            <a data-toggle="modal" data-target="#exampleModal">
+
+                                <!--Needs some real data to work - JUST A MOCKUP -->
+                                @{ var countTwo = 0;}
+                                @if (countTwo != 0)
+                                {
+                                    <i class="fa fa-envelope fa-lg message-envelope animated jello"><span class="badge message-count">@count</span></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-envelope fa-lg message-envelope-empty"></i>
+                                }
+                            </a>
+
                             <span class="pull-right">
-                                <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                                <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                     <i class="fa fa-chevron-down"></i>
                                 </a>
                             </span>
@@ -163,7 +218,7 @@
                                     <td style="width:15%">value4</td>
                                     <th style="width:15%">value5</th>
                                     <th style="width:15%">value6</th>
-                                    <th style="width:5%"></th>
+                                    <th style="width:5%">Edit</th>
                                 </tr>
                             </thead>
                         </table>
