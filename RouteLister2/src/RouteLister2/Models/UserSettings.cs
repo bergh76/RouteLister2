@@ -12,18 +12,18 @@ namespace RouteLister2.Models
     public class UserSettings
     {
 
-        IServiceProvider _serviceProvider;
+        //IServiceProvider _serviceProvider;
         private ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public UserSettings(
-            IServiceProvider serviceProvider,
+            //IServiceProvider serviceProvider,
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context, string email, string [] roles
             )
         {
             _context = context;
-            _serviceProvider = serviceProvider;
+            //_serviceProvider = serviceProvider;
             _userManager = userManager;
         }
         internal async Task<ApplicationUser> SetNewPassword(ApplicationDbContext context,ApplicationUser user,  string newPW, string userID)
