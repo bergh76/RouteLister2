@@ -77,7 +77,7 @@ namespace RouteLister2.Controllers
                     var user = await _userManager.FindByNameAsync(model.User);
                     var userRole = await _userManager.GetRolesAsync(user);
                     if(userRole.FirstOrDefault() == "Admin")
-                        //Redirects users of Adminrole to adminpage
+                        //Redirects users of Adminrole to adminpage if userRole = true
                         return RedirectToAction(nameof(AccountController.Register), "Account");
                     //Redirects users of Userrole to Home/Index
                     return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -124,6 +124,12 @@ namespace RouteLister2.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var exist = _context.Users.Any(x => x.UserName == user.UserName);
+                if (exist == true) {
+                    string fail = ViewBag.UserExists = "Användaren finns redan";
+                    return View(model) ;
+                }
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                
                 // Gets role from View and pars to Array  

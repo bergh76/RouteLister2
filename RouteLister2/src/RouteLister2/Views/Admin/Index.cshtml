@@ -1,18 +1,8 @@
-﻿@{
+﻿@model IEnumerable<RouteLister2.Models.ParcelListFromCompanyViewModel.ParcelListFromCompanyViewModel>
+@{
     ViewData["Title"] = "LOGISTIKBOLAGET || Paketlista-" + DateTime.Now.ToString("yyyy-MM-dd");
 }
-@{ bool isAssigned = false; }
-<!-- DATATABLE CSS-->
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
-<!-- END DATATABLE CSS-->
-<!-- DATATABLE BUTTONS CSS-->
-<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
-<!-- END DATATABLE BUTTONS CSS-->
+
 
 <script type="text/javascript">
     // < datatables API start 
@@ -41,7 +31,7 @@
                 "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
             },
             "processing": true,
-            "order": [[0, "asc"],[4, 'asc']]
+            "order": [[2, "asc"],[6, 'asc']]
         })
 
     });
@@ -68,7 +58,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
 
     @{Html.RenderPartial("_AdminNavbar");}
-   
+
     <div class="panel panel-default x_panel">
         <div class="panel-heading x_title">
             <span class="h3">
@@ -81,243 +71,37 @@
                 <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
                     <thead>
                         <tr class="text-center">
-                            <th><h6>Datum</h6></th>
+                            @*<th><h6></h6></th>*@
                             <th><h6>Antal</h6></th>
+                            <th><h6>KollieId</h6></th>
+                            <th><h6>Levdatum</h6></th>
                             <th><h6>Namn</h6></th>
                             <th><h6>Adress</h6></th>
-                            <th><h6>Postadress</h6></th>
+                            <th><h6>City</h6></th>
                             <th><h6>Postnr</h6></th>
-                            <th><h6>Leverantör</h6></th>
-                            <th><h6>KollieId</h6></th>
-                            <th><h6>Artikel</h6></th>                            
-                            <th><h6>Tilldelad</h6></th>
+                            <th><h6>Distributör</h6></th>
+                            <th><h6>Artikel</h6></th>
+                            <th><h6>Leveranstyp</h6></th>
+                            <th><h6>Bil</h6></th>
                             <th></th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>20161223</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>White Away</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>
-                            @{if (isAssigned != true)
-                                {
-                                 <td>
-                                <select class="dropdown" id="Select1">
-                                    <option>AAA111</option>
-                                    <option>BBB222</option>
-                                    <option>CCC333</option>
-                                    <option>DDD444</option>
-                                    <option>EEE555</option>
-                                    <option>DDD666</option>
-                                </select>
-                                 </td>
-                                <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>BBB222</td>
-                                }
-                                }
-                        </tr>
-                        <tr>
-                            <td>20161130</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Elgiganten</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161130</td>
-                            <td>1</td>
-                            <td>Elsa Beskov</td>
-                            <td>Segelvägen 19</td>
-                            <td>394 21</td>
-                            <td>Huddinge</td>
-                            <td>White Away</td>
-                            <td>0718482548729SE</td>
-                            <td>Electrolux Kylskåp</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161202</td>
-                            <td>1</td>
-                            <td>Jan Mårtensson</td>
-                            <td>Abborrevägen 5</td>
-                            <td>382 96</td>
-                            <td>Nybro</td>
-                            <td>Vinoteket</td>
-                            <td>078295148529SE</td>
-                            <td>Drycker</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161209</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Elgiganten</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>AAA111</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161205</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Vinoteket</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>                                
-                                }
-                                else
-                                {
-                                    <td>CCC333</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161121</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Vinoteket</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>                            
-                            @{if (isAssigned != true)
-                                {
-                                    <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
-                                    </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
 
-                                }
-                                else
-                                {
-                                    <td>DDD666</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161205</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Vinoteket</td>
-                            <td>078282988529SE</td>
-                            <td>Cylinda Diskmaskin</td>                            
-                            @{if (isAssigned != true)
-                                {
+                    </thead >
+                    <tbody >
+                        @{foreach (var item in Model)
+                            {
+                                <tr>
+                                    @*<td></td>*@
+                                    <td>@item.ArticleAmount</td>
+                                    <td>@item.CollieId</td>
+                                    <td>@item.DeliveryDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@item.FirstName @item.LastName</td>
+                                    <td>@item.Adress</td>
+                                    <td>@item.City</td>
+                                    <td>@item.PostNr</td>
+                                    <td>@item.Distributor</td>
+                                    <td>@item.ArticleName</td>
+                                    <td>@item.DeliveryType</td>
                                     <td>
                                         <select class="dropdown" id="Select1">
                                             <option>AAA111</option>
@@ -328,61 +112,17 @@
                                             <option>DDD666</option>
                                         </select>
                                     </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>BBB222</td><!--SÄTT TILLDELAD BIL-->
-                                }
-                            }
-                        </tr>
-                        <tr>
-                            <td>20161106</td>
-                            <td>1</td>
-                            <td>Klas Knutsson</td>
-                            <td>Björkkvistsgatan 3</td>
-                            <td>392 44</td>
-                            <td>Nyköping</td>
-                            <td>Jysk</td>
-                            <td>078282988529SE</td>
-                            <td>Sängar</td>                           
-                            @{if (isAssigned != true)
-                                {
                                     <td>
-                                        <select class="dropdown" id="Select1">
-                                            <option>AAA111</option>
-                                            <option>BBB222</option>
-                                            <option>CCC333</option>
-                                            <option>DDD444</option>
-                                            <option>EEE555</option>
-                                            <option>DDD666</option>
-                                        </select>
+                                        <form>
+                                            <button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button>
+                                        </form>
                                     </td>
-                                    <td><button class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
-                                }
-                                else
-                                {
-                                    <td>BBB222</td><!--SÄTT TILLDELAD BIL-->
-                                }
+                                </tr>
                             }
-                        </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-<!-- DATATABELS -->
-<script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
-<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
-<script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
-<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
-<script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
-<!-- END DATATABELS -->
-<!-- DATATABEL-BUTTONS -->
-<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
-<script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
-<script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
-<script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
-<script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
-<!-- END DATATABEL-BUTTONS -->
