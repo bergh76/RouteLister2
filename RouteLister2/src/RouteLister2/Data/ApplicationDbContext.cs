@@ -22,6 +22,7 @@ namespace RouteLister2.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+        //public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Address { get; set; }

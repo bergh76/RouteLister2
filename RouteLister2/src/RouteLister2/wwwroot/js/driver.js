@@ -33,6 +33,7 @@ var routeLister = (function () {
     //const idPrefix = '-_:\.Id';
     const idRegex = new RegExp(regexForidToken2);
 
+
     var connectionStatus = false;
     //Stop event from happening and bubbling
     var stopClient = function (event) {
@@ -43,7 +44,6 @@ var routeLister = (function () {
     var connectionId;
 
     var setConnectionStatus = (function (status) {
-
         var changeStatus = function (status) {
             //Determine client status(What the client sees right now
 
@@ -60,8 +60,6 @@ var routeLister = (function () {
                 clientGraphicsStatus = false;
             }
             var statusText = $("#status-text");
-
-
 
             //If status is true = online
             if (status) {
