@@ -73,10 +73,14 @@ namespace RouteLister2.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    // Standard redirect at login
-                    //return RedirectToLocal(returnUrl);
-
-                    return RedirectRoleToLocal(returnUrl);
+                    //Check Role at login. If admin returns adminpage else redirect user to Home/Index
+                    var user = await _userManager.FindByNameAsync(model.User);
+                    var userRole = await _userManager.GetRolesAsync(user);
+                    if(userRole.FirstOrDefault() == "Admin")
+                        //Redirects users of Adminrole to adminpage
+                        return RedirectToAction(nameof(AccountController.Register), "Account");
+                    //Redirects users of Userrole to Home/Index
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -96,26 +100,6 @@ namespace RouteLister2.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
-
-        private IActionResult RedirectRoleToLocal(string returnUrl)
-        {
-            //var user = await _userManager.FindByIdAsync(User.);
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-
-                //ToDo: Rolebased user login
-                // Might need claims to function
-                if (User.IsInRole("Admin"))
-                    //if (user..IsInRole != "Admin")
-                    return RedirectToAction(nameof(AccountController.Register), "Account");
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
         }
 
         //
