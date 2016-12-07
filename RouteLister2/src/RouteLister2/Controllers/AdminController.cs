@@ -36,14 +36,14 @@ namespace RouteLister2.Controllers
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public IActionResult Index(
+        public async Task<IActionResult> Index(
             JsonDataListImports jsonData, 
             ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
             {
-                var data = jsonData.getParcelData(_context);
-                var result = _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetIncluded();
+                await jsonData.getParcelData(_context);
+                var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
 
                 return View(result);
             }

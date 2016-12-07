@@ -29,6 +29,7 @@ namespace RouteLister2.Services
         }
 
         public JsonDataListImports() { }
+
         private async Task<T> jsonSerializer<T>(string path) where T : new()
         {
             using (var http = new HttpClient())
@@ -48,45 +49,13 @@ namespace RouteLister2.Services
 
         public async Task getParcelData(ApplicationDbContext context)
         {
-            string path = JsonUrl;
+            string path = JsonUrl.ToString();
             var data = await jsonSerializer<JsonDataListImports>(path);
             ParcelList = data.ParcelListImports;
             await setDataToPersonIfNotExists(context);
             //await GetCurrentList();
         }
 
-        private async Task GetCurrentList()
-        {
-            var result = from contact in _context.Contacts
-                             //join destination in context.Destinations on contact.Id equals destination.ContactId
-                         //join phone in context.PhoneNumbers on contact.Id equals phone.ContactId
-                         //join address in context.Address on destination.AddressId equals address.Id
-                         //join parcel in context.Parcels on contact.Id equals parcel.Id
-                         //join ordertype in context.OrderType on contact.Id equals ordertype.Id
-
-                         select new ParcelListFromCompanyViewModel
-                         {
-                             FirstName = contact.FirstName,
-                             LastName = contact.LastName,
-                             Adress = "",
-                             City = "",
-                             PostNr = "",
-                             Country = "",
-                             ArticleName = "",
-                             CollieId = "",
-                             Distributor = "",
-                             DeliveryType = "",
-                             PhoneOne = _context.PhoneNumbers
-                                        .Where(x => x.ContactId == contact.Id).ToList()
-                                        .Select(x => x.Number).First(),
-                             PhoneTwo = _context.PhoneNumbers
-                                        .Where(x => x.ContactId == contact.Id).ToList()
-                                        .Select(x => x.Number).Last(),
-                             ArticleAmount = 1,
-                             DeliveryDate = DateTime.Now
-                         };
-            ParcelList = result.ToList();
-        }
 
         public async Task setDataToPersonIfNotExists(ApplicationDbContext context)
         {
@@ -101,119 +70,73 @@ namespace RouteLister2.Services
         }
 
         internal async Task APIListImport(ApplicationDbContext context)
-        {           
-            var contacts  =_mapper.Map<IEnumerable<Contact>>(ParcelList);
-            List<Contact> test = new List<Contact>();
-            
-            await context.AddRangeAsync(contacts);
-
+        {
             for (int i = 0; i < ParcelList.Count; i++)
             {
-                var contact = new Contact
-                {
-                    FirstName = ParcelList[i].FirstName,
-                    LastName = ParcelList[i].LastName,
-                    PhoneNumbers = new List<PhoneNumber>()
-                        {
-                                new PhoneNumber() { Number = ParcelList[i].PhoneOne},
-                                new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
-                        }
-                };
-                context.Add(contact);
-                await context.SaveChangesAsync();
-
-                var address = new Address()
-                {
-                    City = ParcelList[i].City,
-                    Street = ParcelList[i].Adress,
-                    County = ParcelList[i].Country,
-                    PostNumber = ParcelList[i].PostNr
-                };
-                context.Add(address);
-                await context.SaveChangesAsync();
-
-                var parcel = new Parcel()
-                {
-                    Name = ParcelList[i].ArticleName,
-                    ParcelNumber = ParcelList[i].CollieId,
-                    PickedStatus = false,
-                };
-                context.Add(parcel);
-                await context.SaveChangesAsync();
-
-                var destination = new Destination()
-                {
-                    AddressId = address.Id,
-                    ContactId = contact.Id,
-                    
-                };
-                context.Add(destination);
-                await context.SaveChangesAsync();
-
-                var ordertyp = new OrderType()
-                {
-                    Description = ParcelList[i].DeliveryType,
-                    Name = ParcelList[i].DeliveryType,
-                };
-                context.Add(ordertyp);
+                var contacts = _mapper.Map<IEnumerable<Contact>>(ParcelList);
+                await context.AddRangeAsync(contacts);
+                var address = _mapper.Map<IEnumerable<Address>>(ParcelList);
+                await context.AddRangeAsync(address);
+                var parcel = _mapper.Map<IEnumerable<Parcel>>(ParcelList);
+                await context.AddRangeAsync(parcel);
+                var destination = _mapper.Map<IEnumerable<Destination>>(ParcelList);
+                await context.AddRangeAsync(destination);
+                var ordertype = _mapper.Map<IEnumerable<OrderType>>(ParcelList);
+                await context.AddRangeAsync(ordertype);
                 await context.SaveChangesAsync();
 
             }
+                //var contact = new Contact
+                //{
+                //    FirstName = ParcelList[i].FirstName,
+                //    LastName = ParcelList[i].LastName,
+                //    PhoneNumbers = new List<PhoneNumber>()
+                //        {
+                //                new PhoneNumber() { Number = ParcelList[i].PhoneOne},
+                //                new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
+                //        }
+                //};
+                //context.Add(contact);
+                //await context.SaveChangesAsync();
+
+                //var address = new Address()
+                //{
+                //    City = ParcelList[i].City,
+                //    Street = ParcelList[i].Adress,
+                //    County = ParcelList[i].Country,
+                //    PostNumber = ParcelList[i].PostNr
+                //};
+                //context.Add(address);
+                //await context.SaveChangesAsync();
+
+                //var parcel = new Parcel()
+                //{
+                //    Name = ParcelList[i].ArticleName,
+                //    ParcelNumber = ParcelList[i].CollieId,
+                //    PickedStatus = false,
+                //};
+                //context.Add(parcel);
+                //await context.SaveChangesAsync();
+
+                //var destination = new Destination()
+                //{
+                //    AddressId = address.Id,
+                //    ContactId = contact.Id,
+
+                //};
+                //context.Add(destination);
+                //await context.SaveChangesAsync();
+
+                //var ordertyp = new OrderType()
+                //{
+                //    Description = ParcelList[i].DeliveryType,
+                //    Name = ParcelList[i].DeliveryType,
+                //};
+                //context.Add(ordertyp);
+                //await context.SaveChangesAsync();
+
+
         }
 
-        //internal async Task CheckIfCollieExists(ApplicationDbContext context)
-        //{
-        //    for (int i = 0; i < ParcelList.Count; i++)
-        //    {
-
-        //        var contact = new Contact
-        //        {
-        //            FirstName = ParcelList[i].FirstName,
-        //            LastName = ParcelList[i].LastName,
-        //            PhoneNumbers = new List<PhoneNumber>()
-        //                {
-        //                        new PhoneNumber() { Number = ParcelList[i].PhoneOne},
-        //                        new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
-        //                }
-        //        };
-        //        context.Add(contact);
-        //        await context.SaveChangesAsync();
-
-        //        var address = new Address()
-        //        {
-        //            City = ParcelList[i].City,
-        //            Street = ParcelList[i].Adress,
-        //            County = ParcelList[i].Country,
-        //            PostNumber = ParcelList[i].PostNr
-        //        };
-        //        context.Attach(address);
-        //        await context.SaveChangesAsync();
-
-        //        var parcel = new Parcel()
-        //        {
-        //            Name = ParcelList[i].ArticleName,
-        //            ParcelNumber = ParcelList[i].CollieId,
-        //            PickedStatus = false,
-        //        };
-        //        context.Attach(parcel);
-        //        await context.SaveChangesAsync();
-
-        //        var destination = new Destination()
-        //        {
-        //            AddressId = address.Id,
-        //            ContactId = contact.Id,
-        //        };
-        //        context.Attach(destination);
-        //        await context.SaveChangesAsync();
-
-        //        var ordertyp = new OrderType()
-        //        {
-        //            Description = ParcelList[i].DeliveryType,
-        //            Name = ParcelList[i].DeliveryType,
-        //        };
-        //        context.Attach(ordertyp);
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
     }
 }
