@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RouteLister2.Data;
 using RouteLister2.Models;
@@ -18,16 +20,18 @@ namespace RouteLister2.Services
         private const string JsonUrl = "http://localhost:5000/TestData/jsonParcels.json";
         public List<ParcelListFromCompanyViewModel> ParcelListImports { get; set; }
         public static List<ParcelListFromCompanyViewModel> ParcelList = new List<ParcelListFromCompanyViewModel>();
+        private IMapper _mapper;
 
-        public JsonDataListImports(ApplicationDbContext context)
+        public JsonDataListImports(ApplicationDbContext context, [FromServices] IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public JsonDataListImports() { }
         private async Task<T> jsonSerializer<T>(string path) where T : new()
         {
-            using(var http = new HttpClient())
+            using (var http = new HttpClient())
             {
                 var data = string.Empty;
                 {
@@ -36,40 +40,88 @@ namespace RouteLister2.Services
                         data = await http.GetStringAsync(path);
                     }
                     catch (Exception) { }
-                    return !string.IsNullOrEmpty(path) 
-                        ? JsonConvert.DeserializeObject<T>(data) : new T();
+                    return !string.IsNullOrEmpty(path) ? JsonConvert.DeserializeObject<T>(data) : new T();
                 }
 
             }
         }
 
-        public async Task getParcelData()
+        public async Task getParcelData(ApplicationDbContext context)
         {
             string path = JsonUrl;
-
             var data = await jsonSerializer<JsonDataListImports>(path);
             ParcelList = data.ParcelListImports;
-            await setDataToPersonIfNotExists();
+            await setDataToPersonIfNotExists(context);
+            //await GetCurrentList();
         }
 
-        public async Task setDataToPersonIfNotExists()
+        private async Task GetCurrentList()
+        {
+            var result = from contact in _context.Contacts
+                             //join destination in context.Destinations on contact.Id equals destination.ContactId
+                         //join phone in context.PhoneNumbers on contact.Id equals phone.ContactId
+                         //join address in context.Address on destination.AddressId equals address.Id
+                         //join parcel in context.Parcels on contact.Id equals parcel.Id
+                         //join ordertype in context.OrderType on contact.Id equals ordertype.Id
+
+                         select new ParcelListFromCompanyViewModel
+                         {
+                             FirstName = contact.FirstName,
+                             LastName = contact.LastName,
+                             Adress = "",
+                             City = "",
+                             PostNr = "",
+                             Country = "",
+                             ArticleName = "",
+                             CollieId = "",
+                             Distributor = "",
+                             DeliveryType = "",
+                             PhoneOne = _context.PhoneNumbers
+                                        .Where(x => x.ContactId == contact.Id).ToList()
+                                        .Select(x => x.Number).First(),
+                             PhoneTwo = _context.PhoneNumbers
+                                        .Where(x => x.ContactId == contact.Id).ToList()
+                                        .Select(x => x.Number).Last(),
+                             ArticleAmount = 1,
+                             DeliveryDate = DateTime.Now
+                         };
+            ParcelList = result.ToList();
+        }
+
+        public async Task setDataToPersonIfNotExists(ApplicationDbContext context)
         {
             for (int i = 0; i < ParcelList.Count; i++)
+            {                
+                // First applyment to db from API and checks if collieId exists in db.
+                if (!context.Parcels.Where(x => x.ParcelNumber == ParcelList[i].CollieId).Any())
+                {
+                    await APIListImport(context);
+                }
+            };
+        }
+
+        internal async Task APIListImport(ApplicationDbContext context)
+        {           
+            var contacts  =_mapper.Map<IEnumerable<Contact>>(ParcelList);
+            List<Contact> test = new List<Contact>();
+            
+            await context.AddRangeAsync(contacts);
+
+            for (int i = 0; i < ParcelList.Count; i++)
             {
-                var person = new Contact
+                var contact = new Contact
                 {
                     FirstName = ParcelList[i].FirstName,
                     LastName = ParcelList[i].LastName,
-                };
-                //await _context.SaveChangesAsync();
-                //await context.AddAsync(person);
-                var phone = new List<PhoneNumber>()
+                    PhoneNumbers = new List<PhoneNumber>()
                         {
-                            new PhoneNumber() { Number = ParcelList[i].PhoneOne, ContactId = person.Id },
-                            new PhoneNumber() { Number = ParcelList[i].PhoneTwo , ContactId = person.Id}
-                        };
-                //await context.AddAsync(phone);
-                //await _context.SaveChangesAsync();
+                                new PhoneNumber() { Number = ParcelList[i].PhoneOne},
+                                new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
+                        }
+                };
+                context.Add(contact);
+                await context.SaveChangesAsync();
+
                 var address = new Address()
                 {
                     City = ParcelList[i].City,
@@ -77,44 +129,91 @@ namespace RouteLister2.Services
                     County = ParcelList[i].Country,
                     PostNumber = ParcelList[i].PostNr
                 };
-                //await context.AddAsync(address);
-                //await _context.SaveChangesAsync();
+                context.Add(address);
+                await context.SaveChangesAsync();
+
                 var parcel = new Parcel()
                 {
                     Name = ParcelList[i].ArticleName,
                     ParcelNumber = ParcelList[i].CollieId,
                     PickedStatus = false,
                 };
-                //await context.AddAsync(parcel);
-                //await _context.SaveChangesAsync();
+                context.Add(parcel);
+                await context.SaveChangesAsync();
+
                 var destination = new Destination()
                 {
                     AddressId = address.Id,
-                    ContactId = person.Id,
+                    ContactId = contact.Id,
+                    
                 };
-                //await context.AddAsync(destination); 
-                //await context.AddRangeAsync(person, address, parcel, destination);
+                context.Add(destination);
+                await context.SaveChangesAsync();
 
-            };
-            await _context.SaveChangesAsync();
+                var ordertyp = new OrderType()
+                {
+                    Description = ParcelList[i].DeliveryType,
+                    Name = ParcelList[i].DeliveryType,
+                };
+                context.Add(ordertyp);
+                await context.SaveChangesAsync();
 
+            }
         }
 
-        //public Contact addContact(Contact person)
+        //internal async Task CheckIfCollieExists(ApplicationDbContext context)
         //{
-        //    if (!_context.Contacts.Where(x => x.FirstName + x.LastName == person.FirstName + person.LastName).Any())
+        //    for (int i = 0; i < ParcelList.Count; i++)
         //    {
-        //        _context.Attach(person);
+
+        //        var contact = new Contact
+        //        {
+        //            FirstName = ParcelList[i].FirstName,
+        //            LastName = ParcelList[i].LastName,
+        //            PhoneNumbers = new List<PhoneNumber>()
+        //                {
+        //                        new PhoneNumber() { Number = ParcelList[i].PhoneOne},
+        //                        new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
+        //                }
+        //        };
+        //        context.Add(contact);
+        //        await context.SaveChangesAsync();
+
+        //        var address = new Address()
+        //        {
+        //            City = ParcelList[i].City,
+        //            Street = ParcelList[i].Adress,
+        //            County = ParcelList[i].Country,
+        //            PostNumber = ParcelList[i].PostNr
+        //        };
+        //        context.Attach(address);
+        //        await context.SaveChangesAsync();
+
+        //        var parcel = new Parcel()
+        //        {
+        //            Name = ParcelList[i].ArticleName,
+        //            ParcelNumber = ParcelList[i].CollieId,
+        //            PickedStatus = false,
+        //        };
+        //        context.Attach(parcel);
+        //        await context.SaveChangesAsync();
+
+        //        var destination = new Destination()
+        //        {
+        //            AddressId = address.Id,
+        //            ContactId = contact.Id,
+        //        };
+        //        context.Attach(destination);
+        //        await context.SaveChangesAsync();
+
+        //        var ordertyp = new OrderType()
+        //        {
+        //            Description = ParcelList[i].DeliveryType,
+        //            Name = ParcelList[i].DeliveryType,
+        //        };
+        //        context.Attach(ordertyp);
+        //        await context.SaveChangesAsync();
         //    }
-        //    return person;
-        //}
-        //public Address addAdress(Address address)
-        //{
-        //    if (!_context.Address.Where(x => x.Street == address.Street).Any())
-        //    {
-        //        _context.Attach(address);
-        //    }
-        //    return address;
         //}
     }
 }

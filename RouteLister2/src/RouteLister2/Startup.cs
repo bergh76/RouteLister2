@@ -64,7 +64,6 @@ namespace RouteLister2
 
             });
             services.AddTransient(sp => configuration.CreateMapper());
-            
             //Unit of work service
             services.AddTransient<UnitOfWork>();
 
@@ -91,7 +90,6 @@ namespace RouteLister2
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RouteLister2.Services;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
+using AutoMapper;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,20 +20,37 @@ namespace RouteLister2.Controllers
     //[Route("Admin")]
     public class AdminController : Controller
     {
-         // GET: /<controller>/
+        private ApplicationDbContext _context;
+        private IMapper _mapper;
+        private UnitOfWork _unitOfWork;
+
+        // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
-       
-        public async Task<IActionResult> Index(JsonDataListImports jsonData, ParcelListFromCompanyViewModel parcel)
+        public AdminController(
+            [FromServices]ApplicationDbContext context,
+            [FromServices] IMapper mapper,
+            [FromServices] UnitOfWork unitOfWork
+            )
+        {
+            _context = context;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
+        public IActionResult Index(
+            JsonDataListImports jsonData, 
+            ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
             {
-                var data = jsonData.getParcelData();
-                var list = JsonDataListImports.ParcelList;
-                return View(list);
+                var data = jsonData.getParcelData(_context);
+                var result = _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetIncluded();
+
+                return View(result);
             }
             
             return RedirectToAction("Error");
         }
+
         public IActionResult ShowCarLists()
         {
             return View();
