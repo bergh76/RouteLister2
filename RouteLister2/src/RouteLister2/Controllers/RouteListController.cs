@@ -18,21 +18,21 @@ namespace RouteLister2.Controllers
     {
         private ApplicationDbContext _context;
         private IMapper _mapper;
-        private UnitOfWork _unitOfWork;
+ 
         private IConnectionManager _connectionManager;
         private SignalRBusinessLayer _businessLayer;
 
         public RouteListController(
             [FromServices] ApplicationDbContext context, 
             [FromServices] IMapper mapper, 
-            [FromServices] UnitOfWork unitOfWork,
+
             IConnectionManager connectionManager,
             [FromServices] SignalRBusinessLayer businessLayer
             )
         {
             _context = context;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
+
             _connectionManager = connectionManager;
             _businessLayer = businessLayer;
         }
@@ -47,12 +47,11 @@ namespace RouteLister2.Controllers
         public async Task<IActionResult> List(string id)
         {
 
-            var result = await _unitOfWork.GenericRepository<RouteList>().GetIncluded(
-                included: x => x.ApplicationUser,
-                filter: x => x.ApplicationUser.RegistrationNumber == id
-                ).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            var result = await _businessLayer.GetRouteList(id);
+            var viewModel = _mapper.Map<RouteListViewModel>(result);
             return View(result);
         }
+    
 
 
         ////Example SignalR flow action
@@ -81,8 +80,8 @@ namespace RouteLister2.Controllers
         //    {
         //        //Row doesn exist, notify user of that and logg this
         //    }
-            
-            
+
+
 
         //    if ()
         //    {

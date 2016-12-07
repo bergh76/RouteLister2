@@ -42,7 +42,7 @@ namespace RouteLister2.Data
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus))
                 .ForMember(x => x.ParcelName, opt => opt.MapFrom(t => t.Parcel.Name))
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
-                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue))
+                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == SignalRBusinessLayer.OrderRowStatusTrue))
                 .ForMember(x => x.OrderId, opt => opt.MapFrom(t => t.OrderId))
                 ;
 
@@ -51,6 +51,8 @@ namespace RouteLister2.Data
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))
                 .ForAllOtherMembers(x => x.Ignore())
                 ;
+
+
         }
 
     }

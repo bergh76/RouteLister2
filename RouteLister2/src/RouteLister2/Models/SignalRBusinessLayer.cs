@@ -14,6 +14,8 @@ namespace RouteLister2.Models
     {
         private IDriverHub _hub;
         private RouteListerRepository _repo;
+        public static readonly string OrderRowStatusTrue = "Plockad";
+        public static readonly string OrderRowStatusFalse = "I Lager";
 
         public SignalRBusinessLayer([FromServices] RouteListerRepository repo, [FromServices] IDriverHub hub = null)
         {
@@ -115,15 +117,15 @@ namespace RouteLister2.Models
             }
 
             //Translates orderstatus strign name to boolean and changes it to either or two things
-            if (model.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue)
+            if (model.OrderRowStatus.Name == OrderRowStatusTrue)
             {
-                model.OrderRowStatusId = (await _repo.GetAsync<OrderRowStatus>(filter: x => x.Name == UnitOfWork.OrderRowStatusFalse)).Select(x => x.Id).FirstOrDefault();
+                model.OrderRowStatusId = (await _repo.GetAsync<OrderRowStatus>(filter: x => x.Name == OrderRowStatusFalse)).Select(x => x.Id).FirstOrDefault();
                 await _repo.UpdateAsync(model);
                 return false;
             }
-            else if (model.OrderRowStatus.Name == UnitOfWork.OrderRowStatusFalse)
+            else if (model.OrderRowStatus.Name == OrderRowStatusFalse)
             {
-                model.OrderRowStatusId = (await _repo.GetAsync<OrderRowStatus>(filter: x => x.Name == UnitOfWork.OrderRowStatusTrue)).Select(x => x.Id).FirstOrDefault();
+                model.OrderRowStatusId = (await _repo.GetAsync<OrderRowStatus>(filter: x => x.Name == OrderRowStatusTrue)).Select(x => x.Id).FirstOrDefault();
                 await _repo.UpdateAsync(model);
                 return true;
             }

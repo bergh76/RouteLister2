@@ -48,8 +48,8 @@
             }
         } else if (typeof css == "string") {
             css = css.split("; ");
-            for (var i in css) {
-                var l = css[i].split(": ");
+            for (var f in css) {
+                var l = css[f].split(": ");
                 s[l[0].toLowerCase()] = (l[1]);
             }
         }
