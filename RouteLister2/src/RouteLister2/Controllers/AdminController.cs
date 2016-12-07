@@ -42,10 +42,35 @@ namespace RouteLister2.Controllers
         {
             if (ModelState.IsValid)
             {
-                await jsonData.getParcelData(_context);
-                var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
+                await jsonData.GetParcelData(_context);
+                //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
+                var result = from c in _context.Contacts
+                                 //join order in _context.Orders on c.Id equals order.Id
+                             //join phone in _context.PhoneNumbers on c.Id equals phone.ContactId
+                             //join par in _context.Parcels on c.Id equals par.Id
+                             select new ParcelListFromCompanyViewModel
+                             {
 
-                return View(result);
+                                 FirstName = c.FirstName, //Contact
+                                 LastName = c.LastName, //Contact
+                                 Adress = "", //Address
+                                 City = "", //Address
+                                 PostNr = "", //Address
+                                 Distributor = "", //Address
+                                 CollieId = "", //Parcel
+                                 ArticleName = "", //Parcel
+                                 ArticleAmount = 0, //Parcel
+                                 Country = "", //Parcel
+                                 DeliveryType = "", //Parcel
+                                 DeliveryDate = DateTime.Now, //Parcel
+                                 PhoneOne = _context.PhoneNumbers.Where(x => x.ContactId == c.Id)
+                                             .Select(x => x.Number).FirstOrDefault(),
+                                              //Phone
+                                 PhoneTwo = "", //Phone
+
+                             };
+                IEnumerable<ParcelListFromCompanyViewModel> outResult = result.ToList();
+                return View(outResult);
             }
             
             return RedirectToAction("Error");

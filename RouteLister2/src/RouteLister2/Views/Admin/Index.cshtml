@@ -55,11 +55,10 @@
     }
     // < clock functionality END
 </script>
-<div class="col-md-12 col-sm-12 col-xs-12">
 
     @{Html.RenderPartial("_AdminNavbar");}
 
-    <div class="panel panel-default x_panel">
+    <section class="container panel panel-default x_panel">
         <div class="panel-heading x_title">
             <span class="h3">
                 <i class="fa fa-list-ol"></i> Paketlista - @DateTime.Now.ToString("yyyy-MM-dd")
@@ -79,6 +78,7 @@
                             <th><h6>Adress</h6></th>
                             <th><h6>City</h6></th>
                             <th><h6>Postnr</h6></th>
+                            <th><h6>Tele</h6></th>
                             <th><h6>Distributör</h6></th>
                             <th><h6>Artikel</h6></th>
                             <th><h6>Leveranstyp</h6></th>
@@ -99,6 +99,7 @@
                                     <td>@item.Adress</td>
                                     <td>@item.City</td>
                                     <td>@item.PostNr</td>
+                                    <td>@item.PhoneOne</td>
                                     <td>@item.Distributor</td>
                                     <td>@item.ArticleName</td>
                                     <td>@item.DeliveryType</td>
@@ -124,5 +125,5 @@
                 </table>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+

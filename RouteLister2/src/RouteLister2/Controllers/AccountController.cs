@@ -76,7 +76,7 @@ namespace RouteLister2.Controllers
                     //Check Role at login. If admin returns adminpage else redirect user to Home/Index
                     var user = await _userManager.FindByNameAsync(model.User);
                     var userRole = await _userManager.GetRolesAsync(user);
-                    if(userRole.FirstOrDefault() == "Admin")
+                    if (userRole.Contains("Admin"))
                         //Redirects users of Adminrole to adminpage if userRole = true
                         return RedirectToAction(nameof(AdminController.Index), "Admin");
                     //Redirects users of Userrole to Home/Index

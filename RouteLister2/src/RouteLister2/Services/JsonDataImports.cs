@@ -19,7 +19,7 @@ namespace RouteLister2.Services
         private ApplicationDbContext _context;
         private const string JsonUrl = "http://localhost:5000/TestData/jsonParcels.json";
         public List<ParcelListFromCompanyViewModel> ParcelListImports { get; set; }
-        public static List<ParcelListFromCompanyViewModel> ParcelList = new List<ParcelListFromCompanyViewModel>();
+        public static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
         private IMapper _mapper;
 
         public JsonDataListImports(ApplicationDbContext context, [FromServices] IMapper mapper)
@@ -30,7 +30,7 @@ namespace RouteLister2.Services
 
         public JsonDataListImports() { }
 
-        private async Task<T> jsonSerializer<T>(string path) where T : new()
+        private async Task<T> JsonSerializer<T>(string path) where T : new()
         {
             using (var http = new HttpClient())
             {
@@ -47,96 +47,72 @@ namespace RouteLister2.Services
             }
         }
 
-        public async Task getParcelData(ApplicationDbContext context)
+        public async Task GetParcelData(ApplicationDbContext context)
         {
             string path = JsonUrl.ToString();
-            var data = await jsonSerializer<JsonDataListImports>(path);
-            ParcelList = data.ParcelListImports;
-            await setDataToPersonIfNotExists(context);
+            var data = await JsonSerializer<JsonDataListImports>(path);
+            _parcelList = data.ParcelListImports;
+            await JsonApiDataImport(context);
             //await GetCurrentList();
         }
 
-
-        public async Task setDataToPersonIfNotExists(ApplicationDbContext context)
+        public async Task JsonApiDataImport(ApplicationDbContext context)
         {
-            for (int i = 0; i < ParcelList.Count; i++)
-            {                
+            for (int i = 0; i < _parcelList.Count; i++)
+            {
                 // First applyment to db from API and checks if collieId exists in db.
-                if (!context.Parcels.Where(x => x.ParcelNumber == ParcelList[i].CollieId).Any())
+                if (!context.Parcels.Where(x => x.ParcelNumber == _parcelList[i].CollieId).Any())
                 {
-                    await APIListImport(context);
+                    var contact = new Contact
+                    {
+                        FirstName = _parcelList[i].FirstName,
+                        LastName = _parcelList[i].LastName,
+                        PhoneNumbers = new List<PhoneNumber>()
+                        {
+                                new PhoneNumber() { Number = _parcelList[i].PhoneOne},
+                                new PhoneNumber() { Number = _parcelList[i].PhoneTwo}
+                        }
+                    };
+                    context.Add(contact);
+                    await context.SaveChangesAsync();
+
+                    var address = new Address()
+                    {
+                        City = _parcelList[i].City,
+                        Street = _parcelList[i].Adress,
+                        County = _parcelList[i].Country,
+                        PostNumber = _parcelList[i].PostNr
+                    };
+                    context.Add(address);
+                    await context.SaveChangesAsync();
+
+                    var parcel = new Parcel()
+                    {
+                        Name = _parcelList[i].ArticleName,
+                        ParcelNumber = _parcelList[i].CollieId,
+                        PickedStatus = false,
+                    };
+                    context.Add(parcel);
+                    await context.SaveChangesAsync();
+
+                    var destination = new Destination()
+                    {
+                        AddressId = address.Id,
+                        ContactId = contact.Id,
+
+                    };
+                    context.Add(destination);
+                    await context.SaveChangesAsync();
+
+                    var ordertyp = new OrderType()
+                    {
+                        Description = _parcelList[i].DeliveryType,
+                        Name = _parcelList[i].DeliveryType,
+                    };
+                    context.Add(ordertyp);
+                    await context.SaveChangesAsync();
                 }
             };
         }
-
-        internal async Task APIListImport(ApplicationDbContext context)
-        {
-            for (int i = 0; i < ParcelList.Count; i++)
-            {
-                var contacts = _mapper.Map<IEnumerable<Contact>>(ParcelList);
-                await context.AddRangeAsync(contacts);
-                var address = _mapper.Map<IEnumerable<Address>>(ParcelList);
-                await context.AddRangeAsync(address);
-                var parcel = _mapper.Map<IEnumerable<Parcel>>(ParcelList);
-                await context.AddRangeAsync(parcel);
-                var destination = _mapper.Map<IEnumerable<Destination>>(ParcelList);
-                await context.AddRangeAsync(destination);
-                var ordertype = _mapper.Map<IEnumerable<OrderType>>(ParcelList);
-                await context.AddRangeAsync(ordertype);
-                await context.SaveChangesAsync();
-
-            }
-                //var contact = new Contact
-                //{
-                //    FirstName = ParcelList[i].FirstName,
-                //    LastName = ParcelList[i].LastName,
-                //    PhoneNumbers = new List<PhoneNumber>()
-                //        {
-                //                new PhoneNumber() { Number = ParcelList[i].PhoneOne},
-                //                new PhoneNumber() { Number = ParcelList[i].PhoneTwo}
-                //        }
-                //};
-                //context.Add(contact);
-                //await context.SaveChangesAsync();
-
-                //var address = new Address()
-                //{
-                //    City = ParcelList[i].City,
-                //    Street = ParcelList[i].Adress,
-                //    County = ParcelList[i].Country,
-                //    PostNumber = ParcelList[i].PostNr
-                //};
-                //context.Add(address);
-                //await context.SaveChangesAsync();
-
-                //var parcel = new Parcel()
-                //{
-                //    Name = ParcelList[i].ArticleName,
-                //    ParcelNumber = ParcelList[i].CollieId,
-                //    PickedStatus = false,
-                //};
-                //context.Add(parcel);
-                //await context.SaveChangesAsync();
-
-                //var destination = new Destination()
-                //{
-                //    AddressId = address.Id,
-                //    ContactId = contact.Id,
-
-                //};
-                //context.Add(destination);
-                //await context.SaveChangesAsync();
-
-                //var ordertyp = new OrderType()
-                //{
-                //    Description = ParcelList[i].DeliveryType,
-                //    Name = ParcelList[i].DeliveryType,
-                //};
-                //context.Add(ordertyp);
-                //await context.SaveChangesAsync();
-
-
-        }
-
     }
 }

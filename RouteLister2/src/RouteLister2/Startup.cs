@@ -43,7 +43,7 @@ namespace RouteLister2
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-
+            services.AddTransient<SeedDefaultUser>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -86,10 +86,11 @@ namespace RouteLister2
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SeedDefaultUser seedUser)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            seedUser.SeedAdminUser();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

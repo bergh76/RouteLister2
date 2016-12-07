@@ -14,11 +14,10 @@ namespace RouteLister2.Models
         //private IServiceProvider _serviceProvider;
 
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-
         public IEnumerable<ApplicationUser> _users { get; set; }
         public IEnumerable<string> _role { get; set; }
-
+        public string Role { get; set; }
+        public string UserName { get; set; }
         // Hack might need a ViewModel for populating Roles with userdata.
         //// Need a workaround 
         public string _userRole { get; set; }
@@ -51,9 +50,7 @@ namespace RouteLister2.Models
         {
             _context = context;
             _userRole = UserRoles;
-
         }
-
 
         public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
         {

@@ -6,6 +6,7 @@
         public string ParcelNumber { get; set; }
         public string Name { get;set;}
         public bool PickedStatus { get; set; }
+
         //public ParcelStatus ParcelStatus { get; set; }
         //public int ParcelStatusId { get; set; }
 

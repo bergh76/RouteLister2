@@ -11,7 +11,7 @@ namespace RouteLister2.Data
 
         public AutoMapperProfileConfiguration() : base()
         {
-           
+
             CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
@@ -76,6 +76,5 @@ namespace RouteLister2.Data
              ;
 
         }
-
     }
 }
