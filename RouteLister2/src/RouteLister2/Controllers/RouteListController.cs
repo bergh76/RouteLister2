@@ -20,27 +20,27 @@ namespace RouteLister2.Controllers
         private IMapper _mapper;
         private UnitOfWork _unitOfWork;
         private IConnectionManager _connectionManager;
+        private SignalRBusinessLayer _businessLayer;
 
         public RouteListController(
             [FromServices] ApplicationDbContext context, 
             [FromServices] IMapper mapper, 
             [FromServices] UnitOfWork unitOfWork,
-            IConnectionManager connectionManager
+            IConnectionManager connectionManager,
+            [FromServices] SignalRBusinessLayer businessLayer
             )
         {
             _context = context;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _connectionManager = connectionManager;
+            _businessLayer = businessLayer;
         }
 
         public IActionResult Index(string id)
         {
-
-            var result = _unitOfWork.GenericRepository<RouteList>().GetIncluded(
-                included: x => x.ApplicationUser, 
-                filter: x => x.ApplicationUser.RegistrationNumber == id
-                ).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).FirstOrDefault();
+            var result = _businessLayer.GetRouteList(id);
+           
             return View(result);
         }
 

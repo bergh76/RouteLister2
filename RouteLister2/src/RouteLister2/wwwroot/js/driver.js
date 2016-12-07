@@ -1,27 +1,4 @@
-﻿var signalRClient = $.connection.driverHub;
-//Regex used to extract idToken
-
-$.connection.hub.logging = true;
-$.connection.hub.start().done(function () {
-    var connected = signalRClient.server.connect();
-}).fail(function (error) {
-    console.log('Invocation of start failed. Error:' + error);
-});
-
-signalRClient.client.changeClientRowStatus = function (id,checked) {
-    console.log("changestatus triggered");
-    routeLister.orderRow.client(id,checked);
-
-};
-
-signalRClient.client.setConnectionStatus = function (status) {
-    routeLister.setConnectionStatus.client(status);
-};
-
-signalRClient.client.setConnectionId = function (connectionId) {
-    routeLister.connectionId = connectionId;
-};
-
+﻿
 
 
 
@@ -34,35 +11,35 @@ var routeLister = (function () {
     const idRegex = new RegExp(regexForidToken2);
 
     var connectionStatus = false;
+    var tryingToReconnect = false;
     //Stop event from happening and bubbling
     var stopClient = function (event) {
         event.stopPropagation();
         event.preventDefault();
     };
     //Request signalr server to change status on a order
-    var connectionId;
+    var _connectionId;
 
-    var setConnectionStatus = (function (status) {
-
+    var setConnectionId = function (connectionId) {
+            routeLister._connectionId = connectionId;
+            routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);   
+    };
+    var setConnectionStatus = (function () {
         var changeStatus = function (status) {
             //Determine client status(What the client sees right now
-
             //Clients representation of online
             var clientGraphicsStatus = true;
             var onlineCircle = $(".online");
             var offlineCircle = $(".offline-dim");
-            if (onlineCircle === undefined) {
+            if (onlineCircle.length === 0 ) {
                 onlineCircle = $(".online-dim");
                 clientGraphicsStatus = false;
             }
-            if (offlineCircle === undefined) {
+            if (offlineCircle.length === 0) {
                 offlineCircle = $(".offline");
                 clientGraphicsStatus = false;
             }
             var statusText = $("#status-text");
-
-
-
             //If status is true = online
             if (status) {
                 if (!clientGraphicsStatus) {
@@ -71,9 +48,7 @@ var routeLister = (function () {
                     offlineCircle.addClass("offline-dim");
                     offlineCircle.removeClass("offline");
                     statusText.text("[online");
-
                 }
-                routeLister.connectionStatus = true;
             }
             else {
                 if (clientGraphicsStatus) {
@@ -83,7 +58,6 @@ var routeLister = (function () {
                     offlineCircle.addClass("offline");
                     statusText.text("[offline");
                 }
-                routeLister.connectionStatus = false;
             }
 
         };
@@ -93,14 +67,13 @@ var routeLister = (function () {
         };
         return {
             client : changeStatus,
-            server : disconnectFromServer,
-            connectionStatus : connectionStatus
+            server : disconnectFromServer
         };
     })();
-
+ 
+    //TODO
     var routeList = (function (routeListId) {
-
-
+    
     })();
     //Regex to get id from a reference.
     //The number at the end of a id reference is the id(
@@ -109,7 +82,6 @@ var routeLister = (function () {
         return id;
     };
     var orderRow = (function () {
-
         var NameId;
         var setNameId = function (name) {
             NameId = name;
@@ -118,7 +90,7 @@ var routeLister = (function () {
         var requestOrderRowStatusChange = function (event) {
             //Always stop the event
             routeLister.stop(event);
-            if (routeLister.connectionStatus) {
+            if (routeLister._connectionId) {
                 $(event.target).prop('disabled', true);
                 if (event.type === "click") {
                     //Remove all listeners
@@ -134,6 +106,8 @@ var routeLister = (function () {
                     //Asks server to change status on orderRow
                     signalRClient.server.changeStatusOnOrderRow(idValue, checkBoxId);
                     //Show waiting message for client while server works
+                    var spinner = $(event.target).parents().siblings('.fa-spin');
+                    spinner.removeClass("hidden");
                     //TODO
                 }
             }
@@ -156,6 +130,8 @@ var routeLister = (function () {
             });
             //Enable checkbox again
             $(checkbox).prop('disabled', false);
+            var spinner = $(checkbox).parents().siblings('.fa-spin');
+            spinner.addClass("hidden");
         };
 
         //Regex to get id from a reference.
@@ -167,7 +143,6 @@ var routeLister = (function () {
             setNameId: setNameId
         };
     })();
-
     var order = (function () {
         //Request signalr server to change status on a order
         var requestOrderRowStatusChange = function (orderRowId) {
@@ -184,6 +159,7 @@ var routeLister = (function () {
     })();
 
 
+  
     return {
         stop: stopClient,
         token: idPrefix,
@@ -193,11 +169,72 @@ var routeLister = (function () {
         routeList: routeList,
         getId: getValueFromIdRef,
         setConnectionStatus: setConnectionStatus,
-        connectionId: connectionId
+        setConnectionId: setConnectionId,
+        _connectionId : _connectionId,
+        tryingToReconnect: tryingToReconnect
 
     };
 
 })();
+
+
+
+
+//SignalR setting
+var signalRClient = $.connection.driverHub;
+//Regex used to extract idToken
+
+$.connection.hub.logging = true;
+external.loadingScreen.show();
+$.connection.hub.start().done(function () {
+    console.log("connected");
+    signalRClient.server.connect();
+    //should enable all buttons
+    external.loadingScreen.hide();
+}).fail(function (error) {
+    console.log('Invocation of start failed. Error:' + error);
+    //TODO show error msg
+});
+$.connection.hub.reconnecting(function () {
+    routeLister.tryingToReconnect = true;
+});
+$.connection.hub.reconnected(function () {
+    routeLister.tryingToReconnect = false;
+});
+$.connection.hub.disconnected(function () {
+    if (routeLister.tryingToReconnect) {
+        routeLister.setConnectionStatus.client(false);
+    }
+    setTimeout(function () {
+        $.connection.hub.start().done(function () {
+            console.log("connected");
+            //should enable all buttons
+        }).fail(function (error) {
+            console.log('Invocation of start failed. Error:' + error);
+            //TODO show error msg
+        });
+    }, 5000);
+});
+
+
+signalRClient.client.changeClientRowStatus = function (id, checked) {
+    console.log("changestatus triggered");
+    routeLister.orderRow.client(id, checked);
+};
+
+
+
+signalRClient.client.setConnectionId = function (connectionId) {
+    routeLister.setConnectionId(connectionId);
+    console.log("connectId set!");
+};
+signalRClient.client.enableEverything = function () {
+    //Enable all gui touchy touchy
+
+};
+signalRClient.client.disableEverything = function () {
+    //Enable all gui touchy touchy
+};
 
 
 

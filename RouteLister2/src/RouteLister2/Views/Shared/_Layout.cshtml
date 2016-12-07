@@ -34,9 +34,9 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">RouteLister</a>
                     <span class="pull-left">
-                        <span class="status-text" id="status-text">  [online</span> 
-                        <span class="fa fa-circle online">
-                        </span><span class="fa fa-circle offline-dim"></span>
+                        <span class="status-text" id="status-text">  [offline</span> 
+                        <span class="fa fa-circle online-dim">
+                        </span><span class="fa fa-circle offline"></span>
                     <span class="status-text">]</span>
                 </span>
             </div>
@@ -53,11 +53,13 @@
     </div>
     <div class="container body-content">
         @RenderBody()
+
         <hr />
         <footer>
             <p>&copy; 2016 - RouteLister</p>
         </footer>
     </div>
+
     @* testing *@
     <script type="text/javascript">
         const idPrefix = "@RouteLister2.Services.TokenService._idToken";
