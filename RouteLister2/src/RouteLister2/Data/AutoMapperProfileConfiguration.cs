@@ -53,7 +53,6 @@ namespace RouteLister2.Data
             CreateMap<ApplicationUser, RouteListViewModel>()
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))
                 .ForAllOtherMembers(x => x.Ignore())
-               .ForAllOtherMembers(x => x.Ignore())
                 ;
 
             CreateMap<ParcelListFromCompanyViewModel, Parcel>()

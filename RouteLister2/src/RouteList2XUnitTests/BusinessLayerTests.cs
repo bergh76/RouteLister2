@@ -16,6 +16,7 @@ namespace RouteList2XUnitTests
     public class BusinessLayerTests
     {
      
+        
 
         [Fact]
         public async Task TestingBusinessLayer()
@@ -26,7 +27,13 @@ namespace RouteList2XUnitTests
             //Arrange
             using (var context = new ApplicationDbContext(Utilities.CreateNewContextOptions()))
             {
-                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context));
+                MapperConfiguration configuration = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile<AutoMapperProfileConfiguration>();
+
+                });
+                IMapper mapper = configuration.CreateMapper();
+                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context), mapper);
                 ApplicationUser user = FakeDataSets.ApplicationUserFactory();
                 //context.Database.ExecuteSqlCommand(string.Format("Set identity_insert off"));
                 await businessLayer.AddUser(FakeDataSets.ApplicationUserFactory());
@@ -42,9 +49,15 @@ namespace RouteList2XUnitTests
         public async Task TestingNullValueInGetUserId()
         {
             //Arrange
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfileConfiguration>();
+
+            });
+            IMapper mapper = configuration.CreateMapper();
             using (var context = new ApplicationDbContext(Utilities.CreateNewContextOptions()))
             {
-                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context));
+                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context),mapper);
                 ApplicationUser user = FakeDataSets.ApplicationUserFactory();
               
                 await businessLayer.AddUser(FakeDataSets.ApplicationUserFactory());
@@ -65,12 +78,12 @@ namespace RouteList2XUnitTests
                 cfg.AddProfile<AutoMapperProfileConfiguration>();
 
             });
-            
+            IMapper mapper = configuration.CreateMapper();
 
             //Arrange
             using (var context = new ApplicationDbContext(Utilities.CreateNewContextOptions()))
             {
-                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context));
+                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context),mapper);
                 ApplicationUser user = FakeDataSets.ApplicationUserFactory();
   
                 await businessLayer.AddUser(FakeDataSets.ApplicationUserFactory());
