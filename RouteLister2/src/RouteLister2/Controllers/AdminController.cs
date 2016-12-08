@@ -37,12 +37,12 @@ namespace RouteLister2.Controllers
             _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> Index(
-            JsonDataListImports jsonData, 
+            DataImports import,
             ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
             {
-                await jsonData.GetParcelData(_context);
+                import.GetParcelData();
                 //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
                 var result = from c in _context.Contacts
                                  //join order in _context.Orders on c.Id equals order.Id

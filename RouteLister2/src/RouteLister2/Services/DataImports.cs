@@ -13,24 +13,12 @@ using System.Threading.Tasks;
 
 namespace RouteLister2.Services
 {
-
-    public class JsonDataListImports
+    public class ApiDeserializer
     {
-        private ApplicationDbContext _context;
-        private const string JsonUrl = "http://localhost:5000/TestData/jsonParcels.json";
         public List<ParcelListFromCompanyViewModel> ParcelListImports { get; set; }
-        public static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
-        private IMapper _mapper;
 
-        public JsonDataListImports(ApplicationDbContext context, [FromServices] IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public JsonDataListImports() { }
-
-        private async Task<T> JsonSerializer<T>(string path) where T : new()
+        public ApiDeserializer() { }
+        public async Task<T> JsonSerializer<T>(string path) where T : new()
         {
             using (var http = new HttpClient())
             {
@@ -43,20 +31,31 @@ namespace RouteLister2.Services
                     catch (Exception) { }
                     return !string.IsNullOrEmpty(path) ? JsonConvert.DeserializeObject<T>(data) : new T();
                 }
-
             }
         }
 
-        public async Task GetParcelData(ApplicationDbContext context)
+    }
+
+    public class DataImports : IDataImports
+    {
+        private ApplicationDbContext _context;
+        private const string path = "http://localhost:5000/TestData/jsonParcels.json";
+        private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
+
+        public DataImports([FromServices] ApplicationDbContext context)
         {
-            string path = JsonUrl.ToString();
-            var data = await JsonSerializer<JsonDataListImports>(path);
-            _parcelList = data.ParcelListImports;
-            await JsonApiDataImport(context);
-            //await GetCurrentList();
+            _context = context;
+        }
+        public DataImports() { }
+        public async void GetParcelData()
+        {
+            ApiDeserializer serializer = new ApiDeserializer();
+            var dataOut = await serializer.JsonSerializer<ApiDeserializer>(path);
+            _parcelList = dataOut.ParcelListImports;
+            await JsonApiDataImport(_context);
         }
 
-        public async Task JsonApiDataImport(ApplicationDbContext context)
+        private async Task JsonApiDataImport(ApplicationDbContext context)
         {
             for (int i = 0; i < _parcelList.Count; i++)
             {
@@ -114,5 +113,7 @@ namespace RouteLister2.Services
                 }
             };
         }
+
     }
+
 }
