@@ -37,63 +37,20 @@ namespace RouteLister2.Controllers
             _businessLayer = businessLayer;
         }
 
-        public IActionResult Index(string id)
+        public async Task<IActionResult> Index(string id)
         {
-            var result = _businessLayer.GetRouteList(id);
-           
-            return View(result);
+            if (string.IsNullOrEmpty(id)) { 
+                var result = await _businessLayer.GetRouteList(id);
+                RouteListViewModel viewModel = _mapper.Map<RouteListViewModel>(result);
+                return View(viewModel);
+            }
+            return View();
         }
 
         public async Task<IActionResult> List(string id)
         {
-
-            var result = await _businessLayer.GetRouteList(id);
-            var viewModel = _mapper.Map<RouteListViewModel>(result);
+            var result = await _businessLayer.GetAllRouteLists().ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
             return View(result);
         }
-    
-
-
-        ////Example SignalR flow action
-        ////If this method returns false, the client does not change its status. If true, the client is allowed to change its status
-        ////Ideally one should return a object with why the client wasn't allowed to change status for more detailed message to the user
-        //[HttpPost]
-        //public bool ChangeStatusOnOrderRow(int id)
-        //{
-        //    //Bizniz layah at work
-        //    //return _unitOfWork.ChangeStatusOnOrderRow(id);
-        //    return _connectionManager.GetHubContext<DriverHub>().
-        //}
-
-        ////In this method we push the change to client with their method
-        //[HttpGet]
-        //public async Task ChangeStatusOnClientsRow(int id,string clientId)
-        //{
-        //    //Bizniz layah at work
-        //    ApplicationUser user = await _unitOfWork.GenericRepository<ApplicationUser>().GetAsync(clientId);
-        //    if (user == null)
-        //    {
-        //        //Do nothing or block user ip or something
-        //    }
-        //    OrderRow orderRow = await _unitOfWork.GenericRepository<OrderRow>().GetAsync(id);
-        //    if (orderRow == null)
-        //    {
-        //        //Row doesn exist, notify user of that and logg this
-        //    }
-
-
-
-        //    if ()
-        //    {
-        //        _connectionManager.GetHubContext<DriverHub>().Clients.User(clientId).ChangeStatus(id);
-        //    }
-        //    else
-        //    {
-        //        _connectionManager.GetHubContext<DriverHub>().Clients.User(clientId).SendMessage("Cant touch this,dumdumdum psch");
-        //    }
-        //}
-
-
-
     }
 }

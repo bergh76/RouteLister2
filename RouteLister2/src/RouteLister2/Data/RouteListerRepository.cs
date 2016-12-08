@@ -26,7 +26,8 @@ namespace RouteLister2.Data
         public virtual IQueryable<TEntity> Get<TEntity>(
 
             Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] included) where TEntity : class
+            Func<IQueryable<TEntity>,IOrderedQueryable<TEntity>> orderBy = null, 
+            params Expression<Func<TEntity, object>>[] included) where TEntity : class
         {
             IQueryable<TEntity> query = _context.Set<TEntity>();
 
@@ -48,6 +49,8 @@ namespace RouteLister2.Data
                 return query;
             }
         }
+
+
 
         public virtual TEntity Get<TEntity>(int id) where TEntity : class
         {

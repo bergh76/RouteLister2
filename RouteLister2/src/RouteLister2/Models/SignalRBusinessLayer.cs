@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using RouteLister2.Data;
 using RouteLister2.Models.RouteListerViewModels;
@@ -6,6 +7,7 @@ using RouteLister2.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace RouteLister2.Models
@@ -67,9 +69,18 @@ namespace RouteLister2.Models
 
         public async Task<RouteList> GetRouteList(string id)
         {
-            var result = (await _repo.GetAsync<RouteList>(filter: x => x.ApplicationUser.RegistrationNumber == id, included: x => x.ApplicationUser));
+            RouteList result = await _repo.GetAsync<RouteList>(filter: x => x.ApplicationUser.RegistrationNumber == id, included: x => x.ApplicationUser);
             return result;
         }
+
+        public IQueryable<RouteList> GetAllRouteLists()
+        {
+
+                var result = _repo.Get<RouteList>(null,null,x=>x.ApplicationUser);
+
+            return result;
+        }
+
 
         public async Task SetUserConnectionId(string connectionId, string name = null, string id = null)
         {
