@@ -1,0 +1,40 @@
+﻿@model RouteLister2.Models.RouteListerViewModels.OrderRowViewModel
+
+
+@{
+    string rowIdentifier = Html.IdFor(x=>x.OrderId)+Html.IdFor(x=>x.OrderRowId)+Html.IdFor(x => x.OrderRowStatus) +RouteLister2.Services.TokenService._idToken+ (Model.OrderRowId.ToString());
+}
+<tr id="@Html.IdFor(x => x.OrderRowId)@Model.OrderRowId">
+    <td class="@Html.IdFor(x => x.Count)"><h5>@Model.Count</h5></td>
+    <td class="@Html.IdFor(x => x.ParcelNumber)"><h5>@Model.ParcelNumber</h5></td>
+    <td class="@Html.IdFor(x => x.ParcelName)"><h5>@Model.ParcelName</h5></td>
+    <td>
+        <div class="slideThree">
+            @if (Model.OrderRowStatus)
+            {
+                <input type="checkbox" value="@Model.OrderRowStatus" class="@Html.IdForModel()@Html.IdFor(x => x.OrderRowStatus)" name="check2" id="@rowIdentifier" />
+            }
+            else
+            {
+                <input type="checkbox" value="@Model.OrderRowStatus" class="@Html.IdForModel()@Html.IdFor(x => x.OrderRowStatus)" name="check2" id="@rowIdentifier" />
+            }
+            <label for="@rowIdentifier"></label>
+
+        </div>
+
+    </td>
+
+</tr>
+
+<script type="text/javascript">
+    console.log("@rowIdentifier");
+    $("#@rowIdentifier").click(function (event) {
+        //Stops client from changing anything before server has done so
+        routeLister.stop(event);
+        ///sets the idName that client funktion uses + token to change later on
+        routeLister.orderRow.setNameId = "@Html.IdFor(x=>x.OrderRowStatus)";
+        routeLister.orderRow.server("@Model.OrderRowId");
+            
+        
+        });
+</script>

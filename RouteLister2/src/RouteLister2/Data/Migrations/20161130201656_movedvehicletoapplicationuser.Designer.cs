@@ -8,9 +8,10 @@ using RouteLister2.Data;
 namespace RouteLister2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161130201656_movedvehicletoapplicationuser")]
+    partial class movedvehicletoapplicationuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -150,8 +151,6 @@ namespace RouteLister2.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
-
-                    b.Property<string>("ConnectionId");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
