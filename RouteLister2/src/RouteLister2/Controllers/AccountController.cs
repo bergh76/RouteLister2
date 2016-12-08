@@ -125,9 +125,18 @@ namespace RouteLister2.Controllers
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var exist = _context.Users.Any(x => x.UserName == user.UserName);
-                if (exist == true) {
-                    string fail = ViewBag.UserExists = "Användaren finns redan";
-                    return View(model) ;
+                var emailExists = _context.Users.Any(x => x.Email == user.Email);
+                if (exist == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.UserExists = "Användaren finns redan";
+                    return View(model);
+                        }
+                else if (emailExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.EmailExists = "Eposten finns redan";
+                    return View(model);
                 }
 
                 var result = await _userManager.CreateAsync(user, model.Password);

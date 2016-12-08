@@ -20,21 +20,25 @@ namespace RouteLister2.Controllers
     //[Route("Admin")]
     public class AdminController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private IMapper _mapper;
         private UnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
         public AdminController(
             [FromServices]ApplicationDbContext context,
             [FromServices] IMapper mapper,
-            [FromServices] UnitOfWork unitOfWork
+            [FromServices] UnitOfWork unitOfWork,
+            UserManager<ApplicationUser> userManager
+
             )
         {
             _context = context;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index(
             JsonDataListImports jsonData, 
@@ -79,6 +83,13 @@ namespace RouteLister2.Controllers
         public IActionResult ShowCarLists()
         {
             return View();
+        }
+
+        public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
+        {
+            await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
+
+            return RedirectToAction(nameof(AccountController.Register), "Account");
         }
 
         public IActionResult Message()
