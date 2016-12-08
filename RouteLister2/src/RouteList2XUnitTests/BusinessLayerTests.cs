@@ -15,6 +15,7 @@ namespace RouteList2XUnitTests
 {
     public class BusinessLayerTests
     {
+     
 
         [Fact]
         public async Task TestingBusinessLayer()
@@ -52,6 +53,34 @@ namespace RouteList2XUnitTests
                 //Assert
 
                 Assert.Equal(userGotten.Id, user.Id);
+            }
+        }
+
+        [Fact]
+        public async Task TestingGetRouteList()
+        {
+
+            MapperConfiguration configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfileConfiguration>();
+
+            });
+            
+
+            //Arrange
+            using (var context = new ApplicationDbContext(Utilities.CreateNewContextOptions()))
+            {
+                SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context));
+                ApplicationUser user = FakeDataSets.ApplicationUserFactory();
+  
+                await businessLayer.AddUser(FakeDataSets.ApplicationUserFactory());
+                //Act
+
+                var routelist = await businessLayer.GetRouteList(FakeDataSets.ApplicationUserFactory().RegistrationNumber);
+                //Assert
+                Assert.NotNull(routelist);
+           
+                
             }
         }
 

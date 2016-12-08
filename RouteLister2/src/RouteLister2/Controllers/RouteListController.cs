@@ -39,9 +39,10 @@ namespace RouteLister2.Controllers
 
         public async Task<IActionResult> Index(string id)
         {
-            if (string.IsNullOrEmpty(id)) { 
-                var result = await _businessLayer.GetRouteList(id);
-                RouteListViewModel viewModel = _mapper.Map<RouteListViewModel>(result);
+            if (!string.IsNullOrEmpty(id)) {
+                //RouteList result = await _businessLayer.GetRouteList(id);
+                //RouteListViewModel viewModel = _mapper.Map<RouteListViewModel>(result);
+                var viewModel = await _businessLayer.GetRouteListViewModels(id);
                 return View(viewModel);
             }
             return View();
@@ -49,7 +50,7 @@ namespace RouteLister2.Controllers
 
         public async Task<IActionResult> List(string id)
         {
-            var result = await _businessLayer.GetAllRouteLists().ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            var result = await _businessLayer.GetAllRouteLists();
             return View(result);
         }
     }

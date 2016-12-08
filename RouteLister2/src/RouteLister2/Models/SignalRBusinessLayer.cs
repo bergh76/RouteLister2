@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RouteLister2.Data;
 using RouteLister2.Models.RouteListerViewModels;
 using RouteLister2.Services;
@@ -14,15 +15,17 @@ namespace RouteLister2.Models
 {
     public class SignalRBusinessLayer
     {
-        private IDriverHub _hub;
+        //private IDriverHub _hub;
         private RouteListerRepository _repo;
         public static readonly string OrderRowStatusTrue = "Plockad";
         public static readonly string OrderRowStatusFalse = "I Lager";
+        private IMapper _mapper;
 
-        public SignalRBusinessLayer([FromServices] RouteListerRepository repo, [FromServices] IDriverHub hub = null)
+        public SignalRBusinessLayer([FromServices] RouteListerRepository repo, [FromServices] IMapper mapper)
         {
             _repo = repo;
-            _hub = hub;
+            //_hub = hub;
+            _mapper = mapper;
         }
         public async Task<bool> IsUserValid(string userName)
         {
@@ -69,15 +72,20 @@ namespace RouteLister2.Models
 
         public async Task<RouteList> GetRouteList(string id)
         {
-            RouteList result = await _repo.GetAsync<RouteList>(filter: x => x.ApplicationUser.RegistrationNumber == id, included: x => x.ApplicationUser);
-            return result;
+            var result = await _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == id,null, x => x.ApplicationUser ,x=>x.Orders).ToListAsync();
+            return result.FirstOrDefault();
+        }
+        public async Task<RouteListViewModel> GetRouteListViewModels(string id)
+        {
+            var result = _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == id, null, x => x.ApplicationUser, x => x.Orders).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
+            return await result.FirstOrDefaultAsync();
         }
 
-        public IQueryable<RouteList> GetAllRouteLists()
+
+        
+        public async Task<IEnumerable<RouteListViewModel>> GetAllRouteLists()
         {
-
-                var result = _repo.Get<RouteList>(null,null,x=>x.ApplicationUser);
-
+             var result = await _repo.Get<RouteList>(null,null,x=>x.ApplicationUser).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync(); 
             return result;
         }
 

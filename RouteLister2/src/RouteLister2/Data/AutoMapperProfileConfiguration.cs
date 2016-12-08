@@ -11,10 +11,12 @@ namespace RouteLister2.Data
         public AutoMapperProfileConfiguration() : base()
         {
            
-            CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
+            CreateMap<RouteList, RouteListViewModel>()
+                .ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
-                .ForMember(x => x.Assigned, opt => opt.MapFrom(t => t.Assigned)
+                .ForMember(x => x.Assigned, opt => opt.MapFrom(t => t.Assigned))
+                .ForMember(x => x.Orders, opt => opt.MapFrom(t => t.Orders)
                 );
 
             //Real test right here
