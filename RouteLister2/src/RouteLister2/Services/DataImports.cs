@@ -13,29 +13,6 @@ using System.Threading.Tasks;
 
 namespace RouteLister2.Services
 {
-    public class ApiDeserializer
-    {
-        public List<ParcelListFromCompanyViewModel> ParcelListImports { get; set; }
-
-        public ApiDeserializer() { }
-        public async Task<T> JsonSerializer<T>(string path) where T : new()
-        {
-            using (var http = new HttpClient())
-            {
-                var data = string.Empty;
-                {
-                    try
-                    {
-                        data = await http.GetStringAsync(path);
-                    }
-                    catch (Exception) { }
-                    return !string.IsNullOrEmpty(path) ? JsonConvert.DeserializeObject<T>(data) : new T();
-                }
-            }
-        }
-
-    }
-
     public class DataImports : IDataImports
     {
         private ApplicationDbContext _context;
@@ -46,7 +23,9 @@ namespace RouteLister2.Services
         {
             _context = context;
         }
+        
         public DataImports() { }
+
         public async void GetParcelData()
         {
             ApiDeserializer serializer = new ApiDeserializer();
@@ -113,7 +92,5 @@ namespace RouteLister2.Services
                 }
             };
         }
-
     }
-
 }

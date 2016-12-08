@@ -22,19 +22,13 @@ namespace RouteLister2.Controllers
     {
         private ApplicationDbContext _context;
         private IMapper _mapper;
-        private UnitOfWork _unitOfWork;
 
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
-        public AdminController(
-            [FromServices]ApplicationDbContext context,
-            [FromServices] IMapper mapper,
-            [FromServices] UnitOfWork unitOfWork
-            )
+        public AdminController([FromServices]ApplicationDbContext context, [FromServices] IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> Index(
             DataImports import,
