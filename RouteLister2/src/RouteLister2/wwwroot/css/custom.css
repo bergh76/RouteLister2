@@ -658,3 +658,9 @@ h2 {
   clear: both;
   height: 0;
 }
+
+#loadingDiv{
+    z-index:9999;
+    background-color:white;
+    opacity:0.8;
+}

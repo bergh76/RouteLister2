@@ -65,7 +65,9 @@ namespace RouteLister2
             });
             services.AddTransient(sp => configuration.CreateMapper());
             //Unit of work service
-            services.AddTransient<UnitOfWork>();
+            
+            services.AddTransient<SignalRBusinessLayer>();
+            services.AddTransient<RouteListerRepository>();
 
             //Things needed for SignalR, like a ContractResolver
             var settings = new JsonSerializerSettings();

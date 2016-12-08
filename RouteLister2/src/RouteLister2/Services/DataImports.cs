@@ -13,50 +13,28 @@ using System.Threading.Tasks;
 
 namespace RouteLister2.Services
 {
-
-    public class JsonDataListImports
+    public class DataImports : IDataImports
     {
         private ApplicationDbContext _context;
-        private const string JsonUrl = "http://localhost:5000/TestData/jsonParcels.json";
-        public List<ParcelListFromCompanyViewModel> ParcelListImports { get; set; }
-        public static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
-        private IMapper _mapper;
+        private const string path = "http://localhost:5000/TestData/jsonParcels.json";
+        private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
 
-        public JsonDataListImports(ApplicationDbContext context, [FromServices] IMapper mapper)
+        public DataImports([FromServices] ApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
+        
+        public DataImports() { }
 
-        public JsonDataListImports() { }
-
-        private async Task<T> JsonSerializer<T>(string path) where T : new()
+        public async void GetParcelData()
         {
-            using (var http = new HttpClient())
-            {
-                var data = string.Empty;
-                {
-                    try
-                    {
-                        data = await http.GetStringAsync(path);
-                    }
-                    catch (Exception) { }
-                    return !string.IsNullOrEmpty(path) ? JsonConvert.DeserializeObject<T>(data) : new T();
-                }
-
-            }
+            ApiDeserializer serializer = new ApiDeserializer();
+            var dataOut = await serializer.JsonSerializer<ApiDeserializer>(path);
+            _parcelList = dataOut.ParcelListImports;
+            await JsonApiDataImport(_context);
         }
 
-        public async Task GetParcelData(ApplicationDbContext context)
-        {
-            string path = JsonUrl.ToString();
-            var data = await JsonSerializer<JsonDataListImports>(path);
-            _parcelList = data.ParcelListImports;
-            await JsonApiDataImport(context);
-            //await GetCurrentList();
-        }
-
-        public async Task JsonApiDataImport(ApplicationDbContext context)
+        private async Task JsonApiDataImport(ApplicationDbContext context)
         {
             for (int i = 0; i < _parcelList.Count; i++)
             {
