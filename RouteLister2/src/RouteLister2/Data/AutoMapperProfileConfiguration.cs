@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using RouteLister2.Models;
-using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using RouteLister2.Models.RouteListerViewModels;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace RouteLister2.Data
 
         public AutoMapperProfileConfiguration() : base()
         {
-
+           
             CreateMap<RouteList, RouteListViewModel>().ForMember(x => x.DeliveryListId, opt => opt.MapFrom(t => t.Id))
                 .ForMember(x => x.Title, opt => opt.MapFrom(t => t.Title))
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.ApplicationUser.RegistrationNumber))
@@ -43,7 +42,7 @@ namespace RouteLister2.Data
                 .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus))
                 .ForMember(x => x.ParcelName, opt => opt.MapFrom(t => t.Parcel.Name))
                 .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
-                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == UnitOfWork.OrderRowStatusTrue))
+                .ForMember(x => x.OrderRowStatus, opt => opt.MapFrom(t => t.OrderRowStatus.Name == SignalRBusinessLayer.OrderRowStatusTrue))
                 .ForMember(x => x.OrderId, opt => opt.MapFrom(t => t.OrderId))
                 ;
 
@@ -53,28 +52,8 @@ namespace RouteLister2.Data
                 .ForAllOtherMembers(x => x.Ignore())
                 ;
 
-            CreateMap<ParcelListFromCompanyViewModel, Parcel>()
-               .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.CollieId))
-               .ForMember(x => x.Name, opt => opt.MapFrom(t => t.ArticleName))
-               .ForAllOtherMembers(x => x.Ignore())
-               ;
-            CreateMap<ParcelListFromCompanyViewModel, Contact>()
-               .ForMember(x => x.FirstName, opt => opt.MapFrom(t => t.FirstName))
-               .ForMember(x => x.LastName, opt => opt.MapFrom(t => t.LastName))
-               .ForAllOtherMembers(x => x.Ignore())
-               ;
-            CreateMap<ParcelListFromCompanyViewModel, Address>()
-              .ForMember(x => x.Street, opt => opt.MapFrom(t => t.Adress))
-              .ForMember(x => x.City, opt => opt.MapFrom(t => t.City))
-              .ForMember(x => x.PostNumber, opt => opt.MapFrom(t => t.PostNr))
-              .ForMember(x => x.County, opt => opt.MapFrom(t => t.Country))
-              .ForAllOtherMembers(x => x.Ignore())
-              ;
-            CreateMap<ParcelListFromCompanyViewModel, PhoneNumber>()
-             .ForMember(x => x.Number, opt => opt.MapFrom(t => t.PhoneTwo))
-             .ForAllOtherMembers(x => x.Ignore())
-             ;
 
         }
+
     }
 }

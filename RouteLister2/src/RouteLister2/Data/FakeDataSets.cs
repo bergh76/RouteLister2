@@ -29,7 +29,8 @@ namespace RouteLister2.Data
             ApplicationUser model = new ApplicationUser()
             {
                 Id = Id.ToString(),
-                RegistrationNumber = "xxx111"
+                RegistrationNumber = "xxx111",
+                UserName = "Åke"
             };
             return model;
         }

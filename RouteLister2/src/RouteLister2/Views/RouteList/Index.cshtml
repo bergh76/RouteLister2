@@ -1,28 +1,32 @@
 ﻿@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
 
+@if (Model != null)
+{
 
-<div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="x_panel">
-        <div class="x_title">
-            <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now.ToString("yyyy-MM-dd") <span class="pull-right" id="clock"></span></span>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            <!-- start accordion -->
-            <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-                @if (Model != null)
-                {
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <span class="h3"><i class="fa fa-list-ol"></i> Utkörningslista @User.Identity.Name @DateTime.Now <span class="pull-right" id="clock"></span></span>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <!-- start accordion -->
+                <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+
+
                     @if (Model.Orders != null)
-                {
+                    {
                         @for (int i = 0; i < Model.Orders.Count; i++)
                         {
                             <div class="panel">
+                                <div hidden id="@Html.IdFor(x=>x.Orders[i])">@Model.Orders[i]</div>
                                 <div class="panel-heading collapsed col-md-12">
                                     <div class="col-lg-8 pull-left">
                                         <p class="h5 text-left">@(i + 1) @Model.Orders[i].Description</p>
                                     </div>
                                     <div class="col-lg-4">
-                                        <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseOne@(@i)" aria-expanded="false" aria-controls="collapseTwo">
+                                        <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse@(Html.IdFor(x=>x.Orders[i]))" aria-expanded="false" aria-controls="collapseTwo">
                                             <i class="fa fa-info-circle fa-2x"></i>
                                         </span>
                                         <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
@@ -31,7 +35,7 @@
                                     </div>
                                 </div>
 
-                                <div id="collapseOne@(@i)" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                <div id="collapse@(Html.IdFor(x=>x.Orders[i]))" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body">
                                         <!--Customer Detail Data Start-->
                                         <div class="col-md-12">
@@ -71,22 +75,31 @@
                                                 <tbody>
                                                     @for (int k = 0; k < Model.Orders[i].OrderRows.Count; k++)
                                                     {
-                                                        <tr id="@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowId)@Model.Orders[i].OrderRows[k].OrderRowId">
-                                                            <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].Count)"><h5>@Model.Orders[i].OrderRows[k].Count</h5></td>
-                                                            <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model.Orders[i].OrderRows[k].ParcelNumber</h5></td>
-                                                            <td class="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelName)"><h5>@Model.Orders[i].OrderRows[k].ParcelName</h5></td>
+                                                        <tr>
+                                                            <td hidden class="id" id="@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowId)">@Model.Orders[i].OrderRows[k].OrderRowId</td>
+                                                            <td id="@Html.IdFor(x => x.Orders[i].OrderRows[k].Count)"><h5>@Model.Orders[i].OrderRows[k].Count</h5></td>
+                                                            <td id="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model.Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                                            <td id="@Html.IdFor(x => x.Orders[i].OrderRows[k].ParcelName)"><h5>@Model.Orders[i].OrderRows[k].ParcelName</h5></td>
                                                             <td>
                                                                 <div class="slideThree">
-                                                                    <input type="checkbox" value=@Model.Orders[i].OrderRows[k].OrderRowStatus class="@Html.IdForModel()@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowStatus)" name="check2" id="slideThree@(Model.Orders[i].OrderRows[k].OrderRowId.ToString()+k.ToString())" />
-                                                                    <label for="slideThree@(Model.Orders[i].OrderRows[k].OrderRowId.ToString()+k.ToString())"></label>
+                                                                    @{
+                                                                        var isChecked = "checked='checked'";
+                                                                        @if (!@Model.Orders[i].OrderRows[k].OrderRowStatus)
+                                                                        {
+                                                                            isChecked = null;
 
+                                                                        }
+                                                                    }
+                                                                    <input type="checkbox" value=@Model.Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowStatus)" />
+
+                                                                    <label for="@Html.IdFor(x => x.Orders[i].OrderRows[k].OrderRowStatus)"></label>
                                                                 </div>
-
+                                                                <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
                                                             </td>
 
                                                         </tr>
 
-                                                    }
+                                                                        }
                                                 </tbody>
                                             </table>
                                             <span class="h4 pull-right">Total antal kollie @Model.Orders[i].TotalCount st</span>
@@ -95,25 +108,41 @@
                                     </div>
                                 </div>
                             </div>
-                        }
-                    }
-                }
-            </section>
-            <!-- end of accordion -->
+                                                                        }
+                                                                        }
+
+                </section>
+                <!-- end of accordion -->
+            </div>
         </div>
     </div>
-</div>
+
+                                                                        }
+
+<div id="loadingDiv" class="hidden"></div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                "bFilter": false,
-                "paging": false,
-                "processing": true,
-                "info": false
-            })
+
+        //$(document).ready(function () {
+        //    $('#myTable').DataTable({
+        //        "bFilter": false,
+        //        "paging": false,
+        //        "processing": true,
+        //        "info": false
+        //    })
+        //});
+        //Onclick function for changing status on orderrows
+
+
+        $(".slideThree > input").click(function (event) {
+            routeLister.orderRow.server(event);
         });
+        $(".status-text").click(function (event) {
+            console.log("teeest");
+            routeLister.setConnectionStatus.client(false);
+        });
+
         function startTime() {
             var today = new Date();
             var h = today.getHours();

@@ -93,8 +93,10 @@
                                                                                 }
                                                                             }
                                                                             <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
+                                                                            
                                                                             <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
                                                                         </div>
+                                                                        <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
                                                                     </td>
 
                                                                 </tr>
@@ -116,8 +118,10 @@
                 </div>
             </div>
         </div>
+    
                                                                                 }
                                                                                 }
+<div id="loadingDiv" class="hidden"></div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
     <script type="text/javascript">
@@ -131,6 +135,8 @@
         //    })
         //});
         //Onclick function for changing status on orderrows
+        
+
         $(".slideThree > input").click(function (event) {
             routeLister.orderRow.server(event);
         });
