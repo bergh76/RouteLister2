@@ -1,0 +1,21 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "LOGISTIKBOLAGET | ERROR";
+}
+
+@{
+    ViewBag.Title = "Access denied due to insufficient permissions";
+}
+    <div class="wrapper row2 error-container-box animated shake">
+    <div id="container" class="clear">
+        <section id="fof" class="clear">
+            <img class="img-responsive" src="~/images/E_Img/403.png" />
+            <p class="text-center"><a href="javascript:history.go(-1)">&laquo; Go Back</a> / <a href="htt://localhost:5000/Home/">Go Home &raquo;</a></p>
+        </section>
+    </div>
+</div>

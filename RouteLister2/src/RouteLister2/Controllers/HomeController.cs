@@ -27,9 +27,5 @@ namespace RouteLister2.Controllers
             return View();
         }
 
-        public IActionResult Error()
-        {
-            return View();
-        }
     }
 }

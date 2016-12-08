@@ -10,6 +10,7 @@ var routeLister = (function () {
     //const idPrefix = '-_:\.Id';
     const idRegex = new RegExp(regexForidToken2);
 
+
     var connectionStatus = false;
     var tryingToReconnect = false;
     //Stop event from happening and bubbling

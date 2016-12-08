@@ -11,30 +11,40 @@ using Microsoft.Extensions.Logging;
 using RouteLister2.Models;
 using RouteLister2.Models.AccountViewModels;
 using RouteLister2.Services;
+using RouteLister2.Data;
+using System.Security.Principal;
 
 namespace RouteLister2.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private IServiceProvider _serviceProvider;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
         public AccountController(
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IServiceProvider serviceProvicer
+
+            )
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _serviceProvider = serviceProvicer;
         }
 
         //
@@ -59,11 +69,18 @@ namespace RouteLister2.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.User, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    //Check Role at login. If admin returns adminpage else redirect user to Home/Index
+                    var user = await _userManager.FindByNameAsync(model.User);
+                    var userRole = await _userManager.GetRolesAsync(user);
+                    if (userRole.Contains("Admin"))
+                        //Redirects users of Adminrole to adminpage if userRole = true
+                        return RedirectToAction(nameof(AdminController.Index), "Admin");
+                    //Redirects users of Userrole to Home/Index
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -91,6 +108,7 @@ namespace RouteLister2.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -100,13 +118,27 @@ namespace RouteLister2.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string role, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var exist = _context.Users.Any(x => x.UserName == user.UserName);
+                if (exist == true) {
+                    string fail = ViewBag.UserExists = "Användaren finns redan";
+                    return View(model) ;
+                }
+
                 var result = await _userManager.CreateAsync(user, model.Password);
+               
+                // Gets role from View and pars to Array  
+                string tempRole = role;
+                string[] roleArray = new string[] { tempRole };
+                var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
+                // Calls the method for setting the role to actual useraccount
+                await UserSettings.AssignRoles(_userManager,user.Email, roleArray);
+
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -115,9 +147,10 @@ namespace RouteLister2.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(AccountController.Register), "Account");
+                    //return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
@@ -436,6 +469,15 @@ namespace RouteLister2.Controllers
             }
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View("~/Views/Shared/AccessDenied.cshtml");
+        }
+
+        public IActionResult Error()
+        {
+            return View("Error");
+        }
         #region Helpers
 
         private void AddErrors(IdentityResult result)

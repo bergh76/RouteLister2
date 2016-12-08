@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RouteLister2.Models;
+using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using RouteLister2.Models.RouteListerViewModels;
 using System.Linq;
 
@@ -52,10 +53,31 @@ namespace RouteLister2.Data
             CreateMap<ApplicationUser, RouteListViewModel>()
                 .ForMember(x => x.RegNr, opt => opt.MapFrom(t => t.RegistrationNumber))
                 .ForAllOtherMembers(x => x.Ignore())
+               .ForAllOtherMembers(x => x.Ignore())
                 ;
 
+            CreateMap<ParcelListFromCompanyViewModel, Parcel>()
+               .ForMember(x => x.ParcelNumber, opt => opt.MapFrom(t => t.CollieId))
+               .ForMember(x => x.Name, opt => opt.MapFrom(t => t.ArticleName))
+               .ForAllOtherMembers(x => x.Ignore())
+               ;
+            CreateMap<ParcelListFromCompanyViewModel, Contact>()
+               .ForMember(x => x.FirstName, opt => opt.MapFrom(t => t.FirstName))
+               .ForMember(x => x.LastName, opt => opt.MapFrom(t => t.LastName))
+               .ForAllOtherMembers(x => x.Ignore())
+               ;
+            CreateMap<ParcelListFromCompanyViewModel, Address>()
+              .ForMember(x => x.Street, opt => opt.MapFrom(t => t.Adress))
+              .ForMember(x => x.City, opt => opt.MapFrom(t => t.City))
+              .ForMember(x => x.PostNumber, opt => opt.MapFrom(t => t.PostNr))
+              .ForMember(x => x.County, opt => opt.MapFrom(t => t.Country))
+              .ForAllOtherMembers(x => x.Ignore())
+              ;
+            CreateMap<ParcelListFromCompanyViewModel, PhoneNumber>()
+             .ForMember(x => x.Number, opt => opt.MapFrom(t => t.PhoneTwo))
+             .ForAllOtherMembers(x => x.Ignore())
+             ;
 
         }
-
     }
 }
