@@ -18,6 +18,7 @@ namespace RouteLister2.Models
         {
             _context = context;
         }
+
         internal async Task<ApplicationUser> SetNewPassword(ApplicationDbContext context,ApplicationUser user,  string newPW, string userID)
         {
             var password = new PasswordHasher<ApplicationUser>();
@@ -36,30 +37,31 @@ namespace RouteLister2.Models
             return result;
         }
 
-        //internal static async Task<IdentityResult> UpdateRole(UserManager<ApplicationUser> userManager, string Id, string[] roles)
-        //{
-        //    ApplicationUser user = await _userManager.FindByEmailAsync(email);
-        //    var result = await _userManager.AddToRolesAsync(user, roles);
+        internal static async Task<IdentityResult> UpdateRole(UserManager<ApplicationUser> userManager, string Id, string[] roles)
+        {
+            ApplicationUser user = await userManager.FindByIdAsync(Id);
+            var result = await userManager.AddToRolesAsync(user, roles);
 
-        //    return result;
-        //}
-        //internal async Task<ApplicationUser> UpdateUserData(UserManager<ApplicationUser> userManager, ApplicationUser user,  ApplicationDbContext context,string Id, string username, string email, string phone, string roles, bool islocked)
-        //{
-        //    user = await userManager.FindByIdAsync(Id);
-        //    user.UserName = username;
-        //    user.NormalizedUserName = username.ToUpper();
-        //    user.Email = email;
-        //    user.NormalizedEmail = email.ToUpper();
-        //    user.PhoneNumber = phone;
-        //    user.LockoutEnabled = islocked;
-        //    string tempRole = roles;
-        //    string[] roleArray = new string[] { tempRole };
-        //    var addRole = await userManager.AddToRoleAsync(user, roles.ToUpper());
-        //    await UserSettings.UpdateRole(userManager, user.Id, roleArray);
+            return result;
+        }
 
-        //    return user;
+        internal async Task<ApplicationUser> UpdateUserData(UserManager<ApplicationUser> userManager, ApplicationUser user, ApplicationDbContext context, string Id, string username, string email, string phone, string roles, bool islocked)
+        {
+            user = await userManager.FindByIdAsync(Id);
+            user.UserName = username;
+            user.NormalizedUserName = username.ToUpper();
+            user.Email = email;
+            user.NormalizedEmail = email.ToUpper();
+            user.PhoneNumber = phone;
+            user.LockoutEnabled = islocked;
+            string tempRole = roles;
+            string[] roleArray = new string[] { tempRole };
+            var addRole = await userManager.AddToRoleAsync(user, roles.ToUpper());
+            await UserSettings.UpdateRole(userManager, user.Id, roleArray);
 
-        //}
+            return user;
+
+        }
 
     }
 }

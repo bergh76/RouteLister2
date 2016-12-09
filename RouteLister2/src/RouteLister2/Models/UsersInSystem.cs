@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RouteLister2.Controllers;
 using RouteLister2.Data;
 using RouteLister2.Models.UsersInSystemViewModel;
@@ -10,20 +11,18 @@ namespace RouteLister2.Models
 {
     public class UsersInSystem
     {
-        //private IServiceProvider _serviceProvider;
-
         private readonly ApplicationDbContext _context;
         public List<SystemUsersViewModel> _userList { get; set; }
         public List<string> _role { get; set; }
 
-        public string _message { get; set; }
-        public string Message {
-            get { return ManageController._messageRemove; }
-            set { _message = value; }
-        }
+        //public string _message { get; set; }
+        //public string Message {
+        //    get { return ManageController._messageRemove; }
+        //    set { _message = value; }
+        //}
 
 
-        public UsersInSystem(ApplicationDbContext context)
+        public UsersInSystem([FromServices] ApplicationDbContext context)
         {
             _context = context;
             _role = _context.Roles.Select(x => x.Name).ToList();
@@ -51,23 +50,5 @@ namespace RouteLister2.Models
             return _userList = await result.ToListAsync(); 
         }
 
-        //public async Task GetRoles()
-        //{
-        //}
-
-        //public async Task<List<string>> GetUserRole()
-        //{
-        //var result = from u in _context.Users
-        //             join ur in _context.UserRoles on u.Id equals ur.UserId
-        //             join r in _context.Roles on ur.RoleId equals r.Id
-        //             where ur.UserId == u.Id
-        //             select r.Name;
-        //        foreach (var item in result)
-        //        {
-        //            _userRole = item;
-
-        //        }
-        //        return _userRole;
-        //}
     }
 }

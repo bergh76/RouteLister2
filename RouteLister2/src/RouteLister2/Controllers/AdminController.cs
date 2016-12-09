@@ -38,7 +38,7 @@ namespace RouteLister2.Controllers
             _mapper = mapper;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(ParcelListFromCompanyViewModel parcel)
+        public async Task<IActionResult> Index()
         {
             if (ModelState.IsValid)
             {
@@ -81,12 +81,17 @@ namespace RouteLister2.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
-        //{
-        //    await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
+        public async Task<IActionResult> SetParcelToVehicle()
+        {
+            return View();
+        }
 
-        //    return RedirectToAction(nameof(AccountController.Register), "Account");
-        //}
+        public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
+        {
+            await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
+
+            return RedirectToAction(nameof(AccountController.Register), "Account");
+        }
 
         public IActionResult Message()
         {

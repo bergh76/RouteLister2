@@ -51,9 +51,5 @@ namespace RouteLister2.Models.ParcelListFromCompanyViewModel
 
         [Display(Name = "Leveransdatum")]
         public DateTime DeliveryDate { get; set; }
-
-        //public List<ParcelListFromCompanyViewModel> ParcelList = new List<ParcelListFromCompanyViewModel>();
-
     }
-
 }
