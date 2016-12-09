@@ -1,4 +1,5 @@
-﻿using RouteLister2.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using RouteLister2.Data;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,6 @@ namespace RouteLister2.Services
 {
     public interface IDataImports
     {
-        void GetParcelData();
+        Task GetParcelData(ApplicationDbContext context);
     }
 }

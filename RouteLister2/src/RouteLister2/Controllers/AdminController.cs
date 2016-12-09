@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using RouteLister2.Services;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,16 +38,14 @@ namespace RouteLister2.Controllers
             _mapper = mapper;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(
-            DataImports jsonData, 
-            ParcelListFromCompanyViewModel parcel)
+        public async Task<IActionResult> Index(ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
             {
-                jsonData.GetParcelData();
-                //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
+                IDataImports data = new DataImports(_context);
+                await data.GetParcelData(_context);
                 var result = from c in _context.Contacts
-                                 //join order in _context.Orders on c.Id equals order.Id
+                             //join order in _context.Orders on c.Id equals order.Id
                              //join phone in _context.PhoneNumbers on c.Id equals phone.ContactId
                              //join par in _context.Parcels on c.Id equals par.Id
                              select new ParcelListFromCompanyViewModel
@@ -70,7 +69,7 @@ namespace RouteLister2.Controllers
                                  PhoneTwo = "", //Phone
 
                              };
-                IEnumerable<ParcelListFromCompanyViewModel> outResult = result.ToList();
+                IEnumerable<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
                 return View(outResult);
             }
             

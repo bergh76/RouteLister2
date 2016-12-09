@@ -23,16 +23,8 @@ namespace RouteLister2.Services
         {
             _context = context;
         }
-        
-        public DataImports() { }
 
-        public async void GetParcelData()
-        {
-            ApiDeserializer serializer = new ApiDeserializer();
-            var dataOut = await serializer.JsonSerializer<ApiDeserializer>(path);
-            _parcelList = dataOut.ParcelListImports;
-            await JsonApiDataImport(_context);
-        }
+        public DataImports() { }
 
         private async Task JsonApiDataImport(ApplicationDbContext context)
         {
@@ -91,6 +83,14 @@ namespace RouteLister2.Services
                     await context.SaveChangesAsync();
                 }
             };
+        }
+
+        public async Task GetParcelData(ApplicationDbContext context)
+        {
+            ApiDeserializer serializer = new ApiDeserializer();
+            var dataOut = await serializer.JsonSerializer<ApiDeserializer>(path);
+            _parcelList = dataOut.ParcelListImports;
+            await JsonApiDataImport(context);
         }
     }
 }

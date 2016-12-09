@@ -95,6 +95,38 @@
       "DeliveryType": "Doubble Indoor",
       "DeliveryDate": "2016/12/09",
       "Country": "SE"
+    },
+    {
+      "FirstName": "Jan",
+      "LastName": "Fritiofsson",
+      "City": "Torsås",
+      "PostNr": "41998",
+      "Adress": "Bygdegården 6",
+      "PhoneOne": "0703-66666",
+      "PhoneTwo": "0480-123456",
+      "Distributor": "Vinoteket",
+      "ArticleName": "Vin&Sprit",
+      "CollieId": "070259745621SE",
+      "ArticleAmount": "1",
+      "DeliveryType": "Doubble Indoor",
+      "DeliveryDate": "2016/12/11",
+      "Country": "SE"
+    },
+    {
+      "FirstName": "Tobias",
+      "LastName": "Ottosson",
+      "City": "Söderåkra",
+      "PostNr": "41999",
+      "Adress": "Vassmolösavägen 6",
+      "PhoneOne": "0703-777777",
+      "PhoneTwo": "0480-123456",
+      "Distributor": "Sova",
+      "ArticleName": "Sängar",
+      "CollieId": "073554874595SE",
+      "ArticleAmount": "1",
+      "DeliveryType": "Doubble Indoor",
+      "DeliveryDate": "2016/12/09",
+      "Country": "SE"
     }
   ]
 }

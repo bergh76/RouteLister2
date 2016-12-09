@@ -1,4 +1,5 @@
-﻿using RouteLister2.Controllers;
+﻿using Microsoft.EntityFrameworkCore;
+using RouteLister2.Controllers;
 using RouteLister2.Data;
 using RouteLister2.Models.UsersInSystemViewModel;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace RouteLister2.Models
         //private IServiceProvider _serviceProvider;
 
         private readonly ApplicationDbContext _context;
-        public IEnumerable<SystemUsersViewModel> _userList { get; set; }
-        public IEnumerable<string> _role { get; set; }
+        public List<SystemUsersViewModel> _userList { get; set; }
+        public List<string> _role { get; set; }
 
         public string _message { get; set; }
         public string Message {
@@ -28,7 +29,7 @@ namespace RouteLister2.Models
             _role = _context.Roles.Select(x => x.Name).ToList();
         }
 
-        public async Task<IEnumerable<SystemUsersViewModel>> GetAllUsers()
+        public async Task<List<SystemUsersViewModel>> GetAllUsers()
         {
             var result = from u in _context.Users
                          join ur in _context.UserRoles on u.Id equals ur.UserId
@@ -47,7 +48,7 @@ namespace RouteLister2.Models
                                         .ToList()
                          };
             
-            return _userList = result.ToList(); 
+            return _userList = await result.ToListAsync(); 
         }
 
         //public async Task GetRoles()
