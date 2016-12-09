@@ -22,7 +22,6 @@ namespace RouteLister2.Controllers
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-        private UnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
 
         // GET: /<controller>/
@@ -30,23 +29,21 @@ namespace RouteLister2.Controllers
         public AdminController(
             [FromServices]ApplicationDbContext context,
             [FromServices] IMapper mapper,
-            [FromServices] UnitOfWork unitOfWork,
             UserManager<ApplicationUser> userManager
 
             )
         {
             _context = context;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
         public async Task<IActionResult> Index(
-            JsonDataListImports jsonData, 
+            DataImports jsonData, 
             ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
             {
-                await jsonData.GetParcelData(_context);
+                jsonData.GetParcelData();
                 //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
                 var result = from c in _context.Contacts
                                  //join order in _context.Orders on c.Id equals order.Id
@@ -85,12 +82,12 @@ namespace RouteLister2.Controllers
             return View();
         }
 
-        public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
-        {
-            await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
+        //public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
+        //{
+        //    await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
 
-            return RedirectToAction(nameof(AccountController.Register), "Account");
-        }
+        //    return RedirectToAction(nameof(AccountController.Register), "Account");
+        //}
 
         public IActionResult Message()
         {

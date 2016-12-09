@@ -11,14 +11,20 @@ namespace RouteLister2.Models
     public class SeedDefaultUser
     {
         private ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
         private IServiceProvider _serviceProvider;
+
 
         public SeedDefaultUser(
             ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _context = context;
+            _userManager = userManager;
+
         }
 
         private static string[] GetRoles()
@@ -36,7 +42,6 @@ namespace RouteLister2.Models
                 {
                     await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
                 }
-
             }
 
             var user = new ApplicationUser
@@ -65,17 +70,8 @@ namespace RouteLister2.Models
                 //});
             }
 
-            await SeedAssignRoles(_serviceProvider, user.Email, roles);
+            await UserSettings.AssignRoles(_userManager, user.Email, roles);
             await dbContext.SaveChangesAsync();
-        }
-        
-        internal static async Task<IdentityResult> SeedAssignRoles(IServiceProvider services, string email, string[] roles)
-        {
-            UserManager<ApplicationUser> _userManager = services.GetService<UserManager<ApplicationUser>>();
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
-            var result = await _userManager.AddToRolesAsync(user, roles);
-
-            return result;
         }
     }
 }
