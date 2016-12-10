@@ -12,20 +12,12 @@ namespace RouteLister2.Models
     public class UsersInSystem
     {
         private readonly ApplicationDbContext _context;
-        public List<SystemUsersViewModel> _userList { get; set; }
-        public List<string> _role { get; set; }
-
-        //public string _message { get; set; }
-        //public string Message {
-        //    get { return ManageController._messageRemove; }
-        //    set { _message = value; }
-        //}
+        public List<SystemUsersViewModel> UserList { get; set; }
 
 
         public UsersInSystem([FromServices] ApplicationDbContext context)
         {
             _context = context;
-            _role = _context.Roles.Select(x => x.Name).ToList();
         }
 
         public async Task<List<SystemUsersViewModel>> GetAllUsers()
@@ -46,8 +38,8 @@ namespace RouteLister2.Models
                                         .Select(x => r.Name)
                                         .ToList()
                          };
-            
-            return _userList = await result.ToListAsync(); 
+
+            return UserList = await result.ToListAsync();
         }
 
     }

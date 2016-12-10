@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RouteLister2.Models.ParcelListFromCompanyViewModel
 {
-    public class ParcelListFromCompanyViewModel
+    public class ParcelListImport
     {
         //public int Id { get; set; }
         [Display(Name = "Förnamn")]

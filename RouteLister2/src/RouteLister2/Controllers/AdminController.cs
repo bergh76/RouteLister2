@@ -43,12 +43,12 @@ namespace RouteLister2.Controllers
             if (ModelState.IsValid)
             {
                 IDataImports data = new DataImports(_context);
-                await data.GetParcelData(_context);
+                await data.GetParcelData();
                 var result = from c in _context.Contacts
                              //join order in _context.Orders on c.Id equals order.Id
                              //join phone in _context.PhoneNumbers on c.Id equals phone.ContactId
                              //join par in _context.Parcels on c.Id equals par.Id
-                             select new ParcelListFromCompanyViewModel
+                             select new ParcelListImport
                              {
 
                                  FirstName = c.FirstName, //Contact
@@ -69,7 +69,7 @@ namespace RouteLister2.Controllers
                                  PhoneTwo = "", //Phone
 
                              };
-                IEnumerable<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
+                IEnumerable<ParcelListImport> outResult = await result.ToListAsync();
                 return View(outResult);
             }
             

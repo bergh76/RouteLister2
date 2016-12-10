@@ -11,9 +11,9 @@ namespace RouteLister2.Models
     {
 
         private ApplicationDbContext _context;
-        //private readonly UserManager<ApplicationUser> _userManager;
 
         public UserSettings() { }
+
         public UserSettings([FromServices] ApplicationDbContext context)
         {
             _context = context;
@@ -58,11 +58,12 @@ namespace RouteLister2.Models
             string[] roleArray = new string[] { tempRole };
             var addRole = await userManager.AddToRoleAsync(user, roles.ToUpper());
             await UserSettings.UpdateRole(userManager, user.Id, roleArray);
-
+            await context.SaveChangesAsync();
             return user;
 
         }
 
+       
     }
 }
 

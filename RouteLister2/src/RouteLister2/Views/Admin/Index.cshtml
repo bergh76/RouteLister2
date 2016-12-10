@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RouteLister2.Models.ParcelListFromCompanyViewModel.ParcelListFromCompanyViewModel>
+﻿@model IEnumerable<RouteLister2.Models.ParcelListFromCompanyViewModel.ParcelListImport>
 @{
     ViewData["Title"] = "LOGISTIKBOLAGET || Paketlista-" + DateTime.Now.ToString("yyyy-MM-dd");
 }
@@ -67,10 +67,10 @@
         </div>
         <div class="x_content">
             <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
+                <table id="deliverytable" class="table table-width table-striped dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
                     <thead>
                         <tr class="text-center">
-                            @*<th><h6></h6></th>*@
+                            <th><h6>#</h6></th>
                             <th><h6>Antal</h6></th>
                             <th><h6>KollieId</h6></th>
                             <th><h6>Levdatum</h6></th>
@@ -88,10 +88,11 @@
 
                     </thead >
                     <tbody >
+                        @{ int count = 1;}
                         @{foreach (var item in Model)
                             {
                                 <tr>
-                                    @*<td></td>*@
+                                    <td>@count</td>
                                     <td>@item.ArticleAmount</td>
                                     <td>@item.CollieId</td>
                                     <td>@item.DeliveryDate.ToString("yyyy-MM-dd")</td>
@@ -119,6 +120,7 @@
                                         </form>
                                     </td>
                                 </tr>
+                                count++;
                             }
                         }
                     </tbody>

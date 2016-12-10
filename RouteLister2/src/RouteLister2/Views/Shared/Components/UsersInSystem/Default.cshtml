@@ -1,8 +1,6 @@
 ﻿@*@model IEnumerable<RouteLister2.Models.UsersInSystemViewModel.SystemUsersViewModel>*@
 @model RouteLister2.Models.UsersInSystem
 
-<link href="~/lib/animate.css/animate.css" rel="stylesheet" />
-
 
 <div class="panel-group">
     <div class="panel panel-default">
@@ -23,6 +21,7 @@
                 <table class="table-useradmin">
                     <thead>
                         <tr>
+                            <th style="width:2%">#</th>
                             <th style="width:5%"></th>
                             <th style="width:15%">Namn</th>
                             <th style="width:15%">Roll</th>
@@ -35,39 +34,45 @@
                     </thead>
                 </table>
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    @{foreach (var item in Model._userList)
+                  @{ int count = 1;}
+                    @{foreach (var item in Model.UserList)
                         {
                             <div class="panel panel-default-useradmin">
                                 <div class="panel-heading-useradmin" role="tab" id="heading @item.Id">
                                     <table class="table-useradmin table-width table-hover">
                                         <tbody>
-                                            <tr class="text-left">
-                                                <td style="width:5%">
-                                                    <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
-                                                </td>
-                                                <td style="width:15%">@item.UserName</td>
-                                                <td style="width:15%">@string.Join(", ",item.UserRole.ToArray()) </td>
-                                                <td style="width:20%">@item.Email</td>
-                                                <td style="width:15%">@item.Phone</td>
-                                                @if (item.IsAccountLocked != true)
-                                                {
-                                                    <td style="width:15%">@item.IsAccountLocked</td>
-                                                }
-                                                else
-                                                {
-                                                    <td style="width:15%"><span class="animated shake"><i class="fa fa-exclamation"></i>@item.IsAccountLocked</span></td>
-                                                }
-                                                <td style="width:15%">@item.LoginCount</td>
-                                                <td style="width:5%">
-                                                    <form asp-controller="Manage" asp-action="DeleteUser" method="post" class="form-horizontal">
-                                                        <input type="text" name="Id" value="@item.Id" hidden /> <!--HACK !!!!!!! NEEDS A CLEANER APPROACH-->
-                                                        <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <tr class="text-left">
+                                            <td style="width:2%">@count</td>                                           
+                                            <td style="width:5%">
+                                                <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
+                                            </td>
+                                            <td style="width:15%">@item.UserName</td>
+                                            @{
+                                                var resOut = string.Join(", ", item.UserRole.ToArray());
+                                            }
+                                            <td style="width:15%">@resOut</td>
+                                            <td style="width:20%">@item.Email</td>
+                                            <td style="width:15%">@item.Phone</td>
+                                            @if (item.IsAccountLocked != true)
+                                            {
+                                                <td style="width:15%">@item.IsAccountLocked</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="width:15%"><span class="animated shake"><i class="fa fa-exclamation"></i>@item.IsAccountLocked</span></td>
+                                            }
+                                            <td style="width:15%">@item.LoginCount</td>
+                                            <td style="width:5%">
+                                                <form asp-controller="Manage" asp-action="DeleteUser" method="post" class="form-horizontal">
+                                                    <input type="text" name="Id" value="@item.Id" hidden /> <!--HACK !!!!!!! NEEDS A CLEANER APPROACH-->
+                                                    <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                                 <div id="@item.Id" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading @item.Id">
                                     <div class="panel-body">
                                         <div class="h4 col-lg-12 alert-danger"><i class="fa fa-edit"> </i>Redigera användarkonton</div>
@@ -152,7 +157,8 @@
                                     </div>
                                 </div>
                             </div>
-                        }
+                            count++;
+                                                }
                     }
                 </div>
             </div>
@@ -160,5 +166,6 @@
     </div>
 </div>
 @section Scripts {
+<link href="~/lib/animate.css/animate.css" rel="stylesheet" />
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

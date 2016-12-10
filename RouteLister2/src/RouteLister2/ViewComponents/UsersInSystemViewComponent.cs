@@ -22,7 +22,7 @@ namespace RouteLister2.ViewComponents
         {
             ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
             UsersInSystem users = new UsersInSystem(_context);
-            users._userList = await users.GetAllUsers();
+            users.UserList = await users.GetAllUsers();
             return View(users);
         }
     }
