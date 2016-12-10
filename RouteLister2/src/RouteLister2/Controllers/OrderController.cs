@@ -13,28 +13,26 @@ namespace RouteLister2.Controllers
 {
     public class OrderController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
+        private SignalRBusinessLayer _businessLayer;
 
-        public OrderController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public OrderController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<Order>(id);
+            var model = await _businessLayer.Get<Order>(id);
             if (model == null)
             {
                 return NotFound();
             }
-            SetDropDowns(id);
+            await SetDropDowns(id);
             return View(model);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SetDropDowns();
+            await SetDropDowns();
             return View();
         }
         [HttpPost]
@@ -43,24 +41,23 @@ namespace RouteLister2.Controllers
             
             if (!ModelState.IsValid)
             {
-                SetDropDowns();
+                await SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit", new { id = model.Id });
         }
 
-        private void SetDropDowns(int? id=null)
+        private async Task SetDropDowns(int? id=null)
         {
-            
-            var one = _context.Destinations.Include(x => x.Address).Include(x => x.Contact).Select(x => new SelectListItem() { Text = x.Contact.FirstName + " " + x.Contact.LastName + " " + x.Address.City + " " + x.Address.Street, Value = x.Id.ToString(), Selected = x.Id == id });
+
+            var one = await _businessLayer.GetDestinationDropDown(id);
             ViewBag.DestinationDropDown = one.Count() == 0 ? null : one;
-            var two = _context.OrderStatus.Select(x => new SelectListItem() { Text = x.Name,Value=x.Id.ToString(),Selected = x.Id == id });
+            var two = await _businessLayer.GetOrderStatusDropDown(id);
             ViewBag.OrderStatusDropDown = two.Count() == 0 ? null : two;
-            var three = _context.OrderType.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id });
+            var three = await _businessLayer.GetOrderTypDropDown(id);
             ViewBag.OrderTypeDropDown = three.Count() == 0 ? null : three;
-            var four = _context.RouteLists.Select(x => new SelectListItem() { Text = x.Title, Value = x.Id.ToString(), Selected = x.Id == id });
+            var four = await _businessLayer.GetRouteListDropDown(id);
             ViewBag.RouteListDropDown = four.Count() == 0 ? null : four;
         }
     }

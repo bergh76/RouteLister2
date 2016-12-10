@@ -11,18 +11,16 @@ namespace RouteLister2.Controllers
 {
     public class OrderStatusController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
+        private SignalRBusinessLayer _businessLayer;
 
-        public OrderStatusController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public OrderStatusController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<OrderStatus>(id);
+            var model = await _businessLayer.Get<OrderStatus>(id);
             if (model == null)
             {
                 return NotFound();
@@ -44,8 +42,7 @@ namespace RouteLister2.Controllers
                 SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit", new { id = model.Id });
         }
 

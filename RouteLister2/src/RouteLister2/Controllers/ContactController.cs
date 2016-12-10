@@ -11,28 +11,26 @@ namespace RouteLister2.Controllers
 {
     public class ContactController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
+        private SignalRBusinessLayer _businessLayer;
 
-        public ContactController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public ContactController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<Contact>(id);
+            var model = await _businessLayer.Get<Contact>(id);
             if (model == null)
             {
                 return NotFound();
             }
-            SetDropDowns();
+            await SetDropDowns();
             return View(model);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SetDropDowns();
+            await SetDropDowns();
             return View();
         }
         [HttpPost]
@@ -41,14 +39,14 @@ namespace RouteLister2.Controllers
 
             if (!ModelState.IsValid)
             {
-                SetDropDowns();
+                await SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
+
             return RedirectToAction("Edit", new { id = model.Id });
         }
-        private void SetDropDowns(int? id = null)
+        private async Task SetDropDowns(int? id = null)
         {
             
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RouteLister2.Data;
 using RouteLister2.Models.RouteListerViewModels;
@@ -18,13 +19,23 @@ namespace RouteLister2.Models
         //private IDriverHub _hub;
         private RouteListerRepository _repo;
         public static readonly string OrderRowStatusTrue = "Plockad";
+
+        public async Task<T> Get<T>(int id) where T : class
+        {
+            return await _repo.GetAsync<T>(id);
+        }
+
         public static readonly string OrderRowStatusFalse = "I Lager";
         private IMapper _mapper;
+
+        public async Task<IEnumerable<SelectListItem>> GetParcelDropDown(int? Id)
+        {
+            return await _repo.Get<Parcel>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == Id }).ToListAsync();
+        }
 
         public SignalRBusinessLayer([FromServices] RouteListerRepository repo, [FromServices] IMapper mapper)
         {
             _repo = repo;
-            //_hub = hub;
             _mapper = mapper;
         }
         public async Task<bool> IsUserValid(string userName)
@@ -42,9 +53,55 @@ namespace RouteLister2.Models
             return false;
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetAddressDropDown(int? id)
+        {
+            return await _repo.Get<Address>().Select(x => new SelectListItem() { Text = x.PostNumber + " " + x.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetContactsDropDown(int? id)
+        {
+            return await _repo.Get<Contact>().Select(x => new SelectListItem() { Text = x.FirstName + " " + x.LastName, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetOrderTypDropDown(int? id)
+        {
+            return await _repo.Get<OrderType>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetRouteListDropDown(int? id)
+        {
+           return await _repo.Get<RouteList>().Select(x => new SelectListItem() { Text = x.Title, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetOrderStatusDropDown(int? id)
+        {
+           return await _repo.Get<OrderStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetDestinationDropDown(int? id)
+        {
+            return await _repo.Get<Destination>(null, null, x => x.Address, x => x.Contact).Select(x => new SelectListItem() { Text = x.Contact.FirstName + " " + x.Contact.LastName + " " + x.Address.City + " " + x.Address.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
         public async Task AddUser(ApplicationUser applicationUser)
         {
             await _repo.InsertAsync(applicationUser);
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetOrdersDropDown(int? id)
+        {
+            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetOrderRowStatusDropDown(int? id)
+        {
+            if (id.HasValue) { 
+                return await _repo.Get<OrderRowStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            }
+            else
+            {
+                return await _repo.Get<OrderRowStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToListAsync();
+            }
         }
 
         public async Task UpdateUserStatus(bool status, string userId, string connectionId)
@@ -70,14 +127,56 @@ namespace RouteLister2.Models
             }
         }
 
-        public async Task<RouteList> GetRouteList(string id)
+        public async Task Insert<T>(T t) where T : class
         {
-            var result = await _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == id,null, x => x.ApplicationUser ,x=>x.Orders).ToListAsync();
-            return result.FirstOrDefault();
+            await _repo.InsertAsync<T>(t);
         }
-        public async Task<RouteListViewModel> GetRouteListViewModels(string id)
+
+        public async Task<RouteList> GetRouteList(int? id =null ,string ApplicationUserId = null, string Title = null, DateTime? Created = null, DateTime? Modified =null, DateTime? Assigned = null,string RegistrationNumber = null)
         {
-            var result = _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == id, null, x => x.ApplicationUser, x => x.Orders).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
+            return (await GetAllRouteList(id,ApplicationUserId,Title,Created,Modified,Assigned,RegistrationNumber)).FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<RouteList>> GetAllRouteList(int? id = null, string ApplicationUserId = null, string Title = null, DateTime? Created = null, DateTime? Modified = null, DateTime? Assigned = null, string RegistrationNumber = null)
+        {
+            //Default ordering = no order(see null)
+            //Default filtering = no filtering, see first null
+            IQueryable<RouteList> query = _repo.Get<RouteList>(null,
+                    null, x => x.ApplicationUser, x => x.Orders);
+            if (RegistrationNumber != null)
+            {
+                query = query.Where(x => x.ApplicationUser.RegistrationNumber == RegistrationNumber);
+            }
+            if (id.HasValue)
+            {
+                query = query.Where(x => x.Id == id);
+            }
+            if (!string.IsNullOrEmpty(ApplicationUserId))
+            {
+                query = query.Where(x => x.ApplicationUserId == ApplicationUserId);
+            }
+            if (!string.IsNullOrEmpty(Title))
+            {
+                query = query.Where(x => x.Title == Title);
+            }
+            if (Created.HasValue)
+            {
+                query = query.Where(x => x.Created == Created);
+            }
+            if (Modified.HasValue)
+            {
+                query = query.Where(x => x.Modified == Modified);
+            }
+            if (Assigned.HasValue)
+            {
+                query = query.Where(x => x.Assigned == Assigned);
+            }
+
+            return await query.ToListAsync();
+        }
+        public async Task<RouteListViewModel> GetRouteListViewModelByRegistrationNumber(string RegistrationNumber)
+        {
+            var result = _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == RegistrationNumber, null, x => x.ApplicationUser, x => x.Orders).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
             return await result.FirstOrDefaultAsync();
         }
 
@@ -88,6 +187,21 @@ namespace RouteLister2.Models
              var result = await _repo.Get<RouteList>(null,null,x=>x.ApplicationUser).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync(); 
             return result;
         }
+
+        public async Task<IEnumerable<SelectListItem>> GetRegistrationNumberDropDown(string ApplicationUserId) 
+        {
+            var result = _repo.Get<ApplicationUser>(null,null,null);
+            if (string.IsNullOrEmpty(ApplicationUserId))
+            {
+                return await result.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.Id.ToString(), Selected = x.Id == ApplicationUserId }).ToListAsync();
+            }
+            else
+            {
+                return await result.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.Id.ToString() }).ToListAsync();
+            }
+            
+        }
+  
 
 
         public async Task SetUserConnectionId(string connectionId, string name = null, string id = null)

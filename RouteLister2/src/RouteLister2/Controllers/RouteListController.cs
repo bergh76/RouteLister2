@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using RouteLister2.Data;
@@ -18,22 +19,14 @@ namespace RouteLister2.Controllers
 {
     public class RouteListController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
- 
         private IConnectionManager _connectionManager;
         private SignalRBusinessLayer _businessLayer;
 
         public RouteListController(
-            [FromServices] ApplicationDbContext context, 
-            [FromServices] IMapper mapper, 
-
             IConnectionManager connectionManager,
             [FromServices] SignalRBusinessLayer businessLayer
             )
         {
-            _context = context;
-            _mapper = mapper;
 
             _connectionManager = connectionManager;
             _businessLayer = businessLayer;
@@ -42,33 +35,19 @@ namespace RouteLister2.Controllers
         public async Task<IActionResult> Index(string id)
         {
             if (!string.IsNullOrEmpty(id)) {
-                //RouteList result = await _businessLayer.GetRouteList(id);
-                //RouteListViewModel viewModel = _mapper.Map<RouteListViewModel>(result);
-                var viewModel = await _businessLayer.GetRouteListViewModels(id);
+                var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
                 return View(viewModel);
             }
             return View();
+     
         }
 
-            //Using Automapper
-            var result = from vehicles in _context.Vehicles.Where(x => x.RegistrationNumber == id)
-                         from routeLists in _context.RouteLists.Where(x => x.VehicleId == vehicles.Id)
-                         select routeLists;
-            var viewModels = result.ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).FirstOrDefault();
-            return View(viewModels);
-        }
-        public IActionResult Index2()
-
-        {
-            var result = _context.RouteLists.ProjectTo<RouteList>();
-            return View(result);
-        }
 
         [HttpGet]
-        public IActionResult Create(string title)
+        public async Task<IActionResult> Create(string title)
         {
             RouteList model = new RouteList() { Title = title };
-            SetVehicleDropDown();
+            await SetUserDropDown();
 
             return View(model);
         }
@@ -76,39 +55,39 @@ namespace RouteLister2.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RouteList model)
         {
-            SetVehicleDropDown();
+            await SetUserDropDown();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit",new { id=model.Id });
         }
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<RouteList>(id);
+            var model = await _businessLayer.GetRouteList(id:id);
             if (model == null)
             {
                 return NotFound();
             }
-            SetVehicleDropDown(id);
+            await SetUserDropDown(model.ApplicationUserId);
             return View(model);
         }
 
         public async Task<IActionResult> List()
         {
-            var result = await _context.RouteLists.ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            var result = await _businessLayer.GetAllRouteLists();
             return View(result);
         }
-        private void SetVehicleDropDown(int? id = null)
+        private async Task SetUserDropDown(string id = null)
         {
-            if (id.HasValue) { 
-            ViewBag.VehicleDropDown = _context.Vehicles.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.Id.ToString(), Selected = x.Id == id });
+            if (string.IsNullOrEmpty(id)) {
+                ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
             }
             else
             {
-                ViewBag.VehicleDropDown = _context.Vehicles.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.Id.ToString() });
+                ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
             }
         }
        

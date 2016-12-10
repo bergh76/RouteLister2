@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RouteLister2.Data;
-using AutoMapper;
+
 using RouteLister2.Models;
 
 namespace RouteLister2.Controllers
 {
     public class OrderRowStatusController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
+        private SignalRBusinessLayer _businessLayer;
 
-        public OrderRowStatusController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public OrderRowStatusController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<OrderRowStatus>(id);
+            var model = await _businessLayer.Get<OrderRowStatus>(id);
             if (model == null)
             {
                 return NotFound();
@@ -43,8 +38,7 @@ namespace RouteLister2.Controllers
                 SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit", new { id = model.Id });
         }
 

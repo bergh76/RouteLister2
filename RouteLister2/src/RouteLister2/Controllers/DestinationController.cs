@@ -12,28 +12,26 @@ namespace RouteLister2.Controllers
 {
     public class DestinationController : Controller
     {
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
+        private SignalRBusinessLayer _businessLayer;
 
-        public DestinationController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public DestinationController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<Destination>(id);
+            var model = await _businessLayer.Get<Destination>(id);
             if (model == null)
             {
                 return NotFound();
             }
-            SetDropDowns(id);
+            await SetDropDowns(id);
             return View(model);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SetDropDowns();
+            await SetDropDowns();
             return View();
         }
         [HttpPost]
@@ -42,20 +40,19 @@ namespace RouteLister2.Controllers
 
             if (!ModelState.IsValid)
             {
-                SetDropDowns();
+                await SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit", new { id = model.Id });
         }
 
 
-        private void SetDropDowns(int? id = null)
+        private async Task SetDropDowns(int? id = null)
         {
-            var one = _context.Contacts.Select(x => new SelectListItem() { Text = x.FirstName + " " + x.LastName, Value = x.Id.ToString(), Selected = x.Id == id });
+            var one = await _businessLayer.GetContactsDropDown(id);
             ViewBag.ContactDropDown = one.Count() == 0 ? null : one;
-            var two = _context.Address.Select(x => new SelectListItem() { Text = x.PostNumber + " " + x.Street, Value = x.Id.ToString(), Selected = x.Id == id });
+            var two = await _businessLayer.GetAddressDropDown(id);
             ViewBag.AddressDropDown = two.Count() == 0 ? null : two;
         }
     }

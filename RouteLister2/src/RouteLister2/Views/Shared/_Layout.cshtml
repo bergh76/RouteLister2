@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RouteLister</title>
     <environment names="Development">
-        <!--JQUERY -->
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <!--JQUERY -->
         <!-- DATATABLE CSS-->
         <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
         <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
@@ -23,10 +20,7 @@
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/css/custom.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-
     </environment>
-
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -51,7 +45,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="RouteList" asp-action="Index">RouteLists</a></li>
+                    <li><a asp-area="" asp-controller="RouteList" asp-action="List">RouteLists</a></li>
                     
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -75,7 +69,11 @@
         const idPrefix = "@RouteLister2.Services.TokenService._idToken";
         const idPrefixRegex = "@RouteLister2.Services.TokenService._idTokenRegex";
     </script>
+   
     <environment names="Development">
+        <!--JQUERY -->
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <!--JQUERY -->
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <!-- DATATABELS -->

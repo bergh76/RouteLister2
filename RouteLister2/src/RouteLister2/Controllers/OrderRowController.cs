@@ -14,29 +14,26 @@ namespace RouteLister2.Controllers
 {
     public class OrderRowController : Controller
     {
+        private SignalRBusinessLayer _businessLayer;
 
-        private ApplicationDbContext _context;
-        private IMapper _mapper;
-
-        public OrderRowController([FromServices] ApplicationDbContext context, [FromServices] IMapper mapper)
+        public OrderRowController([FromServices] SignalRBusinessLayer businessLayer)
         {
-            _context = context;
-            _mapper = mapper;
+            _businessLayer = businessLayer;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _context.FindAsync<OrderRow>(id);
+            var model = await _businessLayer.Get<OrderRow>(id);
             if (model == null)
             {
                 return NotFound();
             }
-            SetDropDowns(id);
+            await SetDropDowns(id);
             return View(model);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SetDropDowns();
+            await SetDropDowns();
             return View();
         }
         [HttpPost]
@@ -45,21 +42,20 @@ namespace RouteLister2.Controllers
            
             if (!ModelState.IsValid)
             {
-                SetDropDowns();
+                await SetDropDowns();
                 return View(model);
             }
-            _context.Add(model);
-            await _context.SaveChangesAsync();
+            await _businessLayer.Insert(model);
             return RedirectToAction("Edit", new { id = model.Id });
         }
 
-        private void SetDropDowns(int? id=null)
+        private async Task SetDropDowns(int? id=null)
         {
-            var one = _context.OrderRowStatus.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id });
+            var one = await _businessLayer.GetOrderRowStatusDropDown(id);
             ViewBag.OrderRowStatusDropDown = one.Count() == 0 ? null : one;
-            var two = _context.Parcels.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id });
+            var two = await _businessLayer.GetParcelDropDown(id);
             ViewBag.ParcelDropDown = two.Count() == 0 ? null : two;
-            var three = _context.Orders.Select(x => new SelectListItem() { Text = x.DestinationId.ToString()+x.OrderTypeId.ToString()+x.OrderStatusId.ToString(), Value = x.Id.ToString(), Selected = x.Id == id });
+            var three = _businessLayer.GetOrdersDropDown(id);
             ViewBag.OrderDropDown = two.Count() == 0 ? null : three;
         }
     }
