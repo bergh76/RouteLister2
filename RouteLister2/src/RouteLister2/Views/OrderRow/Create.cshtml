@@ -1,0 +1,93 @@
+﻿@model RouteLister2.Models.OrderRow
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+
+
+<form asp-action="Create" asp-controller="OrderRow">
+    <div class="form-horizontal">
+        <h4>OrderRow</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+       
+        @if (ViewBag.OrderRowStatusDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="OrderRowStatusId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="OrderRowStatusId" asp-items="@ViewBag.OrderRowStatusDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.OrderRowStatus) tillgänglig, klicka
+               
+                <a href="@Url.Action("Create","OrderRowStatus")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.OrderRowStatus) 
+            </p>
+        }
+        @if (@ViewBag.ParcelDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="ParcelId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="ParcelId" asp-items="@ViewBag.ParcelDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x=>x.Parcel) tillgänglig, klicka
+                <a href="@Url.Action("Create","Parcel")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.Parcel)
+            </p>
+        }
+        @if (@ViewBag.ParcelDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="Count" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Count" class="form-control" />
+                </div>
+            </div>
+        }
+        @if (ViewBag.OrderDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="OrderId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="OrderId" asp-items="@ViewBag.OrderDropDown" class="form-control"></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.OrderRowStatus) tillgänglig, klicka
+
+                <a href="@Url.Action("Create","Order")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.OrderRowStatus)
+            </p>
+        }
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

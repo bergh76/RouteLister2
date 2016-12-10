@@ -1,0 +1,12 @@
+﻿@*@model RouteLister2.Models.CreateChoicePartial
+@if (Model.Dropdown != null) { 
+    <select asp-for="IdRef" asp-items="Dropdown"></select>
+}
+else
+{
+    <p>
+        Finns ingen @Name tillgänglig, klicka
+        <a href="@Url.Action("Create",@TargetController)">här</a>
+        för att lägga till ny destination
+    </p>*@
+}

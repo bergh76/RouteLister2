@@ -1,0 +1,99 @@
+﻿@model RouteLister2.Models.Order
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+
+
+<form asp-action="Create" asp-controller="Order">
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewBag.DestinationDropDown != null )
+        {
+            <div class="form-group">
+                <label asp-for="DestinationId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="DestinationId" asp-items="@ViewBag.DestinationDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.Destination) tillgänglig, klicka
+               
+                <a href="@Url.Action("Create","Destination")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.Destination) 
+            </p>
+        }
+        @if (@ViewBag.OrderStatusDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="OrderStatusId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="OrderStatusId" asp-items="@ViewBag.OrderStatusDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x=>x.OrderStatus) tillgänglig, klicka
+                <a href="@Url.Action("Create","OrderStatus")" target="_blank">här</a>
+                för att lägga till ny @Html.NameFor(x => x.OrderStatus)
+            </p>
+        }
+        @if (@ViewBag.OrderTypeDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="OrderTypeId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="OrderTypeId" asp-items="@ViewBag.OrderTypeDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.OrderType) tillgänglig, klicka
+                <a href="@Url.Action("Create","OrderType")" target="_blank"> här </a>
+                för att lägga till ny @Html.NameFor(x => x.OrderType)
+            </p>
+        }
+        @if (@ViewBag.RouteListDropDown != null)
+        {
+            <div class="form-group">
+                <label asp-for="RouteListId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="RouteListId" asp-items="@ViewBag.RouteListDropDown" class="form-control" ></select>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>
+                Finns ingen @Html.NameFor(x => x.RouteList) tillgänglig, klicka
+                <a href="@Url.Action("Create","RouteList")" target="_blank"> här </a>
+                för att lägga till ny @Html.NameFor(x => x.RouteList)
+            </p>
+        }
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

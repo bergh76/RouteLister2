@@ -7,6 +7,7 @@ namespace RouteLister2.Models
     {
         public int Id { get; set; }
         public int RouteListId { get; set; }
+        public RouteList RouteList { get; set; }
         public List<OrderRow> OrderRows { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public OrderType OrderType { get; set; }

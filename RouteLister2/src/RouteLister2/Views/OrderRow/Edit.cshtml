@@ -1,0 +1,44 @@
+﻿@model RouteLister2.Models.OrderRow
+<form asp-action="Edit" asp-controller="OrderRow">
+    <div class="form-horizontal">
+        <h4>OrderRow</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="OrderRowStatusId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="OrderRowStatusId" asp-items="@ViewBag.OrderRowStatusDropDown" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ParcelId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="ParcelId" asp-items="@ViewBag.ParcelDropDown" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Count" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Count" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="OrderId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="OrderId" asp-items="@ViewBag.OrderDropDown" class="form-control"></select>
+            </div>
+        </div>
+
+        <div class="form-group hidden">
+            <label asp-for="Id" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Id">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
