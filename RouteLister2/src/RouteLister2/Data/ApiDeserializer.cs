@@ -15,7 +15,7 @@ namespace RouteLister2.Data
 
         public ApiDeserializer() { }
 
-        public async Task<T> JsonSerializer<T>(string path) where T : new()
+        public async Task<T> JsonDserializer<T>(string path) where T : new()
         {
             using (var http = new HttpClient())
             {

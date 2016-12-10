@@ -31,7 +31,7 @@ namespace RouteLister2.Services
         public async Task GetParcelData()
         {
             ApiDeserializer dserial = new ApiDeserializer();
-            var dataOut = await dserial.JsonSerializer<ApiDeserializer>(path);
+            var dataOut = await dserial.JsonDserializer<ApiDeserializer>(path);
             _parcelList = dataOut.ParcelListImport;
             await JsonApiDataImport();
         }
