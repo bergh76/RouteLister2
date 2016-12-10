@@ -51,7 +51,7 @@ namespace RouteLister2.Services
         {
             string path = JsonUrl.ToString();
             var data = await JsonSerializer<JsonDataListImports>(path);
-            data.con
+
             _parcelList = data.ParcelListImports;
             await JsonApiDataImport(context);
             //await GetCurrentList();
