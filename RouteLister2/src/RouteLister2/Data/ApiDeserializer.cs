@@ -11,7 +11,7 @@ namespace RouteLister2.Data
 {
     public class ApiDeserializer
     {
-        public List<ParcelListImport> ParcelListImport { get; set; }
+        public List<ParcelListFromCompanyViewModel> ParcelListImport { get; set; }
 
         public ApiDeserializer() { }
 

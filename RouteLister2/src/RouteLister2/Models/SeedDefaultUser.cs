@@ -8,21 +8,21 @@ using RouteLister2.Data;
 
 namespace RouteLister2.Models
 {
-    public class SeedDefaultUser
+    public class SeedDefaultData
     {
-        private ApplicationDbContext _context;
+        //private ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
         private IServiceProvider _serviceProvider;
 
 
-        public SeedDefaultUser(
-            ApplicationDbContext context,
+        public SeedDefaultData(
+            //ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _context = context;
+            //_context = context;
             _userManager = userManager;
 
         }
@@ -72,6 +72,26 @@ namespace RouteLister2.Models
 
             await UserSettings.AssignRoles(_userManager, user.Email, roles);
             await dbContext.SaveChangesAsync();
+            await AddOrderRowStatusToDbAsync();
+
+
+        }
+
+        public async Task AddOrderRowStatusToDbAsync()
+        {
+            var context = _serviceProvider.GetService<ApplicationDbContext>();
+            if (context.OrderRowStatus.Count() == 0)
+            {
+                var addOrderStatus = new OrderRowStatus();
+                addOrderStatus = new OrderRowStatus { Name = "I Lager" };
+                context.Add(addOrderStatus);
+                await context.SaveChangesAsync();
+                addOrderStatus = new OrderRowStatus { Name = "Plockad" };
+                context.Add(addOrderStatus);
+                await context.SaveChangesAsync();
+                
+            }
+
         }
     }
 }
