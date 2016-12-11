@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
+        public Order Order { get; set; }
         public int Count { get; set; }
         public string PackageId { get; set; }
         public Parcel Parcel { get; set; }

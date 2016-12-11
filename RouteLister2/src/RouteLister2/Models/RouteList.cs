@@ -12,8 +12,8 @@ namespace RouteLister2.Models
         public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
         public string Title { get;set;}
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public DateTime Assigned { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime? Modified { get; set; }
+        public DateTime? Assigned { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace RouteLister2.Models
                 NormalizedEmail = "DEFAULT@DEFAULT.SE",
                 EmailConfirmed = true,
                 LockoutEnabled = false,
+                 RegistrationNumber ="bbb222",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 

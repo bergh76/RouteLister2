@@ -1,4 +1,15 @@
 ﻿var external = (function () {
+
+
+
+    var stop = function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    return {
+        stop: stop
+    };
+
     var loadingScreen = (function () {
 
 
@@ -12,7 +23,7 @@
             loadingDiv.css('top', topValue);
             loadingDiv.width(width);
             loadingDiv.height(height);
-            loadingDiv.css('position','absolute');
+            loadingDiv.css('position', 'absolute');
             loadingDiv.removeClass("hidden");
         };
         var hide = function () {
@@ -63,7 +74,7 @@
         m = checkTime(m);
         s = checkTime(s);
         var clock = document.getElementById('clock');
-        if(clock!=null){
+        if (clock != null) {
             clock.innerHTML = h + ":" + m + ":" + s;
             var t = setTimeout(startTime, 500);
         }
@@ -76,8 +87,9 @@
         css: css,
         loadingScreen: loadingScreen,
         css2json: css2json,
-        startTime:startTime
+        startTime: startTime,
+        stop:stop
     }
 
-   
+
 })();

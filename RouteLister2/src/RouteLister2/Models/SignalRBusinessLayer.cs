@@ -28,7 +28,7 @@ namespace RouteLister2.Models
         public static readonly string OrderRowStatusFalse = "I Lager";
         private IMapper _mapper;
 
-        public async Task<IEnumerable<SelectListItem>> GetParcelDropDown(int? Id)
+        public async Task<List<SelectListItem>> GetParcelDropDown(int? Id)
         {
             return await _repo.Get<Parcel>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == Id }).ToListAsync();
         }
@@ -56,6 +56,70 @@ namespace RouteLister2.Models
         public async Task<IEnumerable<SelectListItem>> GetAddressDropDown(int? id)
         {
             return await _repo.Get<Address>().Select(x => new SelectListItem() { Text = x.PostNumber + " " + x.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+        }
+
+        internal Task UpdateRegNrOnOrderRow<T>(object newEntry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<RouteList> GetRouteListFromOrderRowId(int id, string RegistrationNumber)
+        {
+            
+            var result = from or in _repo.Get<OrderRow>(x => x.Id == id, null, null)
+                         where or.Order.RouteList.ApplicationUser.RegistrationNumber == RegistrationNumber
+                         select or.Order.RouteList;
+            return await result.FirstOrDefaultAsync();
+ 
+            
+            
+        }
+
+        public async Task MoveOrderRowToOtherDriver(int id, string registrationNumber)
+        {
+            //OrderRow to move to a routelist that is on another vehicle/user
+            OrderRow orderRowToMove = await _repo.GetAsync<OrderRow>(id);
+            //See if there's any routeList already on that driver(today only).(need to make a function purely for this in businesslayer
+            RouteList routeListToMoveTo = await _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber==registrationNumber && x.Created.Date==DateTime.Today,x=>x.OrderByDescending(y=>y.Created), x => x.ApplicationUser).FirstOrDefaultAsync();
+            //Is there one already?
+            if (routeListToMoveTo == null)
+            {
+                //If not, create one and assign to the driver
+                routeListToMoveTo = new RouteList();
+                //Get driver
+                routeListToMoveTo.ApplicationUserId = await _repo.Get<ApplicationUser>(x => x.RegistrationNumber == registrationNumber,null,null).Select(x=>x.Id).FirstOrDefaultAsync();
+                //Set other things  routelist needs to have
+                routeListToMoveTo.Title = registrationNumber + " utkörningslista";
+                routeListToMoveTo.Assigned = DateTime.Now;
+                routeListToMoveTo.Orders = new List<Order>();
+                //Create a brand new shiny order to place this orderrow in
+                Order order = new Order();
+                //..
+            }
+        }
+        public async Task MoveOrderRowToOrder(int orderRowId, int targetOrderId)
+        {
+            OrderRow orderRow = await _repo.GetAsync<OrderRow>(orderRowId);
+            orderRow.OrderId = targetOrderId;
+            await _repo.UpdateAsync(orderRow);
+        }
+        public async Task CreateOrderForNewOrderRow(int Id  ,string FirstName ,string LastName ,string City, 
+            string PostNr , string Adress , string PhoneOne , string PhoneTwo , string Distributor , string ArticleName , 
+            string CollieId , string Country , int ArticleAmount, string DeliveryType, DateTime? DeliveryDate, 
+            IEnumerable<SelectListItem> RegNrDropDown , string RegistrationNumber)
+        {
+
+        }
+
+        public async Task<RouteList> CreateNewRouteList(string RegistrationNumber, string CollieId, int RowNumberId)
+        {
+            OrderRow orderRow = (await _repo.GetAsync<OrderRow>(x=>x.Id==RowNumberId, null, x=>x.Order)).FirstOrDefault();
+            //Need to create order first
+            if (orderRow.Order == null)
+            {
+                Order order = new Order();
+            }
+            return null;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetContactsDropDown(int? id)
@@ -88,12 +152,12 @@ namespace RouteLister2.Models
             await _repo.InsertAsync(applicationUser);
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetOrdersDropDown(int? id)
+        public async Task<List<SelectListItem>> GetOrdersDropDown(int? id)
         {
             return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetOrderRowStatusDropDown(int? id)
+        public async Task<List<SelectListItem>> GetOrderRowStatusDropDown(int? id)
         {
             if (id.HasValue) { 
                 return await _repo.Get<OrderRowStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();

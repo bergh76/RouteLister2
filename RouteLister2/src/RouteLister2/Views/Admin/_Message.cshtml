@@ -33,6 +33,9 @@
     </div> <!-- end chat-header -->
     <div class="chat-history">
         <div id="postsList"></div>
+        @section Scripts{
+
+        
         <script type="text/javascript">
             $.ajax({
                 url: '/api/Posts/GetPosts',
@@ -82,6 +85,7 @@
             $.connection.hub.logging = true;
             $.connection.hub.start();
         </script>
+            }
     </div>
 </div>
 @*@section Scripts{

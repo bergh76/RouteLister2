@@ -8,9 +8,10 @@ using RouteLister2.Data;
 namespace RouteLister2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161211121204_AddedSomeFields")]
+    partial class AddedSomeFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -362,11 +363,11 @@ namespace RouteLister2.Data.Migrations
 
                     b.Property<string>("ApplicationUserId");
 
-                    b.Property<DateTime?>("Assigned");
+                    b.Property<DateTime>("Assigned");
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<DateTime?>("Modified");
+                    b.Property<DateTime>("Modified");
 
                     b.Property<string>("Title");
 

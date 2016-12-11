@@ -86,10 +86,10 @@ namespace RouteList2XUnitTests
                 SignalRBusinessLayer businessLayer = new SignalRBusinessLayer(new RouteListerRepository(context),mapper);
                 ApplicationUser user = FakeDataSets.ApplicationUserFactory();
   
-                await businessLayer.AddUser(FakeDataSets.ApplicationUserFactory());
+                await businessLayer.Insert(FakeDataSets.DeliveryListFactory());
                 //Act
 
-                var routelist = await businessLayer.GetRouteList(FakeDataSets.ApplicationUserFactory().RegistrationNumber);
+                var routelist = await businessLayer.GetRouteList(RegistrationNumber: FakeDataSets.ApplicationUserFactory().RegistrationNumber);
                 //Assert
                 Assert.NotNull(routelist);
            

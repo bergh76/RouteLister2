@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using RouteLister2.Services;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,7 +28,7 @@ namespace RouteLister2.Controllers
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
         public AdminController(
-            [FromServices]ApplicationDbContext context,
+            [FromServices] ApplicationDbContext context,
             [FromServices] IMapper mapper
             )
         {
@@ -39,34 +41,42 @@ namespace RouteLister2.Controllers
         {
             if (ModelState.IsValid)
             {
-                await jsonData.GetParcelData(_context);
+                //Uncommented import since webapi is non-existant.
+                //await jsonData.GetParcelData(_context);
                 //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
-                var result = from c in _context.Contacts
+                var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
                                  //join order in _context.Orders on c.Id equals order.Id
                              //join phone in _context.PhoneNumbers on c.Id equals phone.ContactId
                              //join par in _context.Parcels on c.Id equals par.Id
-                             select new ParcelListFromCompanyViewModel
-                             {
+                             //select new ParcelListFromCompanyViewModel
+                             //{
 
-                                 FirstName = c.FirstName, //Contact
-                                 LastName = c.LastName, //Contact
-                                 Adress = "", //Address
-                                 City = "", //Address
-                                 PostNr = "", //Address
-                                 Distributor = "", //Address
-                                 CollieId = "", //Parcel
-                                 ArticleName = "", //Parcel
-                                 ArticleAmount = 0, //Parcel
-                                 Country = "", //Parcel
-                                 DeliveryType = "", //Parcel
-                                 DeliveryDate = DateTime.Now, //Parcel
-                                 PhoneOne = _context.PhoneNumbers.Where(x => x.ContactId == c.Id)
-                                             .Select(x => x.Number).FirstOrDefault(),
-                                              //Phone
-                                 PhoneTwo = "", //Phone
+                             //    FirstName = c.FirstName, //Contact
+                             //    LastName = c.LastName, //Contact
+                             //    Adress = "", //Address
+                             //    City = "", //Address
+                             //    PostNr = "", //Address
+                             //    Distributor = "", //Address
+                             //    CollieId = "", //Parcel
+                             //    ArticleName = "", //Parcel
+                             //    ArticleAmount = 0, //Parcel
+                             //    Country = "", //Parcel
+                             //    DeliveryType = "", //Parcel
+                             //    DeliveryDate = DateTime.Now, //Parcel
+                             //    PhoneOne = _context.PhoneNumbers.Where(x => x.ContactId == c.Id)
+                             //                .Select(x => x.Number).FirstOrDefault(),
+                             //                 //Phone
+                             //    PhoneTwo = "", //Phone
 
-                             };
-                IEnumerable<ParcelListFromCompanyViewModel> outResult = result.ToList();
+                             //};
+                List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
+                List<SelectListItem> dropDown = await _context.Users.Select(x => new SelectListItem() { Text=x.RegistrationNumber, Value=x.RegistrationNumber }).ToListAsync();
+                foreach (var item in outResult)
+                {
+                    //Hack to set index for dropdown, haven't figured out how to map a dropdown with automapper yet or if its possible at all
+                    dropDown[dropDown.IndexOf(dropDown.Where(x => x.Value == item.RegistrationNumber).SingleOrDefault())].Selected = true;
+                    item.RegNrDropDown = dropDown.ToList();
+                }
                 return View(outResult);
             }
             
@@ -77,6 +87,8 @@ namespace RouteLister2.Controllers
         {
             return View();
         }
+
+    
 
         public IActionResult Message()
         {

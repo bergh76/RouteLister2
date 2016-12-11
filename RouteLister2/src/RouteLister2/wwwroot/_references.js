@@ -1,4 +1,5 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="js/driver - copy.js" />
 /// <reference path="js/driver.js" />
 /// <reference path="js/jsunittests.js" />
 /// <reference path="js/site.js" />

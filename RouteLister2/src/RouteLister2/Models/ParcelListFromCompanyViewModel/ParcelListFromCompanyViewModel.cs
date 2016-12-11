@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace RouteLister2.Models.ParcelListFromCompanyViewModel
 {
     public class ParcelListFromCompanyViewModel
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
         [Display(Name = "Förnamn")]
         public string FirstName { get; set; }
         [Display(Name = "Efternamn")]
@@ -50,7 +51,14 @@ namespace RouteLister2.Models.ParcelListFromCompanyViewModel
         public string DeliveryType { get; set; }
 
         [Display(Name = "Leveransdatum")]
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+
+        [Display(Name = "Bil")]
+        public IEnumerable<SelectListItem> RegNrDropDown { get; set; }
+
+        [Display(Name = "RegNr")]
+        public string RegistrationNumber { get; set; }
+
 
         //public List<ParcelListFromCompanyViewModel> ParcelList = new List<ParcelListFromCompanyViewModel>();
 
