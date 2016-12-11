@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<RouteLister2.Models.UsersInSystemViewModel.SystemUsersViewModel>*@
+﻿
 @model RouteLister2.Models.UsersInSystem
 
 
@@ -7,7 +7,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
             <h4 class="panel-title">
                 <span class="h4">
-                    <i class="fa fa-users text-primary"></i> Befintliga användare
+                    <i class="fa fa-users text-primary"></i> Befintliga användare <span class="text-success">@ViewData["StatusMessage"]</span>
                     <span class="pull-right">
                         <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-chevron-down"></i>
@@ -63,7 +63,7 @@
                                             }
                                             <td style="width:15%">@item.LoginCount</td>
                                             <td style="width:5%">
-                                                <form asp-controller="Manage" asp-action="DeleteUser" method="post" class="form-horizontal">
+                                                <form asp-controller="Admin" asp-action="DeleteUser" method="post" class="form-horizontal">
                                                     <input type="text" name="Id" value="@item.Id" hidden /> <!--HACK !!!!!!! NEEDS A CLEANER APPROACH-->
                                                     <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
                                                 </form>

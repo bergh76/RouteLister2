@@ -89,28 +89,28 @@ namespace RouteLister2.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        public async Task<IActionResult> DeleteUser(RemoveLoginViewModel account, string Id, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            ManageMessageId? message = ManageMessageId.Error;
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByIdAsync(Id);
-                if (user != null)
-                {
-                    var result = await _userManager.DeleteAsync(user);
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        message = ManageMessageId.RemoveLoginSuccess;
-                        _messageRemove = "Användaren är borttagen"; //Testar att skicka meddelande till vyn
-                    }
-                }
-                return RedirectToLocal(returnUrl);
+        //public async Task<IActionResult> DeleteUser(RemoveLoginViewModel account, string Id, string returnUrl = null)
+        //{
+        //    ViewData["ReturnUrl"] = returnUrl;
+        //    ManageMessageId? message = ManageMessageId.Error;
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userManager.FindByIdAsync(Id);
+        //        if (user != null)
+        //        {
+        //            var result = await _userManager.DeleteAsync(user);
+        //            if (result.Succeeded)
+        //            {
+        //                await _signInManager.SignInAsync(user, isPersistent: false);
+        //                message = ManageMessageId.RemoveLoginSuccess;
+        //                _messageRemove = "Användaren är borttagen"; //Testar att skicka meddelande till vyn
+        //            }
+        //        }
+        //        return RedirectToLocal(returnUrl);
 
-            }
-            return RedirectToAction(nameof(ManageLogins), new { Message = message });
-        }
+        //    }
+        //    return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        //}
 
         private IActionResult RedirectToLocal(string returnUrl)
         {

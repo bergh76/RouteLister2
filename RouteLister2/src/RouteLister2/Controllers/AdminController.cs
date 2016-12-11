@@ -13,6 +13,10 @@ using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using RouteLister2.Models.ManageViewModels;
+using static RouteLister2.Controllers.ManageController;
+using Microsoft.Extensions.Logging;
+using RouteLister2.Models.AccountViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,17 +28,26 @@ namespace RouteLister2.Controllers
     {
         private ApplicationDbContext _context;
         private IMapper _mapper;
-
+        private readonly ILogger _logger;
+        private UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
         public AdminController(
             [FromServices] ApplicationDbContext context,
-            [FromServices] IMapper mapper
-            )
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices]SignInManager<ApplicationUser> signInManager,
+            [FromServices] IMapper mapper,
+            ILoggerFactory loggerFactory)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = loggerFactory.CreateLogger<ManageController>();
         }
+
+
         public async Task<IActionResult> Index()
         {
             if (ModelState.IsValid)
@@ -43,7 +56,7 @@ namespace RouteLister2.Controllers
                 await data.GetParcelData();
                 var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
                 List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
-                List<SelectListItem> dropDown = await _context.Users.Select(x => new SelectListItem() { Text=x.RegistrationNumber, Value=x.RegistrationNumber }).ToListAsync();
+                List<SelectListItem> dropDown = await _context.Users.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber }).ToListAsync();
                 foreach (var item in outResult)
                 {
                     //Hack to set index for dropdown, haven't figured out how to map a dropdown with automapper yet or if its possible at all
@@ -52,7 +65,7 @@ namespace RouteLister2.Controllers
                 }
                 return View(outResult);
             }
-            
+
             return RedirectToAction("Error");
         }
 
@@ -60,18 +73,152 @@ namespace RouteLister2.Controllers
         {
             return View();
         }
+        //
+        // GET: /Account/Register
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
 
-    
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string role, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationNumber = model.RegNr };
+                var exist = _context.Users.Any(x => x.UserName == user.UserName);
+                var emailExists = _context.Users.Any(x => x.Email == user.Email);
+                var regnrExists = _context.Users.Any(x => x.RegistrationNumber == user.RegistrationNumber);
+                if (exist == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.UserExists = "Användaren finns redan";
+                    return View(model);
+                }
+                else if (emailExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.EmailExists = "Eposten finns redan";
+                    return View(model);
+                }
+                else if (regnrExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.RegnrExists = "Bilen är redan registrerad";
+                    return View(model);
+                }
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                // Gets role from View and pars to Array  
+                string tempRole = role;
+                string[] roleArray = new string[] { tempRole };
+                var addRole = await _userManager.AddToRoleAsync(user, role.ToUpper());
+                // Calls the method for setting the role to actual useraccount
+                await UserSettings.AssignRoles(_userManager, user.Email, roleArray);
+
+                if (result.Succeeded)
+                {
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                    // Send an email with this link
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation(3, "User created a new account with password.");
+                    return RedirectToAction(nameof(AdminController.Register), "Admin");
+                    //return RedirectToLocal(returnUrl);
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        public async Task<IActionResult> UpdateUser(ApplicationUser appUser, UserSettings user, string Id, string username, string email, string phone, string roles, bool islocked)
+        {
+            await user.UpdateUserData(_userManager, appUser, _context, Id, username, email, phone, roles, islocked);
+
+            return RedirectToAction(nameof(AdminController.Register), "Admin");
+
+        }
 
         public IActionResult Message()
         {
             return View();
         }
+
+        public async Task<IActionResult> DeleteUser(RemoveLoginViewModel account, string Id, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            ManageMessageId? message = ManageMessageId.Error;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(Id);
+                if (user != null)
+                {
+                    var result = await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                    {
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
+                        message = ManageMessageId.RemoveLoginSuccess;
+                    }
+                }
+                return RedirectToLocal(returnUrl);
+
+            }
+            return RedirectToAction(nameof(AdminController.Register), new { Message = message });
+        }
+
         public IActionResult Error()
         {
             return View();
         }
 
-    }
+        //GET: /Admin/ManageLogins
+        [HttpGet]
+        public void ManageLogins(ManageMessageId? message = null)
+        {
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.RemoveLoginSuccess ? "Användaren är borttagen."
+                : message == ManageMessageId.AddLoginSuccess ? "Användare lades till!"
+                : message == ManageMessageId.Error ? "Ett fel vid borttagandet av användaren uppstod."
+                : "";
+        }
 
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(AdminController.Register), "Admin");
+            }
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+    }
 }
