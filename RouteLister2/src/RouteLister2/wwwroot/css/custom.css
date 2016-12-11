@@ -6,11 +6,16 @@
     font-weight: 400;
     line-height: 1.471;
 }
-/*ADMIN GUI*/
-.admin-container{
-    right: 0;
-    left: 0;
+
+/* DELETE IF NOT VISUALS GOOD*/
+@media (min-width: 768px) {
+    .container {
+         width: 100%; 
+    }
 }
+
+/*ADMIN GUI*/
+
 .margintop-20{
     margin-top: 20px;
 }
