@@ -41,6 +41,13 @@
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.RegnrExists</span></span>
+                                <div class="form-group">
+                                    <div class="col-lg-12">
+                                        <input asp-for="RegNr" class="form-control" placeholder="Regnr" />
+                                        <span asp-validation-for="RegNr" class="text-danger"></span>
+                                    </div>
+                                </div>
                                 <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.EmailExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">

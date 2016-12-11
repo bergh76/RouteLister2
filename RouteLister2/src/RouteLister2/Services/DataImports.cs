@@ -48,15 +48,15 @@ namespace RouteLister2.Services
             for (int i = 0; i < _parcelList.Count; i++)
             {
                 // checks if collieId exists in imported list,  if not import to db.
-                if (!context.Parcels.Where(x => x.ParcelNumber == _parcelList[i].CollieId).Any())
+                if (!context.Parcels.Where(x => x.ParcelNumber == _parcelList[i].CollieId).Any())// && !context.Address.Where(x => x.Street == _parcelList[i].Adress).Any())
                 {
                     Contact contact = AddContactToDb(i);
                     context.Add(contact);
                     await context.SaveChangesAsync();
 
-                    Address address = AddAddressToDb(i);
+                    Address address = AddAddressToDb(i, context);
                     context.Add(address);
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync();                   
 
                     Parcel parcel = AddParcelToDb(i);
                     context.Add(parcel);
@@ -103,15 +103,19 @@ namespace RouteLister2.Services
             };
         }
 
-        private static Address AddAddressToDb(int i)
+        private static Address AddAddressToDb(int i, ApplicationDbContext context)
         {
-            return new Address()
-            {
-                City = _parcelList[i].City,
-                Street = _parcelList[i].Adress,
-                County = _parcelList[i].Country,
-                PostNumber = _parcelList[i].PostNr
-            };
+            //if (!context.Address.Where(x => x.Street == _parcelList[i].Adress).Any())
+            //{
+                return new Address()
+                {
+                    City = _parcelList[i].City,
+                    Street = _parcelList[i].Adress,
+                    County = _parcelList[i].Country,
+                    PostNumber = _parcelList[i].PostNr
+                };
+            //}
+            // ToDo: Need return value so function can return 
         }
 
         private static Contact AddContactToDb(int i)

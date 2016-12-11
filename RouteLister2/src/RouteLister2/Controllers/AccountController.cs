@@ -123,9 +123,10 @@ namespace RouteLister2.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationNumber = model.RegNr };
                 var exist = _context.Users.Any(x => x.UserName == user.UserName);
                 var emailExists = _context.Users.Any(x => x.Email == user.Email);
+                var regnrExists = _context.Users.Any(x => x.RegistrationNumber == user.RegistrationNumber);
                 if (exist == true)
                 {
                     ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
@@ -136,6 +137,12 @@ namespace RouteLister2.Controllers
                 {
                     ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
                     ViewBag.EmailExists = "Eposten finns redan";
+                    return View(model);
+                }
+                else if (regnrExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.RegnrExists = "Bilen är redan registrerad";
                     return View(model);
                 }
 

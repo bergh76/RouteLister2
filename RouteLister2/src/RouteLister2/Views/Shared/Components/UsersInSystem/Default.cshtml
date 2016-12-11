@@ -47,10 +47,10 @@
                                                 <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
                                             </td>
                                             <td style="width:15%">@item.UserName</td>
-                                            @{
+                                            @*@{
                                                 var resOut = string.Join(", ", item.UserRole.ToArray());
-                                            }
-                                            <td style="width:15%">@resOut</td>
+                                            }*@
+                                            <td style="width:15%">@item.UserRole</td>
                                             <td style="width:20%">@item.Email</td>
                                             <td style="width:15%">@item.Phone</td>
                                             @if (item.IsAccountLocked != true)

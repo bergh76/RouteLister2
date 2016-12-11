@@ -2,8 +2,6 @@
    ViewData["Title"] = "LOGISTIKBOLAGET || KÖRORDER -" + DateTime.Now.ToString("yyyy-MM-dd");
 }        
 
-
-<!-- END DATATABLE BUTTONS CSS-->
 <section class="col-md-12 col-sm-12 col-xs-12">
     @{Html.RenderPartial("_AdminNavbar");}
     <div class="panel panel-default x_panel">
@@ -327,98 +325,3 @@
         </section>
     </div>
 </section>
-
-
-@*<!-- DATATABLE CSS-->
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
-<!-- END DATATABLE CSS-->
-<!-- DATATABLE BUTTONS CSS-->
-<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
-<link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
-<!-- END DATATABLE BUTTONS CSS-->
-<section class="col-md-12 col-sm-12 col-xs-12">
-    @{Html.RenderPartial("_AdminNavbar");}
-    <div class="panel panel-default x_panel">
-        <div class="x_title">
-            <span class="h3"> Fordonslistor - @DateTime.Now.ToString("yyyy-MM-dd")</span>
-            <div class="clearfix"></div>
-        </div>
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingOne">
-                    <h4 class="panel-title">
-                        <span class="h4">
-                            <i class="fa fa-truck fa-flip-horizontal"></i> FORDRON AAA111 || Körlista  @DateTime.Now.ToString("yyyy-MM-dd")
-                            <span class="pull-right">
-                                <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <i class="fa fa-chevron-down"></i>
-                                </a>
-                            </span>
-                        </span>
-                    </h4>
-                </div>
-                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="panel-body">
-                        <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                            <table id="carOne" class="table table-width dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th><h6>Datum</h6></th>
-                                        <th><h6>Antal</h6></th>
-                                        <th><h6>Namn</h6></th>
-                                        <th><h6>Adress</h6></th>
-                                        <th><h6>Stad</h6></th>
-                                        <th><h6>Postnr</h6></th>
-                                        <th><h6>Leverantör</h6></th>
-                                        <th><h6>KollieId</h6></th>
-                                        <th><h6>Artikel</h6></th>
-                                        <th><h6>Tilldelad</h6></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                            <td>
-                                                <button class="btn btn-xs btn-success fa fa-edit" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></button>
-                                                <div class="collapse" id="collapseExample">
-                                                    <div class="well">
-                                                        <form>
-                                                            <div class="form-group">
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                                <input class="form-control" type="text" id="" value="" />
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>20161223</td>
-                                            <td>1</td>
-                                            <td>Bröms Kvargsson</td>
-                                            <td>Björkkvistsgatan 3</td>
-                                            <td>Nyköping</td>
-                                            <td>392 44</td>
-                                            <td>Vinoteket</td>
-                                            <td>078282988529SE</td>
-                                            <td>Sprit</td>
-                                            <td>BBB222</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>*@
