@@ -16,6 +16,9 @@ namespace RouteLister2.Models.AccountViewModels
         [Display(Name = "User")]
         public string UserName { get; set; }
 
+        [Display(Name = "Regnr")]
+        public string RegNr { get; set; }
+
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]

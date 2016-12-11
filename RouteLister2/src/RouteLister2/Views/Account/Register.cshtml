@@ -16,7 +16,7 @@
                     <div class="panel-heading" role="tab" id="headingOne">
                         <h4 class="panel-title">
                             <span class="h4">
-                                <i class="fa fa-user-plus text-success"></i> Skapa användare <span class="badge warning">@ViewBag.UserExists</span>
+                                <i class="fa fa-user-plus text-success"></i> Skapa användare
                                 <span class="pull-right">
                                     <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         <i class="fa fa-chevron-down"></i>
@@ -28,7 +28,8 @@
                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
                             <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                                <span class="col-lg-12 text-center"><span class="alert-danger">@ViewBag.UserExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <select name="role" class="form-control placeholder" asp-items="ViewBag.UserRole"></select>
@@ -40,6 +41,14 @@
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.RegnrExists</span></span>
+                                <div class="form-group">
+                                    <div class="col-lg-12">
+                                        <input asp-for="RegNr" class="form-control" placeholder="Regnr" />
+                                        <span asp-validation-for="RegNr" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.EmailExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <input asp-for="Email" class="form-control" placeholder="Epost" />

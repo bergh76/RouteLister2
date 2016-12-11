@@ -123,11 +123,27 @@ namespace RouteLister2.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationNumber = model.RegNr };
                 var exist = _context.Users.Any(x => x.UserName == user.UserName);
-                if (exist == true) {
-                    string fail = ViewBag.UserExists = "Användaren finns redan";
-                    return View(model) ;
+                var emailExists = _context.Users.Any(x => x.Email == user.Email);
+                var regnrExists = _context.Users.Any(x => x.RegistrationNumber == user.RegistrationNumber);
+                if (exist == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.UserExists = "Användaren finns redan";
+                    return View(model);
+                        }
+                else if (emailExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.EmailExists = "Eposten finns redan";
+                    return View(model);
+                }
+                else if (regnrExists == true)
+                {
+                    ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+                    ViewBag.RegnrExists = "Bilen är redan registrerad";
+                    return View(model);
                 }
 
                 var result = await _userManager.CreateAsync(user, model.Password);

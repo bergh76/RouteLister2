@@ -1,6 +1,5 @@
-﻿@model RouteLister2.Models.UsersInSystem
-
-<link href="~/lib/animate.css/animate.css" rel="stylesheet" />
+﻿@*@model IEnumerable<RouteLister2.Models.UsersInSystemViewModel.SystemUsersViewModel>*@
+@model RouteLister2.Models.UsersInSystem
 
 
 <div class="panel-group">
@@ -8,7 +7,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
             <h4 class="panel-title">
                 <span class="h4">
-                    <i class="fa fa-users text-primary"></i> Befintliga användare<span class="h6 text-danger animated fadeOut"> @Model._message</span>
+                    <i class="fa fa-users text-primary"></i> Befintliga användare
                     <span class="pull-right">
                         <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-chevron-down"></i>
@@ -22,6 +21,7 @@
                 <table class="table-useradmin">
                     <thead>
                         <tr>
+                            <th style="width:2%">#</th>
                             <th style="width:5%"></th>
                             <th style="width:15%">Namn</th>
                             <th style="width:15%">Roll</th>
@@ -34,89 +34,93 @@
                     </thead>
                 </table>
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    @{foreach (var item in Model._users)
+                  @{ int count = 1;}
+                    @{foreach (var item in Model.UserList)
                         {
                             <div class="panel panel-default-useradmin">
                                 <div class="panel-heading-useradmin" role="tab" id="heading @item.Id">
                                     <table class="table-useradmin table-width table-hover">
                                         <tbody>
-                                            <tr class="text-left">
-                                                <td style="width:5%">
-                                                    <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
-                                                </td>
-                                                <td style="width:15%">@item.UserName</td>
+                                        <tr class="text-left">
+                                            <td style="width:2%">@count</td>                                           
+                                            <td style="width:5%">
+                                                <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
+                                            </td>
+                                            <td style="width:15%">@item.UserName</td>
+                                            @*@{
+                                                var resOut = string.Join(", ", item.UserRole.ToArray());
+                                            }*@
+                                            <td style="width:15%">@item.UserRole</td>
+                                            <td style="width:20%">@item.Email</td>
+                                            <td style="width:15%">@item.Phone</td>
+                                            @if (item.IsAccountLocked != true)
+                                            {
+                                                <td style="width:15%">@item.IsAccountLocked</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="width:15%"><span class="animated shake"><i class="fa fa-exclamation"></i>@item.IsAccountLocked</span></td>
+                                            }
+                                            <td style="width:15%">@item.LoginCount</td>
+                                            <td style="width:5%">
+                                                <form asp-controller="Manage" asp-action="DeleteUser" method="post" class="form-horizontal">
+                                                    <input type="text" name="Id" value="@item.Id" hidden /> <!--HACK !!!!!!! NEEDS A CLEANER APPROACH-->
+                                                    <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                                <td style="width:15%">@Model._userRole</td>
-
-                                                <td style="width:20%">@item.Email</td>
-                                                <td style="width:15%">@item.PhoneNumber</td>
-                                                @if (item.LockoutEnabled != true)
-                                                {
-                                                    <td style="width:15%">@item.LockoutEnabled</td>
-                                                }
-                                                else
-                                                {
-                                                    <td style="width:15%"><span class="animated shake"><i class="fa fa-exclamation"></i>@item.LockoutEnabled</span></td>
-                                                }
-                                                <td style="width:15%">@item.Logins.Count()</td>
-                                                <td style="width:5%">
-                                                    <form asp-controller="Manage" asp-action="DeleteUser" method="post" class="form-horizontal">
-                                                        <input type="text" name="Id" value="@item.Id" hidden /> <!--HACK !!!!!!! NEEDS A CLEANER APPROACH-->
-                                                        <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
                                 <div id="@item.Id" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading @item.Id">
                                     <div class="panel-body">
                                         <div class="h4 col-lg-12 alert-danger"><i class="fa fa-edit"> </i>Redigera användarkonton</div>
                                         <div class="col-lg-7">
-                                            <form asp-controller="Manage" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                            <form asp-controller="Admin" asp-action="UpdateUser" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                                                 <div asp-validation-summary="All" class="text-danger"></div>
                                                 <div class="form-group-sm">
                                                     <div class="form-group">
+                                                        <input value="@item.Id" hidden name="Id" />
                                                         <label asp-for="@item.UserName" class="col-md-2 control-label"></label>
                                                         <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.UserName" class="form-control" type="text" />
+                                                            <input asp-for="@item.UserName" class="form-control" type="text" name="username" />
                                                             <span asp-validation-for="@item.UserName" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label asp-for="@item.Roles" class="col-md-2 control-label"></label>
+                                                        <label asp-for="@item.UserRole" class="col-md-2 control-label"></label>
                                                         <div class="col-lg-offset-0 col-md-12">
-                                                            @Html.DropDownListFor(x => Model._role, new SelectList(Model._role), new { @class = "form-control" })
-                                                            <span asp-validation-for="@item.Roles" class="text-danger"></span>
+                                                            <select name="roles" class="form-control placeholder" asp-items="ViewBag.UserRole"></select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label asp-for="@item.Email" class="col-md-2 control-label"></label>
                                                         <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.Email" class="form-control" type="text" />
+                                                            <input asp-for="@item.Email" class="form-control" type="text" name="email" />
                                                             <span asp-validation-for="@item.Email"></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label asp-for="@item.PhoneNumber" class="col-md-2 control-label"></label>
+                                                        <label asp-for="@item.Phone" class="col-md-2 control-label"></label>
                                                         <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.PhoneNumber" class="form-control" type="text" />
-                                                            <span asp-validation-for="@item.PhoneNumber" class="text-danger"></span>
+                                                            <input asp-for="@item.Phone" class="form-control" type="text" name="phone"/>
+                                                            <span asp-validation-for="@item.Phone" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label asp-for="@item.LockoutEnabled" class="col-md-2 control-label"></label>
+                                                        <label asp-for="@item.IsAccountLocked" class="col-md-2 control-label"></label>
                                                         <div class="col-lg-offset-0 col-md-12">
                                                             <div class="checkbox">
                                                                 <label>
-                                                                    <input asp-for="@item.LockoutEnabled" type="checkbox"> [Ja/Nej]
+                                                                    <input asp-for="@item.IsAccountLocked" type="checkbox" name="islocked"> [Ja/Nej]
                                                                 </label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Register</button>
+                                                                <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Register</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -153,7 +157,8 @@
                                     </div>
                                 </div>
                             </div>
-                        }
+                            count++;
+                                                }
                     }
                 </div>
             </div>
@@ -161,5 +166,6 @@
     </div>
 </div>
 @section Scripts {
+<link href="~/lib/animate.css/animate.css" rel="stylesheet" />
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

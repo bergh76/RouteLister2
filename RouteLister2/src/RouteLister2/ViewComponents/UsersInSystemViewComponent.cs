@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RouteLister2.Data;
 using RouteLister2.Models;
 using System;
@@ -19,10 +20,9 @@ namespace RouteLister2.ViewComponents
         }
             public async Task<IViewComponentResult> InvokeAsync()
         {
+            ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
             UsersInSystem users = new UsersInSystem(_context);
-            users._users =  await users.GetAllUsers();
-            users._role =  await users.GetRoles();
-            //users._userRole = await users.GetUserRole();
+            users.UserList = await users.GetAllUsers();
             return View(users);
         }
     }
