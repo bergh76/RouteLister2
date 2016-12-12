@@ -84,7 +84,7 @@ namespace RouteLister2.Services
                         await context.SaveChangesAsync();
                     }
 
-                    OrderType ordertyp = context.OrderType.SingleOrDefault();
+                    OrderType ordertyp = context.OrderType.SingleOrDefault(x => x.Name == _parcelList[i].DeliveryType);
                     if (ordertyp == null)
                     {
                         ordertyp = AddOrderTypToDb(i);
