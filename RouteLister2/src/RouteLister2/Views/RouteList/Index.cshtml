@@ -1,8 +1,4 @@
 ﻿@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_JqueryPartial");
-        }
 
 @if (Model != null)
 {
@@ -126,6 +122,7 @@
 <div id="loadingDiv" class="hidden"></div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+
     <script type="text/javascript">
 
         //$(document).ready(function () {
