@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-RouteLister2-c5c229ed-34be-4fb7-bb6e-3aeba0c49dd6",
   "dependencies": {
     "Microsoft.NETCore.App": {
@@ -35,8 +35,8 @@
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.AspNetCore.SignalR.Server": "0.2.0-*",
     "Microsoft.AspNetCore.SignalR.Messaging": "0.2.0-*",
-
-    "AutoMapper": "5.2.0"
+    "AutoMapper": "5.2.0",
+    "System.Reflection.TypeExtensions": "4.3.0"
   },
 
   "tools": {
