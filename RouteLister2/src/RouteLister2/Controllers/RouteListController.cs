@@ -75,6 +75,10 @@ namespace RouteLister2.Controllers
             return View(model);
         }
 
+        public IActionResult MapRoute()
+        {
+            return View();
+        }
         public async Task<IActionResult> List()
         {
             var result = await _businessLayer.GetAllRouteLists();

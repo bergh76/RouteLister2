@@ -8,8 +8,10 @@ using RouteLister2.Models;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RouteLister2.Services
@@ -17,11 +19,9 @@ namespace RouteLister2.Services
     public class DataImports : IDataImports
     {
         private ApplicationDbContext _context;
-        
-        // Url to i.e external API/Json
-        private const string path = "http://localhost:5000/TestData/jsonParcels.json";
 
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
+        public List<Coordinat> _coordinatsList { get; set; }
 
         public DataImports([FromServices] ApplicationDbContext context)
         {
@@ -31,16 +31,26 @@ namespace RouteLister2.Services
         public DataImports() { }
         public async Task GetParcelData()
         {
-            ApiDeserializer dserial = new ApiDeserializer();
-            var dataOut = await dserial.JsonDserializer<ApiDeserializer>(path);
-            _parcelList = dataOut.ParcelListImport;
-            await JsonApiDataImport();
+            // Uri to external data from ie. API
+            string path = "http://localhost:5000/TestData/jsonParcels.json";
+            try
+            {
+                ApiDeserializer dserial = new ApiDeserializer();
+                var dataOut = await dserial.JsonDserializer<ApiDeserializer>(path);
+                _parcelList = dataOut.ParcelListImport;
+                await JsonApiDataImport();
+            }
+            catch (Exception)
+            {
+                // ToDo: Errormessage to view
+            }
         }
         
         private async Task JsonApiDataImport()
         {
             if (_parcelList.Count() != 0)
                 await ImportData(_context);
+
             return;
         }
 
@@ -225,5 +235,53 @@ namespace RouteLister2.Services
                         }
             };
         }
+
+        // Get coordinats for address
+        //public async Task GetCoordinates()
+        //{
+
+        //        string _address = "";
+        //        var address = _context.Address.ToList();
+        //    //foreach (var item in address)
+        //    //{
+        //    for (int i = 0; i < address.Count(); i++)
+        //    {
+        //        _address = address[i].Street + "+" + address[i].PostNumber + "+" + address[i].City;
+        //        string path = "https://maps.googleapis.com/maps/api/geocode/json?address=" + _address + "&sensor=false";
+        //        var result = 
+
+        //        _coordinatsList.Add();
+
+        //        await SetCoordinats(_context, i);
+        //    }
+            
+        //}
+        private async Task SetCoordinats(ApplicationDbContext context, int i)
+        {
+            if (_coordinatsList.Count() != 0)
+            {
+                for (int j = 0; j < _coordinatsList.Count(); j++)
+                {
+                    Coordinat coordinats = _context.Coordinats.SingleOrDefault(x => x.AddressId == i);
+                    if (coordinats != null)
+                    {
+                        coordinats = AddCoordinatsToDb(j, _context);
+                        context.Add(coordinats);
+                    }
+                }
+            }
+            await context.SaveChangesAsync();
+        }
+
+        private Coordinat AddCoordinatsToDb(int j, ApplicationDbContext context)
+        {
+            return new Coordinat()
+            {
+                AddressId = _coordinatsList[j].AddressId,
+                Longitude = _coordinatsList[j].Longitude,
+                Latitude = _coordinatsList[j].Latitude,
+            };
+        }
+
     }
 }

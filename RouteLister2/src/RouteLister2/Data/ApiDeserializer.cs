@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RouteLister2.Models;
 using RouteLister2.Models.ParcelListFromCompanyViewModel;
 using RouteLister2.Services;
 using System;
@@ -7,11 +8,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+
 namespace RouteLister2.Data
 {
     public class ApiDeserializer
     {
         public List<ParcelListFromCompanyViewModel> ParcelListImport { get; set; }
+        public List<Coordinat> CoordinatsList { get; set; }
 
         public ApiDeserializer() { }
 
