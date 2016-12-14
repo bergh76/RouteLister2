@@ -45,30 +45,7 @@ namespace RouteLister2.Controllers
                 //await jsonData.GetParcelData(_context);
                 //var result = await _unitOfWork.GenericRepository<ParcelListFromCompanyViewModel>().GetAsyncIncluded();
                 var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
-                                 //join order in _context.Orders on c.Id equals order.Id
-                             //join phone in _context.PhoneNumbers on c.Id equals phone.ContactId
-                             //join par in _context.Parcels on c.Id equals par.Id
-                             //select new ParcelListFromCompanyViewModel
-                             //{
-
-                             //    FirstName = c.FirstName, //Contact
-                             //    LastName = c.LastName, //Contact
-                             //    Adress = "", //Address
-                             //    City = "", //Address
-                             //    PostNr = "", //Address
-                             //    Distributor = "", //Address
-                             //    CollieId = "", //Parcel
-                             //    ArticleName = "", //Parcel
-                             //    ArticleAmount = 0, //Parcel
-                             //    Country = "", //Parcel
-                             //    DeliveryType = "", //Parcel
-                             //    DeliveryDate = DateTime.Now, //Parcel
-                             //    PhoneOne = _context.PhoneNumbers.Where(x => x.ContactId == c.Id)
-                             //                .Select(x => x.Number).FirstOrDefault(),
-                             //                 //Phone
-                             //    PhoneTwo = "", //Phone
-
-                             //};
+               
                 List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
                 List<SelectListItem> dropDown = await _context.Users.Select(x => new SelectListItem() { Text=x.RegistrationNumber, Value=x.RegistrationNumber }).ToListAsync();
                 foreach (var item in outResult)

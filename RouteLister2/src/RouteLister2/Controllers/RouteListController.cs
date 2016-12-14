@@ -41,6 +41,19 @@ namespace RouteLister2.Controllers
             return View();
      
         }
+        public async Task<IActionResult> IndexPartial(string id)
+        {
+#if DEBUG
+            id = "aaa111";
+#endif
+            if (!string.IsNullOrEmpty(id))
+            {
+                var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
+                return View(viewModel);
+            }
+            return View();
+
+        }
 
 
         [HttpGet]

@@ -25,7 +25,17 @@
             <select class="dropdown" asp-for="@Model.RegistrationNumber" asp-items="@Model.RegNrDropDown" id="dropdown@{@Model.CollieId} "></select>
             @* same here *@
             <input class="hidden" asp-for="@Model.CollieId" id="value@{@Model.CollieId}" />
-            <input class="hidden" asp-for="@Model.Id" />
+            <input class="hidden" asp-for="@Model.LastName" />
+            <input class="hidden" asp-for="@Model.FirstName" />
+            <input class="hidden" asp-for="@Model.Adress" />
+            <input class="hidden" asp-for="@Model.City" />
+            <input class="hidden" asp-for="@Model.PostNr" />
+            <input class="hidden" asp-for="@Model.PhoneOne" />
+            <input class="hidden" asp-for="@Model.Distributor" />
+            <input class="hidden" asp-for="@Model.ArticleName" />
+            <input class="hidden" asp-for="@Model.DeliveryType" />
+            <input class="hidden" asp-for="@Model.DeliveryDate" />
+            <input class="hidden" asp-for="@Model.ArticleAmount" />
             <input class="hidden" type="button" />
         </form>
     </td>

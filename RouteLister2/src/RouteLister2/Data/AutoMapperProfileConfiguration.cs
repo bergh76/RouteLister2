@@ -97,9 +97,10 @@ namespace RouteLister2.Data
                 //If contact has more than 1 phone number, assign 2nd one to phoneTwo. ignore others
                .ForMember(x => x.PhoneTwo, opt => opt.MapFrom(t=>(t.Order.Destination.Contact.PhoneNumbers.Count >1 ? t.Order.Destination.Contact.PhoneNumbers.Select(y=>y.Number).Skip(1).FirstOrDefault() : "")))
                .ForMember(x => x.RegistrationNumber, opt => opt.MapFrom(t => t.Order.RouteList.ApplicationUser.RegistrationNumber))
-                .ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(t => t.OrderId))
                .ForAllOtherMembers(x => x.Ignore())
                ;
+
 
 
 

@@ -72,9 +72,16 @@ var routeLister = (function () {
         };
     })();
  
-    //TODO
-    var routeList = (function (routeListId) {
     
+    var routeList = (function (routeListId) {
+        //Since its one routelist per driver, reloading whole page
+        var reload = (function () {
+            //Reloading page
+            location.reload();
+        });
+        return {
+            refresh : reload
+        };
     })();
     //Regex to get id from a reference.
     //The number at the end of a id reference is the id(
@@ -237,7 +244,13 @@ signalRClient.client.disableEverything = function () {
     //Enable all gui touchy touchy
 };
 
+signalRClient.client.newRouteListAdded = function () {
+    routeLister.routeList.refresh();
+};
 
+signalRClient.client.AddedOrder = function () {
+    routeLister.order.add();
+};
 
 
 

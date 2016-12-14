@@ -62,31 +62,19 @@ namespace RouteLister2.Controllers
                 
                 return View(viewModel);
             }
-            //How to organize this?, lots of things that needs to be done
-            //Check if a routeList exists already (Date will be set then)
-            if (viewModel.DeliveryDate.HasValue)
-            {
-                //await _businessLayer.MoveOrderRowToOtherDriver(viewModel.Id, viewModel.RegistrationNumber);
-               
-                //TODO
-                //await _businessLayer.Update<RouteList>(newEntry,viewModel.Id);
-                //Notify old routeList driver of change
-                //await _driversHub.Clients.Groups(new List<string>() { oldRouteList.ApplicationUser.RegistrationNumber }).RemovedOrderRow();
-                //TODO notify driver that he has a new OrderRow on his existing routelist
-                //await _driversHub.Clients.Groups(viewModel.RegistrationNumber).AddedOrderRow();
-            }
-           
-            //If there is no existing routeList
-            else 
-            {
-                //Creating new RouteList, and maybe order if it does not exist
-                //await _businessLayer.CreateNewRouteListAndOrder(RegistrationNumber:viewModel.RegistrationNumber,CollieId:viewModel.CollieId, RowNumberId:viewModel.Id);
 
-                //TODO
+
+            //Getting applicationUser
+            bool newRouteList = await _businessLayer.registerOrderToDriver(viewModel.RegistrationNumber,viewModel.Id);
+            if (newRouteList)
+            {
                 //notify relevant driver that he has a new routeList
-                //await _driversHub.Clients.Groups(viewModel.RegistrationNumber).NewRouteList();
+                await _driversHub.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).NewRouteListAdded();
             }
-    
+            else
+            {
+                await _driversHub.Clients.Groups( new List<string>() { viewModel.RegistrationNumber }).AddedOrder();
+            }
             return PartialView(viewModel);
         }
 

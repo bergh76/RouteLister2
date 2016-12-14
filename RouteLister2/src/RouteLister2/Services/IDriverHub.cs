@@ -14,5 +14,7 @@ namespace RouteLister2.Services
         Task ChangeClientRowStatus(string idRef,bool status);
         Task EnableEverything();
         Task DisableEverything();
+        Task AddedOrder();
+        Task NewRouteListAdded();
     }
 }
