@@ -19,6 +19,7 @@ namespace RouteLister2.Services
     public class DataImports : IDataImports
     {
         private ApplicationDbContext _context;
+        private const string path = "http://localhost:5000/TestData/jsonParcels.json";
 
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
         public List<Coordinat> _coordinatsList { get; set; }
@@ -32,7 +33,6 @@ namespace RouteLister2.Services
         public async Task GetParcelData()
         {
             // Uri to external data from ie. API
-            string path = "http://localhost:5000/TestData/jsonParcels.json";
             try
             {
                 ApiDeserializer dserial = new ApiDeserializer();
@@ -40,9 +40,9 @@ namespace RouteLister2.Services
                 _parcelList = dataOut.ParcelListImport;
                 await JsonApiDataImport();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ToDo: Errormessage to view
+                new ArgumentException(ex.Message, ex.InnerException);
             }
         }
         
@@ -160,7 +160,7 @@ namespace RouteLister2.Services
             return new Order()
             {
                 DestinationId = destinId,
-                OrderStatusId = 1,
+                OrderStatusId = 2,
                 OrderTypeId = orderTypeId,
                 RouteListId = routeListId,
             };

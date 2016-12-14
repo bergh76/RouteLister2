@@ -74,7 +74,7 @@ namespace RouteLister2.Data
             await UserSettings.AssignRoles(_userManager, user.Email, roles);
             await dbContext.SaveChangesAsync();
             await SeedOrderRowStatusToDbAsync();
-            //await SeedOrderStatusToDbAsync();
+            await SeedOrderStatusToDbAsync();
 
 
         }
@@ -96,22 +96,22 @@ namespace RouteLister2.Data
 
         }
 
-        //public async Task SeedOrderStatusToDbAsync()
-        //{
-        //    var context = _serviceProvider.GetService<ApplicationDbContext>();
-        //    if (context.OrderStatus.Count() == 0)
-        //    {
-        //        var addOrderStatus = new OrderStatus();
-        //        addOrderStatus = new OrderStatus { Description = "Artikel saknas på lager", Name="Saknas" ,  Priority = 1};
-        //        context.Add(addOrderStatus);
-        //        await context.SaveChangesAsync();
-        //        addOrderStatus = new OrderStatus { Description = "Artikel finns på lager", Name = "Lagerförd", Priority = 2 };
-        //        context.Add(addOrderStatus);
-        //        await context.SaveChangesAsync();
-        //        addOrderStatus = new OrderStatus { Description = "Artikel är restad", Name = "Lagerförd", Priority = 3 };
-        //        context.Add(addOrderStatus);
-        //        await context.SaveChangesAsync();
-        //    };
-        //}
+        public async Task SeedOrderStatusToDbAsync()
+        {
+            var context = _serviceProvider.GetService<ApplicationDbContext>();
+            if (context.OrderStatus.Count() == 0)
+            {
+                var addOrderStatus = new OrderStatus();
+                addOrderStatus = new OrderStatus { Description = "Artikel saknas på lager", Name = "Saknas", Priority = 1 };
+                context.Add(addOrderStatus);
+                await context.SaveChangesAsync();
+                addOrderStatus = new OrderStatus { Description = "Artikel finns på lager", Name = "Lagerförd", Priority = 2 };
+                context.Add(addOrderStatus);
+                await context.SaveChangesAsync();
+                addOrderStatus = new OrderStatus { Description = "Artikel är restad", Name = "Lagerförd", Priority = 3 };
+                context.Add(addOrderStatus);
+                await context.SaveChangesAsync();
+            };
+        }
     }
 }

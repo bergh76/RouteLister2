@@ -94,95 +94,59 @@
 
 })();
 
- //Note: This example requires that you consent to location sharing when
- //prompted by your browser. If you see the error "The Geolocation service
- //failed.", it means you probably did not give permission for the browser to
- //locate you.
 
-//function initMap() {
-//    var infoWindow = new google.maps.({ map: map });
 
-//    // Try HTML5 geolocation.
-//    if (navigator.geolocation) {
-//        navigator.geolocation.getCurrentPosition(function (position) {
-//            var pos = {
-//                lat: position.coords.latitude,
-//                lng: position.coords.longitude
-//            };
-//            //var script = document.createElement('script');
-
-//            infoWindow.setPosition(pos);
-//            infoWindow.setContent('Location found.');
-//            map.setCenter(pos);
-//            document.getElementsByTagName('head')[0].appendChild(pos);
-
-//        }, function () {
-//            handleLocationError(true, infoWindow, map.getCenter());
-
-//        });
-//    } else {
-//        // Browser doesn't support Geolocation
-//        handleLocationError(false, infoWindow, map.getCenter());
-//    }
-
-//    // Checks that the PlacesServiceStatus is OK, and adds a marker
-//    // using the place ID and location from the PlacesService.
-//    function callback(results, status) {
-//        if (status == google.maps.places.PlacesServiceStatus.OK) {
-//            var marker = new google.maps.Marker({
-//                map: map,
-//                place: {
-//                    placeId: results[0].place_id,
-//                    location: results[0].geometry.location
-//                }
-//            });
-//            console.log(marker)
+//function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+//    var start = document.getElementById('start').value;
+//    var end = document.getElementById('end').value;
+//    directionsService.route({
+//        origin: start,
+//        destination: end,
+//        travelMode: 'DRIVING'
+//    }, function (response, status) {
+//        if (status === 'OK') {
+//            directionsDisplay.setDirections(response);
+//        } else {
+//            window.alert('Directions request failed due to ' + status);
 //        }
-
-//        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-//            infoWindow.setPosition(pos);
-//            infoWindow.setContent(browserHasGeolocation ?
-//            'Error: The Geolocation service failed.' :
-//            'Error: Your browser doesn\'t support geolocation.');
-//        }
-//    }
+//    });
 //}
-(function () {
+//(function () {
+//    //var key = "AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E";
+//    if (!!navigator.geolocation) {
+//        var map;
+//        var latitude;
+//        var longitude;
+//        var mapOptions = {
+//            //zoom: 15,
+//            mapTypeId: google.maps.MapTypeId.ROA
+//        };
 
-    if (!!navigator.geolocation) {
-        var map;
-        var latitude;
-        var longitude;
-        var mapOptions = {
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+//        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+//        //navigator.geolocation.watchPosition(
+//        //    (function (position) {
 
-        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-        //navigator.geolocation.watchPosition(
-        //    (function (position) {
+//            navigator.geolocation.getCurrentPosition(function (position) {
 
-            navigator.geolocation.getCurrentPosition(function (position) {
+//            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: geolocate,
-                latitude: $('#latitude').val(position.coords.latitude),
-                longitude: $('#longitude').val(position.coords.longitude),
-                content:
-                    '<span><i class="fa fa-pin"></i></span>' +
-                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
-                    '<span>Longitude: ' + position.coords.longitude + '</span>'
-            });
-            map.setCenter(geolocate);
+//            var infowindow = new google.maps.InfoWindow({
+//                map: map,
+//                position: geolocate,
+//                latitude: $('#latitude').val(position.coords.latitude),
+//                longitude: $('#longitude').val(position.coords.longitude),
+//                content:
+//                    '<span><i class="fa fa-pin"></i></span>' +
+//                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
+//                    '<span>Longitude: ' + position.coords.longitude + '</span>'
+//            });
+//            map.setCenter(geolocate);
             
-            })
-        ;
+//            })
+//        ;
 
-    } else {
-        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
-    }
+//    } else {
+//        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
+//    }
 
-})();
+//})();
