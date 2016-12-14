@@ -5,8 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using RouteLister2.Data;
+using RouteLister2.Models;
 
-namespace RouteLister2.Models
+namespace RouteLister2.Data
 {
     public class SeedDefaultData
     {
@@ -72,12 +73,13 @@ namespace RouteLister2.Models
 
             await UserSettings.AssignRoles(_userManager, user.Email, roles);
             await dbContext.SaveChangesAsync();
-            await AddOrderRowStatusToDbAsync();
+            await SeedOrderRowStatusToDbAsync();
+            //await SeedOrderStatusToDbAsync();
 
 
         }
 
-        public async Task AddOrderRowStatusToDbAsync()
+        public async Task SeedOrderRowStatusToDbAsync()
         {
             var context = _serviceProvider.GetService<ApplicationDbContext>();
             if (context.OrderRowStatus.Count() == 0)
@@ -93,5 +95,23 @@ namespace RouteLister2.Models
             }
 
         }
+
+        //public async Task SeedOrderStatusToDbAsync()
+        //{
+        //    var context = _serviceProvider.GetService<ApplicationDbContext>();
+        //    if (context.OrderStatus.Count() == 0)
+        //    {
+        //        var addOrderStatus = new OrderStatus();
+        //        addOrderStatus = new OrderStatus { Description = "Artikel saknas på lager", Name="Saknas" ,  Priority = 1};
+        //        context.Add(addOrderStatus);
+        //        await context.SaveChangesAsync();
+        //        addOrderStatus = new OrderStatus { Description = "Artikel finns på lager", Name = "Lagerförd", Priority = 2 };
+        //        context.Add(addOrderStatus);
+        //        await context.SaveChangesAsync();
+        //        addOrderStatus = new OrderStatus { Description = "Artikel är restad", Name = "Lagerförd", Priority = 3 };
+        //        context.Add(addOrderStatus);
+        //        await context.SaveChangesAsync();
+        //    };
+        //}
     }
 }
