@@ -193,6 +193,7 @@ var signalRClient = $.connection.driverHub;
 //Regex used to extract idToken
 
 $.connection.hub.logging = true;
+
 external.loadingScreen.show();
 $.connection.hub.start().done(function () {
     console.log("connected");

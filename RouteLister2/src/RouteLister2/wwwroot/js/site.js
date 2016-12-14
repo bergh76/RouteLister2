@@ -6,9 +6,6 @@
         event.stopPropagation();
         event.preventDefault();
     }
-    return {
-        stop: stop
-    };
 
     var loadingScreen = (function () {
 
@@ -88,8 +85,8 @@
         loadingScreen: loadingScreen,
         css2json: css2json,
         startTime: startTime,
-        stop:stop
-    }
+        stop: stop
+    };
 
 
 })();
