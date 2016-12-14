@@ -52,8 +52,10 @@ namespace RouteLister2.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 IDataImports data = new DataImports(_context);
                 await data.GetParcelData();
+                //await data.GetCoordinates();
                 var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
                 List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
                 List<SelectListItem> dropDown = await _context.Users.Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber }).ToListAsync();
@@ -195,6 +197,7 @@ namespace RouteLister2.Controllers
                 : "";
         }
 
+        #region Helpers
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -220,5 +223,6 @@ namespace RouteLister2.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
+        #endregion 
     }
 }

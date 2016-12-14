@@ -6,5 +6,6 @@ namespace RouteLister2.Services
     public interface IDataImports
     {
         Task GetParcelData();
+        //Task GetCoordinates();
     }
 }
