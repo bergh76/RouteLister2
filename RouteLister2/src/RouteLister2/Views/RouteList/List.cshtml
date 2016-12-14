@@ -32,12 +32,28 @@
                                                     <i class="fa fa-info-circle fa-2x"></i>
                                                 </span>
                                                 <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
-                                                <a asp-action="MapRoute" asp-controller="RouteList"><span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span></a>
+                                                <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                                @*@{
+                                                        string position = "Strömgatan 4 Kalmar";
+                                                        string url = "https://www.google.com/maps/dir/" + position + "/" + @Model[f].Orders[i].Address  + "/?hl=sv-SE";
+                                                    }
+                                                     <a rel="parent" href="@url" target="_self"><span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span></a>*@
+                                                @using (Html.BeginForm("MapRoute", "RouteList"))
+                                                { 
+                                                    <input type="submit" class="btn btn-sm btn-primary fa fa-map-o fa-2x" />
+                                                    <input hidden name="latitude" id="latitude" value="latitude" />
+                                                    <input hidden name="longitude" id="longitude" value="longitude" />
+                                                    <input hidden name="name" value="@Model[f].Orders[i].Name" />
+                                                    <input hidden name="address" value="@Model[f].Orders[i].Address" />
+                                                    <input hidden name="postnr" value="@Model[f].Orders[i].PostNumber" />
+                                                    <input hidden name="city" value="@Model[f].Orders[i].City" />
+                                                }
+                                                @*<span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>*@
                                                 <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
                                             </div>
                                         </div>
 
-                                        <div id="collapse@(Html.IdFor(x=>x[f].Orders[i]))" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                        <div id="collapse@(Html.IdFor(x => x[f].Orders[i]))" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                                             <div class="panel-body">
                                                 <!--Customer Detail Data Start-->
                                                 <div class="col-md-12">
@@ -77,31 +93,31 @@
                                                         <tbody>
                                                             @for (int k = 0; k < Model[f].Orders[i].OrderRows.Count; k++)
                                                             {
-                                                                <tr>
-                                                                    <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
-                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
-                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
-                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
-                                                                    <td>
-                                                                        <div class="slideThree">
-                                                                            @{
-                                                                                var isChecked = "checked='checked'";
-                                                                                @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
-                                                                                {
-                                                                                    isChecked = null;
+                                                            <tr>
+                                                                <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
+                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
+                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
+                                                                <td>
+                                                                    <div class="slideThree">
+                                                                        @{
+                                                                            var isChecked = "checked='checked'";
+                                                                            @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
+                                                                            {
+                                                                                isChecked = null;
 
-                                                                                }
                                                                             }
-                                                                            <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
-                                                                            
-                                                                            <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
-                                                                        </div>
-                                                                        <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
-                                                                    </td>
+                                                                        }
+                                                                        <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
 
-                                                                </tr>
+                                                                        <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
+                                                                    </div>
+                                                                    <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+                                                                </td>
 
-                                                                                }
+                                                            </tr>
+
+                                                                            }
                                                         </tbody>
                                                     </table>
                                                     <span class="h4 pull-right">Total antal kollie @Model[f].Orders[i].TotalCount st</span>
@@ -110,17 +126,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                                                                }
-                                                                                }
-                                                                                }
+                                                                            }
+                                                                            }
+                                                                            }
                     </section>
                     <!-- end of accordion -->
                 </div>
             </div>
         </div>
-    
-                                                                                }
-                                                                                }
+
+                                                                            }
+                                                                            }
 <div id="loadingDiv" class="hidden"></div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }

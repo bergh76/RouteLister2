@@ -1,25 +1,5 @@
-﻿   
+﻿   @model MapRouteViewModel
+<script src="//maps.googleapis.com/maps/api/js?"></script>
 @*https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder*@
- <iframe id="map_canvas" class="img-responsive" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E
-         &origin=Jutarnas väg 16
-         &destination=Villagatan+5+Nybro">        
-</iframe>
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
-@*<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD324mgDTkUxMETTYTqHwVxH_MWEk_XEZ8&libraries=places&sensor=false"></script>*@
+<iframe id="map_canvas" class="img-responsive" frameborder="0" style="border:0" src="@Model.Url"></iframe>
 <div id="map_canvas"></div>
-@*<input id="pac-input" class="controls" type="text"
-           placeholder="Enter a location">
-<div id="map_canvas"></div>
-<div id="infowindow-content">
-    <span id="place-name"  class="title"></span><br>
-    Place ID <span id="place-id"></span><br>
-    <span id="place-address"></span>
-</div>*@
-
-
-    @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD324mgDTkUxMETTYTqHwVxH_MWEk_XEZ8&callback=initMap"></script>*@
-    @*<script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD324mgDTkUxMETTYTqHwVxH_MWEk_XEZ8&libraries=places&callback=initMap">
-        </script>*@
-
-

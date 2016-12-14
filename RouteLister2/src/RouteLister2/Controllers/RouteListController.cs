@@ -1,18 +1,6 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using RouteLister2.Data;
 using RouteLister2.Models;
-using RouteLister2.Models.RouteListerViewModels;
-using RouteLister2.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace RouteLister2.Controllers
@@ -27,19 +15,18 @@ namespace RouteLister2.Controllers
             [FromServices] SignalRBusinessLayer businessLayer
             )
         {
-
             _connectionManager = connectionManager;
             _businessLayer = businessLayer;
         }
 
         public async Task<IActionResult> Index(string id)
         {
-            if (!string.IsNullOrEmpty(id)) {
+            if (!string.IsNullOrEmpty(id))
+            {
                 var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
                 return View(viewModel);
             }
             return View();
-     
         }
 
 
@@ -61,12 +48,12 @@ namespace RouteLister2.Controllers
                 return View(model);
             }
             await _businessLayer.Insert(model);
-            return RedirectToAction("Edit",new { id=model.Id });
+            return RedirectToAction("Edit", new { id = model.Id });
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _businessLayer.GetRouteList(id:id);
+            var model = await _businessLayer.GetRouteList(id: id);
             if (model == null)
             {
                 return NotFound();
@@ -75,9 +62,16 @@ namespace RouteLister2.Controllers
             return View(model);
         }
 
-        public IActionResult MapRoute()
+        //[HttpPost]
+        public IActionResult MapRoute(string name, string address, string postnr, string city, float latitude, float longitude)
         {
-            return View();
+            string pos = "Strömgatan 4 b, Kalmar"; //string.Format("{0}","{1}", latitude, longitude);
+            string result = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E"
+                + "&origin=" + pos
+                + "&destination=" + address + "," + postnr + " " + city + " ,Sverige";
+                //+ "&zoom=18";
+            var rmodel = new MapRouteViewModel(result);
+            return View(rmodel);
         }
         public async Task<IActionResult> List()
         {
@@ -86,7 +80,8 @@ namespace RouteLister2.Controllers
         }
         private async Task SetUserDropDown(string id = null)
         {
-            if (string.IsNullOrEmpty(id)) {
+            if (string.IsNullOrEmpty(id))
+            {
                 ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
             }
             else
@@ -94,8 +89,5 @@ namespace RouteLister2.Controllers
                 ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
             }
         }
-
-        
-
     }
 }

@@ -100,11 +100,7 @@
  //locate you.
 
 //function initMap() {
-//    var map = new google.maps.Map(document.getElementById('map_canvas'), {
-//        //center: { lat: -34.397, lng: 150.644 },
-//        zoom: 16
-//    });
-//    var infoWindow = new google.maps.InfoWindow({ map: map });
+//    var infoWindow = new google.maps.({ map: map });
 
 //    // Try HTML5 geolocation.
 //    if (navigator.geolocation) {
@@ -113,7 +109,7 @@
 //                lat: position.coords.latitude,
 //                lng: position.coords.longitude
 //            };
-//            var script = document.createElement('script');
+//            //var script = document.createElement('script');
 
 //            infoWindow.setPosition(pos);
 //            infoWindow.setContent('Location found.');
@@ -151,54 +147,42 @@
 //        }
 //    }
 //}
-//google.maps.event.addDomListener(window, 'load', initMap);
-$(document).ready(function () {
-    var map = new google.maps.Map(document.getElementById('map_canvas'), {
-        //center: { lat: -34.397, lng: 150.644 },
-        zoom: 16
-    });
-    var infoWindow = new google.maps.InfoWindow({ map: map });
-    //Try HTML5 geolocation.
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            var script = document.createElement('script');
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.'); // Get position data to setContet()
-            map.setCenter(pos);
-            document.getElementsByTagName('head')[0].appendChild(pos);
-        }, function () {
-            handleLocationError(true, infoWindow, map.getCenter());
-        });
+(function () {
+
+    if (!!navigator.geolocation) {
+        var map;
+        var latitude;
+        var longitude;
+        var mapOptions = {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        //navigator.geolocation.watchPosition(
+        //    (function (position) {
+
+            navigator.geolocation.getCurrentPosition(function (position) {
+
+            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: geolocate,
+                latitude: $('#latitude').val(position.coords.latitude),
+                longitude: $('#longitude').val(position.coords.longitude),
+                content:
+                    '<span><i class="fa fa-pin"></i></span>' +
+                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
+                    '<span>Longitude: ' + position.coords.longitude + '</span>'
+            });
+            map.setCenter(geolocate);
+            
+            })
+        ;
+
     } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
     }
 
-    var input = document.getElementById("pac-input");
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.bindTo("bounds", map);
-    var marker = new google.maps.Marker({
-        map: map,
-        zoom: 14,
-        animation: google.maps.Animation.BOUNCE
-    });
-
-    google.maps.event.addListener(autocomplete, "place_changed", function () {
-        var place = autocomplete.getPlace();
-        if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-        } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(15);
-        }
-        marker.setPosition(place.geometry.location);
-    });
-
-    google.maps.event.addListener(map, "click", function (event) {
-        marker.setPosition(event.latLng);
-    });
-});
+})();

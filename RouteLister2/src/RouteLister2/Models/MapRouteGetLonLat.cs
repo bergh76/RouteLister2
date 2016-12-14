@@ -41,6 +41,7 @@ namespace RouteLister2.Models
             {
                 _address = string.Format("{0}+{1}+{2}", item.Street + item.PostNumber + item.City);
                 string path = "http://maps.google.com/maps/api/geocode/xml?address=" + _address + "&sensor=false";
+                //ingen serialisering här. Hämta datat och returna som long och lat
                 ApiDeserializer dserialize = new ApiDeserializer();
                 var result = await dserialize.JsonDserializer<ApiDeserializer>(path);
                 _coordinatsList = result.CoordinatsList;
