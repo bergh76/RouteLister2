@@ -75,12 +75,15 @@ var routeLister = (function () {
     
     var routeList = (function (routeListId) {
         //Since its one routelist per driver, reloading whole page
+        var IdPrefix;
         var reload = (function () {
             //Reloading page
             location.reload();
+
         });
         return {
-            refresh : reload
+            refresh: reload,
+            IdPrefix : IdPrefix
         };
     })();
     //Regex to get id from a reference.
@@ -89,7 +92,13 @@ var routeLister = (function () {
         var id = routeLister.idRegex.match(idRef);
         return id;
     };
-    var orderRow = (function () {
+    var orderRow = (function (rowId) {
+        var Id = rowId;
+        var IdPrefix = "OrderRowId";
+        //Adds listeners to toggleable items
+        var addListener = function (listener) {
+            checkbox.next('label').addListener(listener);
+        };
         var NameId;
         var setNameId = function (name) {
             NameId = name;
@@ -99,22 +108,22 @@ var routeLister = (function () {
             //Always stop the event
             routeLister.stop(event);
             if (routeLister._connectionId) {
+                //Dont allow user to click on it till its working
                 $(event.target).prop('disabled', true);
                 if (event.type === "click") {
                     //Remove all listeners
                     $(event.target).unbind("click");
-                    var idValue = $(event.target).val();
+                    //Inputbox
+                    var inputBox = $(event.target).prev('input');
+                    var idValue = inputBox.val();
                     //console.log(idValue);
-                    var checkBoxId = $(event.target).attr("id");
-                    //console.log(checkBoxId);
-                    ///sets the idName that client funktion uses + token to change later on
-                    //Gets id number from id reference
-                    //var id = routeLister.getId(orderRowId);
+                    var checkBoxId = inputBox.attr("id");
+                    //???
                     NameId = "#" + checkBoxId;
                     //Asks server to change status on orderRow
                     signalRClient.server.changeStatusOnOrderRow(idValue, checkBoxId);
                     //Show waiting message for client while server works
-                    var spinner = $(event.target).parents().siblings('.fa-spin');
+                    var spinner = inputBox.parents().siblings('.fa-spin');
                     spinner.removeClass("hidden");
                     //TODO
                 }
@@ -132,8 +141,8 @@ var routeLister = (function () {
             //TODO
             //Focus on changed item
             checkbox.focus();
-            //Add click listener again
-            checkbox.click(function (event) {
+            //Add click listener again to the correct event
+            checkbox.next('label').click(function (event) {
                 routeLister.orderRow.server(event);
             });
             //Enable checkbox again
@@ -148,10 +157,12 @@ var routeLister = (function () {
         return {
             server: requestOrderRowStatusChange,
             client: changeClientSideView,
-            setNameId: setNameId
+            setNameId: setNameId,
+            IdPrefix : IdPrefix
         };
     })();
     var order = (function () {
+        var orderContainerId = "#orderContainer";
         //Request signalr server to change status on a order
         var requestOrderRowStatusChange = function (orderRowId) {
 
@@ -160,9 +171,30 @@ var routeLister = (function () {
         var changeClientSideView = function (orderRowStatusId) {
 
         };
+
+        var addClientOrder = function (urlAction) {
+            $.ajax({
+                type: "GET",
+                url: urlAction
+               
+            }).done(function (data) {
+                $(orderContainerId).append(data);
+                //Adding listener to added OrderRows
+                $(data).on('click', '.slidah', function (e) {
+                    routeLister.orderRow.server(event);
+                });
+
+            }).fail(function (data) {
+
+            }).always(function (date) {
+
+            });
+            $("#orderContainer").append()
+        };
         return {
             server: requestOrderRowStatusChange,
-            client: changeClientSideView
+            client: changeClientSideView,
+            add : addClientOrder
         };
     })();
 

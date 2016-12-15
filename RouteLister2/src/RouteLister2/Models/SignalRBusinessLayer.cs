@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RouteLister2.Data;
+using RouteLister2.Models.OrderRowViewModels;
 using RouteLister2.Models.RouteListerViewModels;
 using RouteLister2.Services;
 using System;
@@ -81,6 +82,12 @@ namespace RouteLister2.Models
             await _repo.UpdateAsync(order);
             return newRouteList;
 
+        }
+
+        public OrderRowViewModel GetOrderRowViewModel()
+        {
+            var result = _mapper.Map<OrderRowViewModel>(_repo.Get<OrderRow>().First());
+            return result;
         }
 
         public async Task<RouteList> GetRouteListFromOrderRowId(int id, string RegistrationNumber)

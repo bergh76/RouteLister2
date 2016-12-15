@@ -90,3 +90,78 @@
 
 
 })();
+
+
+//One should only have to use id to remove a particular item
+var item = function (IdRef, urlAction, cref) {
+
+    //The idPrefix
+    this.ref = IdRef;
+    //The combined idReference
+    this.thisRef = "#" + IdRef;
+    //Url action to get a particular viewmodel
+    this.url = urlAction;
+    //Reference to the container containing the viewmodel/viewmodels
+    this.containerRef = "#" + cref;
+
+};
+
+//Remove a specific viewmodel
+item.prototype.remove = function (idToRemove) {
+    //remove from server
+    //....
+    //remove from interface
+    //...
+    $(this.thisRef + idToRemove).remove();
+    
+
+
+};
+//Update a specfic viewModel(overwrite it)
+item.prototype.update = function (idToUpdate) {
+    //This becomes a reference in ajax so can't use ajax variables in a ajax call
+    var refi = this.thisRef;
+    var burl = this.url;
+    $.ajax({
+        type: "GET",
+        url: burl + "/Edit/" + idToUpdate
+    }).done(function (data) {
+        $("#" + refi + idToUpdate).html(data);
+    }).fail(function (data) {
+
+    }).always(function (data) {
+
+    });
+};
+//Get a viewModel
+item.prototype.get = function (idToGet) {
+    var burl = this.url;
+    $.ajax({
+        type: "GET",
+        url: burl + "/" + idToGet
+
+    }).done(function (data) {
+        return data;
+    }).fail(function (data) {
+
+    }).always(function (data) {
+
+    });
+};
+item.prototype.add = function (idToGet) {
+    var cont = this.containerRef;
+    var burl = this.url;
+    $.ajax({
+        type: "GET",
+        url: burl + "/" + idToGet
+
+    }).done(function (data) {
+        $(cont).append(data);
+    }).fail(function (data) {
+
+    }).always(function (data) {
+
+    });
+};
+
+

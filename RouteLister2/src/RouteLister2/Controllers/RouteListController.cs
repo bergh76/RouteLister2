@@ -93,6 +93,18 @@ namespace RouteLister2.Controllers
             var result = await _businessLayer.GetAllRouteLists();
             return View(result);
         }
+
+        public IActionResult Test()
+        {
+            var result = _businessLayer.GetOrderRowViewModel();
+            return View(result);
+        }
+
+        public async Task<IActionResult> Test2()
+        {
+            ViewBag.Test = "Funkar";
+            return PartialView();
+        }
         private async Task SetUserDropDown(string id = null)
         {
             if (string.IsNullOrEmpty(id)) {
@@ -103,6 +115,7 @@ namespace RouteLister2.Controllers
                 ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
             }
         }
+
 
         
 

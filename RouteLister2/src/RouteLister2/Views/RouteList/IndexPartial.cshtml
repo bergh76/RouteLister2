@@ -2,7 +2,7 @@
 
 @if (Model != null)
 {
-    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12" id="@Html.IdFor(x => x.DeliveryListId)@{@Model.DeliveryListId} ">
         <div class="x_panel">
             <div class="x_title">
                 <span class="h3"><i class="fa fa-list-ol"></i> @Model.Title <span class="pull-right" id="clock"></span></span>
@@ -17,9 +17,9 @@
                         {
                             @for (int i = 0; i < Model.Orders.Count; i++)
                         {
-                                <div class="panel">
+                                <div class="panel" id="orderContainer">
 
-                                    @Html.Partial("_Order", Model.Orders[i])
+                                    @Html.Partial("_Order", Model.Orders[i], null)
                                 </div>
                             }
                         }
@@ -37,15 +37,16 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $(".slideThree > input").click(function (event) {
-                routeLister.orderRow.server(event);
-            });
             $(".status-text").click(function (event) {
-                console.log("teeest");
                 routeLister.setConnectionStatus.client(false);
             });
 
+            $(document).on('click', '.slidah', function (e) {
+                routeLister.orderRow.server(event);
+            });
+
             external.startTime;
+            routeLister.routeList.IdPrefix=@Html.IdFor(x => x.DeliveryListId);
         });
     </script>
 }

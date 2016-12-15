@@ -1,6 +1,6 @@
 ﻿@model RouteLister2.Models.RouteListerViewModels.OrderDetailViewModel
 
-<div class="panel">
+<div class="panel" id="@Html.IdFor(x=>x.OrderId)@Model.OrderId">
     <div hidden id="@Html.IdFor(x => x.OrderId)">@Model.OrderId</div>
     <div class="panel-heading collapsed col-md-12">
         <div class="col-lg-8 pull-left">
