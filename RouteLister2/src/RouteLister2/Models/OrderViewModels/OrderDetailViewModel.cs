@@ -9,7 +9,6 @@ namespace RouteLister2.Models.RouteListerViewModels
     public class OrderDetailViewModel
     {
 
-        public int RowNumber { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Description { get {

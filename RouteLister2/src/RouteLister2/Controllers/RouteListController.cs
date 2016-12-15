@@ -34,6 +34,9 @@ namespace RouteLister2.Controllers
 
         public async Task<IActionResult> Index(string id)
         {
+#if DEBUG
+            id = "aaa111";
+#endif
             if (!string.IsNullOrEmpty(id)) {
                 var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
                 return View(viewModel);
