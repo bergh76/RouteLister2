@@ -19,6 +19,7 @@ namespace RouteLister2
                 .Build();
 
             host.Run();
+
         }
     }
 }

@@ -39,12 +39,13 @@ namespace RouteLister2.Models
             var address = _context.Address.ToList();
             foreach (var item in address)
             {
-                _address = string.Format("{0}+{1}+{2}", item.Street + item.PostNumber + item.City);
-                string path = "http://maps.google.com/maps/api/geocode/xml?address=" + _address + "&sensor=false";
+                _address = item.Street + "+" + item.PostNumber + "+" + item.City;
+                string url = "http://maps.google.com/maps/api/geocode/xml?address=" + _address + "&sensor=false";
+
                 //ingen serialisering här. Hämta datat och returna som long och lat
-                ApiDeserializer dserialize = new ApiDeserializer();
-                var result = await dserialize.JsonDserializer<ApiDeserializer>(path);
-                _coordinatsList = result.CoordinatsList;
+                ApiDeserializer dserial = new ApiDeserializer();
+                var result = await dserial.GetPositionCoordinats(url);
+                //_coordinatsList = result;
                 if (_coordinatsList.Count() != 0)
                 {
                     for (int i = 0; i < _coordinatsList.Count(); i++)

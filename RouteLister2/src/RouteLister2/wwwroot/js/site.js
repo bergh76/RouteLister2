@@ -111,42 +111,42 @@
 //        }
 //    });
 //}
-//(function () {
-//    //var key = "AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E";
-//    if (!!navigator.geolocation) {
-//        var map;
-//        var latitude;
-//        var longitude;
-//        var mapOptions = {
-//            //zoom: 15,
-//            mapTypeId: google.maps.MapTypeId.ROA
-//        };
+(function () {
+    //var key = "AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E";
+    if (!!navigator.geolocation) {
+        var map;
+        var latitude;
+        var longitude;
+        var mapOptions = {
+            //zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROA
+        };
 
-//        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-//        //navigator.geolocation.watchPosition(
-//        //    (function (position) {
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        //navigator.geolocation.watchPosition(
+        //    (function (position) {
 
-//            navigator.geolocation.getCurrentPosition(function (position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
 
-//            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-//            var infowindow = new google.maps.InfoWindow({
-//                map: map,
-//                position: geolocate,
-//                latitude: $('#latitude').val(position.coords.latitude),
-//                longitude: $('#longitude').val(position.coords.longitude),
-//                content:
-//                    '<span><i class="fa fa-pin"></i></span>' +
-//                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
-//                    '<span>Longitude: ' + position.coords.longitude + '</span>'
-//            });
-//            map.setCenter(geolocate);
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: geolocate,
+                latitude: $('#latitude').val(position.coords.latitude),
+                longitude: $('#longitude').val(position.coords.longitude),
+                content:
+                    '<span><i class="fa fa-pin"></i></span>' +
+                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
+                    '<span>Longitude: ' + position.coords.longitude + '</span>'
+            });
+            map.setCenter(geolocate);
             
-//            })
-//        ;
+            })
+        ;
 
-//    } else {
-//        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
-//    }
+    } else {
+        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
+    }
 
-//})();
+})();

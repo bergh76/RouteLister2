@@ -251,3 +251,4 @@ paket-files/
 .idea/
 *.sln.iml
 /RouteLister2/SQLQuery2.sql
+/RouteLister2/src/RouteLister2/Properties/PublishProfiles

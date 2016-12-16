@@ -17,6 +17,7 @@ using RouteLister2.Models.ManageViewModels;
 using static RouteLister2.Controllers.ManageController;
 using Microsoft.Extensions.Logging;
 using RouteLister2.Models.AccountViewModels;
+using Microsoft.AspNetCore.Hosting;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,10 +28,13 @@ namespace RouteLister2.Controllers
     public class AdminController : Controller
     {
         private ApplicationDbContext _context;
-        private IMapper _mapper;
-        private readonly ILogger _logger;
         private UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+
+        private IMapper _mapper;
+        private readonly ILogger _logger;
+        private IHostingEnvironment _host;
+
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
         public AdminController(
@@ -38,13 +42,15 @@ namespace RouteLister2.Controllers
             [FromServices] UserManager<ApplicationUser> userManager,
             [FromServices]SignInManager<ApplicationUser> signInManager,
             [FromServices] IMapper mapper,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IHostingEnvironment host)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _host = host;
         }
 
 
@@ -53,7 +59,7 @@ namespace RouteLister2.Controllers
             if (ModelState.IsValid)
             {
 
-                IDataImports data = new DataImports(_context);
+                IDataImports data = new DataImports(_context, _host);
                 await data.GetParcelData();
                 //await data.GetCoordinates();
                 var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);

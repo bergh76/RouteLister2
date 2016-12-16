@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -10,42 +9,49 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RouteLister2.Services
 {
     public class DataImports : IDataImports
     {
+        // Url to public API 
+        private const string url = "http://webapi20161215113621.azurewebsites.net/api/ParcelsApi";
+
         private ApplicationDbContext _context;
-        private const string path = "http://localhost:5000/TestData/jsonParcels.json";
+        private IHostingEnvironment _host;
 
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
         public List<Coordinat> _coordinatsList { get; set; }
 
-        public DataImports([FromServices] ApplicationDbContext context)
+        public DataImports([FromServices] ApplicationDbContext context, IHostingEnvironment host)
         {
             _context = context;
+            _host = host;
         }
 
         public DataImports() { }
+
         public async Task GetParcelData()
         {
+            if (!string.IsNullOrEmpty(url))
+            {
+                try
+                {
+                    ApiDeserializer dserial = new ApiDeserializer();
+                    var dataOut = await dserial.GetApiListItems(url);
+                    _parcelList = dataOut.ToList();
+                    await JsonApiDataImport();
+                }
+                catch (Exception ex)
+                {
+                    new ArgumentException(ex.Message, ex.InnerException);
+                }
+            }
+
             // Uri to external data from ie. API
-            try
-            {
-                ApiDeserializer dserial = new ApiDeserializer();
-                var dataOut = await dserial.JsonDserializer<ApiDeserializer>(path);
-                _parcelList = dataOut.ParcelListImport;
-                await JsonApiDataImport();
-            }
-            catch (Exception ex)
-            {
-                new ArgumentException(ex.Message, ex.InnerException);
-            }
-        }
-        
+        }        
+
         private async Task JsonApiDataImport()
         {
             if (_parcelList.Count() != 0)
@@ -236,52 +242,12 @@ namespace RouteLister2.Services
             };
         }
 
-        // Get coordinats for address
-        //public async Task GetCoordinates()
-        //{
 
-        //        string _address = "";
-        //        var address = _context.Address.ToList();
-        //    //foreach (var item in address)
-        //    //{
-        //    for (int i = 0; i < address.Count(); i++)
-        //    {
-        //        _address = address[i].Street + "+" + address[i].PostNumber + "+" + address[i].City;
-        //        string path = "https://maps.googleapis.com/maps/api/geocode/json?address=" + _address + "&sensor=false";
-        //        var result = 
-
-        //        _coordinatsList.Add();
-
-        //        await SetCoordinats(_context, i);
-        //    }
-            
-        //}
-        private async Task SetCoordinats(ApplicationDbContext context, int i)
+        // Get Coordinates not working need more reseach on API to get the 
+        public async Task GetCoordinates()
         {
-            if (_coordinatsList.Count() != 0)
-            {
-                for (int j = 0; j < _coordinatsList.Count(); j++)
-                {
-                    Coordinat coordinats = _context.Coordinats.SingleOrDefault(x => x.AddressId == i);
-                    if (coordinats != null)
-                    {
-                        coordinats = AddCoordinatsToDb(j, _context);
-                        context.Add(coordinats);
-                    }
-                }
-            }
-            await context.SaveChangesAsync();
+            var coord = new MapRouteGetLonLat(_context);
+            await coord.GetCoordinates(_context);
         }
-
-        private Coordinat AddCoordinatsToDb(int j, ApplicationDbContext context)
-        {
-            return new Coordinat()
-            {
-                AddressId = _coordinatsList[j].AddressId,
-                Longitude = _coordinatsList[j].Longitude,
-                Latitude = _coordinatsList[j].Latitude,
-            };
-        }
-
     }
 }

@@ -21,6 +21,27 @@
         <link href="~/css/custom.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
+    <environment names="Staging,Production">
+        <!-- DATATABLE CSS-->
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
+        <!-- END DATATABLE CSS-->
+        <!-- DATATABLE BUTTONS CSS-->
+        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
+        <!-- END DATATABLE BUTTONS CSS-->
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="~/css/custom.css" rel="stylesheet" />
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    </environment>
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -92,6 +113,7 @@
         <!-- END DATATABEL-BUTTONS -->
     </environment>
     <environment names="Staging,Production">
+
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
@@ -100,6 +122,20 @@
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
+        <!-- DATATABELS -->
+        <script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+        <!-- END DATATABELS -->
+        <!-- DATATABEL-BUTTONS -->
+        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
+        <script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
+        <!-- END DATATABEL-BUTTONS -->
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
