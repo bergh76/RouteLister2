@@ -15,14 +15,14 @@ namespace RouteLister2.Services
 {
     public class DataImports : IDataImports
     {
-        // Url to public API 
+        // Url to public API for Parcellist
         private const string url = "http://webapi20161215113621.azurewebsites.net/api/ParcelsApi";
 
         private ApplicationDbContext _context;
         private IHostingEnvironment _host;
 
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
-        public List<Coordinat> _coordinatsList { get; set; }
+        //public List<Coordinat> _coordinatsList { get; set; }
 
         public DataImports([FromServices] ApplicationDbContext context, IHostingEnvironment host)
         {
@@ -243,11 +243,12 @@ namespace RouteLister2.Services
         }
 
 
-        // Get Coordinates not working need more reseach on API to get the 
-        public async Task GetCoordinates()
-        {
-            var coord = new MapRouteGetLonLat(_context);
-            await coord.GetCoordinates(_context);
-        }
+        // Get Coordinates 
+        // ToDo: Not working need more reseach on API to get the 
+        //public async Task GetCoordinates()
+        //{
+        //    var coord = new MapRouteGetLonLat(_context);
+        //    await coord.GetCoordinates(_context);
+        //}
     }
 }

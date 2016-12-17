@@ -15,11 +15,11 @@ namespace RouteLister2.Data
 {
     public class ApiDeserializer
     {
-        public List<ParcelListFromCompanyViewModel> ParcelListImport { get; set; }
+        //public List<ParcelListFromCompanyViewModel> ParcelListImport { get; set; }
         //public List<Coordinat> CoordinatsList { get; set; }
         public ApiDeserializer() { }
 
-        // Working not generic<T>
+        // Returns a list with parcel data
         public async Task<List<ParcelListFromCompanyViewModel>> GetApiListItems(string url)
         {
             var obj = new ParcelListFromCompanyViewModel();
@@ -32,33 +32,34 @@ namespace RouteLister2.Data
             return JsonConvert.DeserializeObject<List<ParcelListFromCompanyViewModel>>(content);
         }
 
-        public async Task<List<Coordinat>> GetPositionCoordinats(string url)
-        {
-            var obj = new Coordinat();
+        // ToDo: Get the coordinates from google.map.api
+        // Returns a list with coordinates data
+        //public async Task<List<Coordinat>> GetPositionCoordinats(string url)
+        //{
+        //    var obj = new Coordinat();
+        //    // Customize URL according to obj parameters
+        //    var data = string.Format(url, obj);
 
-            // Customize URL according to obj parameters
-            var data = string.Format(url, obj);
+        //    // Asyncronious Consumption
+        //    var syncClient = new HttpClient();
+        //    var content = await syncClient.GetStringAsync(data);
+        //    return JsonConvert.DeserializeObject<List<Coordinat>>(content);
 
-            // Syncronious Consumption
-            var syncClient = new HttpClient();
-            var content = await syncClient.GetStringAsync(data);
-            return JsonConvert.DeserializeObject<List<Coordinat>>(content);
+        //}
 
-        }
-
-        public async Task<List<T>> JsonDserializer<T>(string api) where T : new()
-        {
-            using (var http = new HttpClient())
-            {
-                string data = null;
-                {
-                    try { data = await http.GetStringAsync(api); }
-                    catch (Exception ex) { new ArgumentException(ex.Message, ex.StackTrace); }
-                    //ToDo: Fix the json string
-                    return !string.IsNullOrEmpty(api) ? JsonConvert.DeserializeObject<List<T>>(data) : new List<T>();
-                }
-            }
-        }
+        //public async Task<List<T>> JsonDserializer<T>(string api) where T : new()
+        //{
+        //    using (var http = new HttpClient())
+        //    {
+        //        string data = null;
+        //        {
+        //            try { data = await http.GetStringAsync(api); }
+        //            catch (Exception ex) { new ArgumentException(ex.Message, ex.StackTrace); }
+        //            //ToDo: Fix the json string
+        //            return !string.IsNullOrEmpty(api) ? JsonConvert.DeserializeObject<List<T>>(data) : new List<T>();
+        //        }
+        //    }
+        //}
     }
     
     //public class RootObject
