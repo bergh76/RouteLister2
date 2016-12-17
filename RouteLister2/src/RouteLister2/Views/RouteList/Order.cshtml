@@ -56,7 +56,7 @@
                     <tbody>
                         @for (int k = 0; k < Model.OrderRows.Count; k++)
                         {
-                            @Html.Partial("_OrderRowLine", Model.OrderRows[k])
+                            @Html.Partial("OrderRowLine", Model.OrderRows[k])
 
                         }
                     </tbody>
@@ -67,4 +67,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+    <script type="text/javascript">
+        //$(document).ready(function () {
+            routeLister.order.IdPrefix = '@Html.IdFor(x => x.OrderId)';
+           
+            console.log(routeLister.order.getUrl);
+        //});
+    </script>
+}
 

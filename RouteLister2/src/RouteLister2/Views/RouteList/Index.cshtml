@@ -18,21 +18,33 @@
                             @for (int i = 0; i < Model.Orders.Count; i++)
                         {
                                 <div class="panel" id="orderContainer">
-                                    @{ 
+                                    @{
                                         ViewBag.OrderRowNumber = i + 1;
                                     }
-                                    @Html.Partial("_Order", Model.Orders[i], null)
+                                    @Html.Partial("Order", Model.Orders[i], null)
 
                                 </div>
-                            }
-                        }
-                    }
+                                        }
+                                        }
+                                        else
+                                        {
+                                            <h1>Inga ordrar idag än</h1>
+
+
+                                        }
+                                        }
+                                       
+
                 </section>
                 <!-- end of accordion -->
             </div>
         </div>
     </div>
-}
+                                        }
+                                        else
+                                        {
+                                            <h1>Ingen lista tilldelad ännu</h1>
+                                        }
 
 <div id="loadingDiv" class="hidden"></div>
 @section Scripts {
@@ -49,7 +61,8 @@
             });
 
             external.startTime;
-            routeLister.routeList.IdPrefix=@Html.IdFor(x => x.DeliveryListId);
+            routeLister.routeList.IdPrefix = '@Html.IdFor(x => x.DeliveryListId)';
+            routeLister.order.getUrl = '@Url.Action("Order", "RouteList")';
         });
     </script>
 }

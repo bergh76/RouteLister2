@@ -18,13 +18,12 @@ namespace RouteLister2.Controllers
     {
         private SignalRBusinessLayer _businessLayer;
         private IMapper _mapper;
-        private DriverHub _driversHub;
 
-        public OrderRowController([FromServices] SignalRBusinessLayer businessLayer, [FromServices] IMapper mapper, [FromServices] DriverHub driversHub)
+        public OrderRowController([FromServices] SignalRBusinessLayer businessLayer, [FromServices] IMapper mapper)
         {
             _businessLayer = businessLayer;
             _mapper = mapper;
-            _driversHub = driversHub;
+
         }
         // GET: /<controller>/
         public async Task<IActionResult> Edit(int id)
@@ -55,28 +54,7 @@ namespace RouteLister2.Controllers
             return RedirectToAction("Edit", new { id = model.Id });
         }
 
-        public async Task<IActionResult> AdminRowPartial([Bind("ParcelListFromCompanyViewModel") ] ParcelListFromCompanyViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                
-                return View(viewModel);
-            }
-
-
-            //Getting applicationUser
-            bool newRouteList = await _businessLayer.registerOrderToDriver(viewModel.RegistrationNumber,viewModel.Id);
-            if (newRouteList)
-            {
-                //notify relevant driver that he has a new routeList
-                await _driversHub.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).NewRouteListAdded();
-            }
-            else
-            {
-                await _driversHub.Clients.Groups( new List<string>() { viewModel.RegistrationNumber }).AddedOrder();
-            }
-            return PartialView(viewModel);
-        }
+   
 
 
 

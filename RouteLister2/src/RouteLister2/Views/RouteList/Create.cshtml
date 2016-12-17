@@ -19,25 +19,25 @@
             </div>
         </div>
 
-        @if (ViewBag.VehicleDropDown != null)
+        @if (ViewBag.UserDropDown != null)
         {
             <div class="form-group">
-                <label asp-for="VehicleId" class="col-md-2 control-label"></label>
+                <label asp-for="ApplicationUserId" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <select asp-for="VehicleId" asp-items="@ViewBag.VehicleDropDown" class="form-control">
+                    <select asp-for="ApplicationUserId" asp-items="@ViewBag.UserDropDown" class="form-control">
                     </select>
-                    <span asp-validation-for="VehicleId" class="text-danger" />
+                    <span asp-validation-for="ApplicationUserId" class="text-danger" />
                 </div>
             </div>
         }
-        else
+        @*else
         {
             <p>
                 Finns ingen bil tillgänglig
-                <a href="@Url.Action("Create","Vehicle")" target="_blank">Lägg </a>
+                <a href="@Url.Action("Create","Acco")" target="_blank">Lägg </a>
                 till en ny bil
             </p>
-        }
+        }*@
 
 
         <div class="form-group">

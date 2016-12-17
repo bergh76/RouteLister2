@@ -23,3 +23,13 @@
         <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
     </td>
 </tr>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            routeLister.orderRow.IdPrefix='@Html.IdFor(x => x.OrderRowId)';
+        });
+    </script>
+}

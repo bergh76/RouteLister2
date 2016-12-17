@@ -31,8 +31,11 @@ namespace RouteLister2.Models
 
         public async Task<List<SelectListItem>> GetParcelDropDown(int? Id)
         {
-            return await _repo.Get<Parcel>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == Id }).ToListAsync();
+            var assignedParcelIds = await _repo.Get<OrderRow>(null, null, null).Select(x => x.ParcelId).ToListAsync();
+            return await _repo.Get<Parcel>().Where(x => !assignedParcelIds.Contains(x.Id)).Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == Id }).ToListAsync();
         }
+
+
 
         public SignalRBusinessLayer([FromServices] RouteListerRepository repo, [FromServices] IMapper mapper)
         {
@@ -54,12 +57,33 @@ namespace RouteLister2.Models
             return false;
         }
 
+  
+
+        /// <summary>
+        /// Gets all the entities, unsorted
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IQueryable<T> GetAll<T>() where T : class
+        {
+            return _repo.Get<T>();
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetAddressDropDown(int? id)
         {
             return await _repo.Get<Address>().Select(x => new SelectListItem() { Text = x.PostNumber + " " + x.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
         }
 
-        public async Task<bool> registerOrderToDriver(string regNr, int orderId)
+        public async Task<List<SelectListItem>> GetUserRegNrDropDown(string SelectedRegnr = null)
+        {
+            if (string.IsNullOrEmpty(SelectedRegnr))
+            {
+                return await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber }).ToListAsync();
+            }
+            return await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber, Selected = x.RegistrationNumber == SelectedRegnr }).ToListAsync();
+        }
+
+        public async Task<bool> RegisterOrderToDriver(string regNr, int orderId)
         {
             bool newRouteList = false;
             //Gets the order that needs to be assigned to a driver
@@ -67,27 +91,39 @@ namespace RouteLister2.Models
 
             //Gets the user
             ApplicationUser user = await GetUser(regNr: regNr);
-            //Checks if user has routelist today
-            RouteList usersDailyRouteList = user.RouteLists.Where(x => x.Created.Date == DateTime.Today.Date).FirstOrDefault();
-            if (newRouteList = usersDailyRouteList == null)
+            //User might come up null for some reason as they might not have been assigned a car
+            if (user != null)
             {
-                //Creates a new routelist
-                usersDailyRouteList = new RouteList();
-                usersDailyRouteList.ApplicationUserId = user.Id;
-                await _repo.InsertAsync(usersDailyRouteList);
+                //Checks if user has routelist today
+                RouteList usersDailyRouteList = user.RouteLists.Where(x => x.Created.Date == DateTime.Today.Date).FirstOrDefault();
+                if (newRouteList = usersDailyRouteList == null)
+                {
+                    //Creates a new routelist
+                    usersDailyRouteList = new RouteList();
+                    usersDailyRouteList.ApplicationUserId = user.Id;
+                    await _repo.InsertAsync(usersDailyRouteList);
 
+                }
+                //Updates order with the new id
+                order.RouteListId = usersDailyRouteList.Id;
+                await _repo.UpdateAsync(order);
+                return newRouteList;
             }
-            //Updates order with the new id
-            order.RouteListId = usersDailyRouteList.Id;
-            await _repo.UpdateAsync(order);
-            return newRouteList;
-
+            return false;
         }
 
-        public OrderRowViewModel GetOrderRowViewModel()
+
+        public async Task<OrderRowViewModel> GetOrderRowViewModel(int? id = null)
         {
-            var result = _mapper.Map<OrderRowViewModel>(_repo.Get<OrderRow>().First());
-            return result;
+            if (id.HasValue)
+            {
+                return await _repo.Get<OrderRow>(x => x.Id == id.Value).ProjectTo<OrderRowViewModel>().FirstOrDefaultAsync();
+                
+            }
+            else
+            {
+                return await _repo.Get<OrderRow>().ProjectTo<OrderRowViewModel>().FirstOrDefaultAsync();
+            }
         }
 
         public async Task<RouteList> GetRouteListFromOrderRowId(int id, string RegistrationNumber)
@@ -126,13 +162,13 @@ namespace RouteLister2.Models
             orderRow.OrderId = targetOrderId;
             await _repo.UpdateAsync(orderRow);
         }
-        public async Task CreateOrderForNewOrderRow(int Id, string FirstName, string LastName, string City,
-            string PostNr, string Adress, string PhoneOne, string PhoneTwo, string Distributor, string ArticleName,
-            string CollieId, string Country, int ArticleAmount, string DeliveryType, DateTime? DeliveryDate,
-            IEnumerable<SelectListItem> RegNrDropDown, string RegistrationNumber)
-        {
+        //public async Task CreateOrderForNewOrderRow(int Id, string FirstName, string LastName, string City,
+        //    string PostNr, string Adress, string PhoneOne, string PhoneTwo, string Distributor, string ArticleName,
+        //    string CollieId, string Country, int ArticleAmount, string DeliveryType, DateTime? DeliveryDate,
+        //    IEnumerable<SelectListItem> RegNrDropDown, string RegistrationNumber)
+        //{
 
-        }
+        //}
 
         public async Task<RouteList> CreateNewRouteList(string RegistrationNumber, string CollieId, int RowNumberId)
         {
@@ -262,9 +298,19 @@ namespace RouteLister2.Models
 
             return await query.ToListAsync();
         }
-        public async Task<RouteListViewModel> GetRouteListViewModelByRegistrationNumber(string RegistrationNumber)
+        /// <summary>
+        /// Gets a drivers assigned routelist for the day. uses assignee date for now.
+        /// 
+        /// </summary>
+        /// <param name="RegistrationNumber"></param>
+        /// <returns></returns>
+        public async Task<RouteListViewModel> GetDriversRouteListForToday(string RegistrationNumber)
         {
-            var result = _repo.Get<RouteList>(x => x.ApplicationUser.RegistrationNumber == RegistrationNumber, null, x => x.ApplicationUser, x => x.Orders).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
+            var result = _repo.Get<RouteList>(
+                x => x.ApplicationUser.RegistrationNumber == RegistrationNumber && 
+                x.Assigned == DateTime.Today.Date, null, x => x.ApplicationUser, x => x.Orders)
+                .ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
+
             return await result.FirstOrDefaultAsync();
         }
 
@@ -276,7 +322,7 @@ namespace RouteLister2.Models
             return result;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetRegistrationNumberDropDown(string ApplicationUserId)
+        public async Task<IEnumerable<SelectListItem>> GetRegistrationNumberDropDown(string ApplicationUserId = null, string RegistrationNumber = null)
         {
             var result = _repo.Get<ApplicationUser>(null, null, null);
             if (string.IsNullOrEmpty(ApplicationUserId))
@@ -307,21 +353,18 @@ namespace RouteLister2.Models
 
             //var test = await _repo.GetAsync<ApplicationUser>(filter:x => x.UserName == (name ?? null) || x.Id== (id ?? null), included:null);
             ApplicationUser user = null;
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(id))
+
+            if (!string.IsNullOrEmpty(name))
             {
-                return null;
-            }
-            else if (!string.IsNullOrEmpty(name))
-            {
-                user = await _repo.GetAsync<ApplicationUser>(filter: x => x.UserName == name, included: null);
+                user = await _repo.Get<ApplicationUser>(filter: x => x.UserName == name, included: x => x.RouteLists).FirstOrDefaultAsync();
             }
             else if (!string.IsNullOrEmpty(id))
             {
-                user = await _repo.GetAsync<ApplicationUser>(id);
+                user = await _repo.Get<ApplicationUser>(x => x.Id == id, null, included: x => x.RouteLists).FirstOrDefaultAsync();
             }
             else if (!string.IsNullOrEmpty(regNr))
             {
-                user = (await _repo.GetAsync<ApplicationUser>(x => x.RegistrationNumber == regNr, null, null)).FirstOrDefault();
+                user = await _repo.Get<ApplicationUser>(x => x.RegistrationNumber == regNr, null, included: x => x.RouteLists).FirstOrDefaultAsync();
             }
             return user;
         }

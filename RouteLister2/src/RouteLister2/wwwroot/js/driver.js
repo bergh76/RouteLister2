@@ -21,6 +21,15 @@ var routeLister = (function () {
     //Request signalr server to change status on a order
     var _connectionId;
 
+    var Message = (function () {
+        var showAlert = function (name,message) {
+            alert(name+": "+message);
+        }
+
+        return {
+            alert :  showAlert
+        }
+    })();
     var setConnectionId = function (connectionId) {
             routeLister._connectionId = connectionId;
             routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);   
@@ -94,6 +103,7 @@ var routeLister = (function () {
     };
     var orderRow = (function (rowId) {
         var Id = rowId;
+        //Default
         var IdPrefix = "OrderRowId";
         //Adds listeners to toggleable items
         var addListener = function (listener) {
@@ -163,38 +173,33 @@ var routeLister = (function () {
     })();
     var order = (function () {
         var orderContainerId = "#orderContainer";
-        //Request signalr server to change status on a order
-        var requestOrderRowStatusChange = function (orderRowId) {
+        var getUrlAction;
 
-        };
-        //Clientside change
-        var changeClientSideView = function (orderRowStatusId) {
-
-        };
-
-        var addClientOrder = function (urlAction) {
+        var addClientOrder = function (url) {
             $.ajax({
                 type: "GET",
-                url: urlAction
+                url: url
+
                
             }).done(function (data) {
                 $(orderContainerId).append(data);
+                alert("added order!");
                 //Adding listener to added OrderRows
-                $(data).on('click', '.slidah', function (e) {
-                    routeLister.orderRow.server(event);
-                });
+                //**Not needed probably since on click is global on the slider class is global
+                //$(data).on('click', '.slidah', function (e) {
+                //    routeLister.orderRow.server(event);
+                //});
 
             }).fail(function (data) {
+                //Show errormessage
 
             }).always(function (date) {
-
+                //
             });
-            $("#orderContainer").append()
         };
         return {
-            server: requestOrderRowStatusChange,
-            client: changeClientSideView,
-            add : addClientOrder
+            add: addClientOrder,
+            getUrl: getUrlAction
         };
     })();
 
@@ -211,7 +216,8 @@ var routeLister = (function () {
         setConnectionStatus: setConnectionStatus,
         setConnectionId: setConnectionId,
         _connectionId : _connectionId,
-        tryingToReconnect: tryingToReconnect
+        tryingToReconnect: tryingToReconnect,
+        message : Message
 
     };
 
@@ -281,8 +287,12 @@ signalRClient.client.newRouteListAdded = function () {
     routeLister.routeList.refresh();
 };
 
-signalRClient.client.AddedOrder = function () {
-    routeLister.order.add();
+signalRClient.client.addedOrder = function (id,url) {
+    routeLister.order.add(id,url);
+};
+
+signalRClient.client.message = function (message) {
+    routeLister.message.alert(message);
 };
 
 

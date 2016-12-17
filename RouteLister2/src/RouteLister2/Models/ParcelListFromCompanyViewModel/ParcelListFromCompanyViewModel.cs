@@ -9,7 +9,8 @@ namespace RouteLister2.Models.ParcelListFromCompanyViewModel
 {
     public class ParcelListFromCompanyViewModel
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public int OrderRowId { get; set; }
         [Display(Name = "Förnamn")]
         public string FirstName { get; set; }
         [Display(Name = "Efternamn")]

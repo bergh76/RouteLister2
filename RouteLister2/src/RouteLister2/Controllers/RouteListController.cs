@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,37 +22,43 @@ namespace RouteLister2.Controllers
     {
         private IConnectionManager _connectionManager;
         private SignalRBusinessLayer _businessLayer;
+        private ConnectionMapping<string> _mapping;
 
         public RouteListController(
-            IConnectionManager connectionManager,
+            [FromServices] IConnectionManager connectionManager,
             [FromServices] SignalRBusinessLayer businessLayer
+            
             )
         {
 
             _connectionManager = connectionManager;
             _businessLayer = businessLayer;
-        }
 
-        public async Task<IActionResult> Index(string id)
+        }
+        /// <summary>
+        /// Getting todays routelist for driver
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-#if DEBUG
-            id = "aaa111";
-#endif
-            if (!string.IsNullOrEmpty(id)) {
-                var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
+            
+            string regNr = (await _businessLayer.GetUser(name: HttpContext.User.Identity.Name)).RegistrationNumber;
+            if (!string.IsNullOrEmpty(regNr)) {
+                var viewModel = await _businessLayer.GetDriversRouteListForToday(regNr);
                 return View(viewModel);
             }
             return View();
      
         }
-        public async Task<IActionResult> IndexPartial(string id)
+        public async Task<IActionResult> IndexPartial()
         {
-#if DEBUG
-            id = "aaa111";
-#endif
-            if (!string.IsNullOrEmpty(id))
+            string regNr = (await _businessLayer.GetUser(name: HttpContext.User.Identity.Name)).RegistrationNumber;
+
+
+            if (!string.IsNullOrEmpty(regNr))
             {
-                var viewModel = await _businessLayer.GetRouteListViewModelByRegistrationNumber(id);
+                var viewModel = await _businessLayer.GetDriversRouteListForToday(regNr);
                 return View(viewModel);
             }
             return View();
@@ -67,16 +74,30 @@ namespace RouteLister2.Controllers
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> Order(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return NotFound();
+            }
+
+            var model = await _businessLayer.GetOrderRowViewModel(id.Value);
+
+            return PartialView(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(RouteList model)
         {
-            await SetUserDropDown();
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+            model.Assigned = DateTime.Now;
             await _businessLayer.Insert(model);
+            await SetUserDropDown();
             return RedirectToAction("Edit",new { id=model.Id });
         }
         [HttpGet]
@@ -110,13 +131,8 @@ namespace RouteLister2.Controllers
         }
         private async Task SetUserDropDown(string id = null)
         {
-            if (string.IsNullOrEmpty(id)) {
-                ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
-            }
-            else
-            {
-                ViewBag.VehicleDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
-            }
+      
+                ViewBag.UserDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
         }
 
 

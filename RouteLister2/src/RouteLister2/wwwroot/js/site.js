@@ -108,11 +108,22 @@ var item = function (IdRef, urlAction, cref) {
 
 //Remove a specific viewmodel
 item.prototype.remove = function (idToRemove) {
+    var current = this;
     //remove from server
     //....
-    //remove from interface
+    //$.ajax({
+    //    type: "GET",
+    //    url: current.url + "/Delete/" + idToUpdate
+    //}).done(function (data) {
+    //    $("#" + current.thisRef + idToUpdate).html(data);
+    //}).fail(function (data) {
+
+    //}).always(function (data) {
+
+    //});
+    //remove from client-gui
     //...
-    $(this.thisRef + idToRemove).remove();
+    $(current.thisRef + idToRemove).remove();
     
 
 
@@ -120,13 +131,12 @@ item.prototype.remove = function (idToRemove) {
 //Update a specfic viewModel(overwrite it)
 item.prototype.update = function (idToUpdate) {
     //This becomes a reference in ajax so can't use ajax variables in a ajax call
-    var refi = this.thisRef;
-    var burl = this.url;
+    var current = this;
     $.ajax({
         type: "GET",
-        url: burl + "/Edit/" + idToUpdate
+        url: current.url + "/Edit/" + idToUpdate
     }).done(function (data) {
-        $("#" + refi + idToUpdate).html(data);
+        $("#" + current.thisRef + idToUpdate).html(data);
     }).fail(function (data) {
 
     }).always(function (data) {
@@ -135,10 +145,11 @@ item.prototype.update = function (idToUpdate) {
 };
 //Get a viewModel
 item.prototype.get = function (idToGet) {
-    var burl = this.url;
+
+    var current = this;
     $.ajax({
         type: "GET",
-        url: burl + "/" + idToGet
+        url: current.url + "/" + idToGet
 
     }).done(function (data) {
         return data;
@@ -149,11 +160,10 @@ item.prototype.get = function (idToGet) {
     });
 };
 item.prototype.add = function (idToGet) {
-    var cont = this.containerRef;
-    var burl = this.url;
+    var current = this;
     $.ajax({
         type: "GET",
-        url: burl + "/" + idToGet
+        url: current.url + "/" + idToGet
 
     }).done(function (data) {
         $(cont).append(data);

@@ -13,13 +13,17 @@ using System.Threading.Tasks;
 namespace RouteLister2.Services
 {
     [Authorize]
-    public class DriverHub : Hub<IDriverHub>
+    public class DriverHub : Hub
     {
-        private SignalRBusinessLayer _signalRBusinessLayer;
 
-        public DriverHub([FromServices] SignalRBusinessLayer signalRBusinessLayer)
+        private SignalRBusinessLayer _signalRBusinessLayer;
+        private ConnectionMapping<string> _mappings;
+
+        public DriverHub([FromServices] SignalRBusinessLayer signalRBusinessLayer,
+            [FromServices] ConnectionMapping<string> mappings)
         {
             _signalRBusinessLayer = signalRBusinessLayer;
+            _mappings = mappings;
         }
 
 
@@ -63,13 +67,16 @@ namespace RouteLister2.Services
         {
             //Set client id
             await Clients.Client(Context.ConnectionId).SetConnectionId(Context.ConnectionId);
-            await Groups.Add(Context.ConnectionId, Context.User.Identity.Name);
+            var name = Context.User.Identity.Name;
+            //Map client to its group(use group as name)
+            _mappings.Add(name, Context.ConnectionId);
         }
         private async Task RemoveClient()
         {
 
             await Clients.Client(Context.ConnectionId).SetConnectionId(null);
-            await Groups.Remove(Context.ConnectionId, Context.User.Identity.Name);
+            var name = Context.User.Identity.Name;
+            _mappings.Remove(name, Context.ConnectionId);
         }
 
 
@@ -92,7 +99,11 @@ namespace RouteLister2.Services
             {
                 //TODO error handling
             }
-            
+        }
+
+        public async Task MessageSomeone(string name, string message)
+        {
+           
         }
     }
 }
