@@ -32,35 +32,35 @@ namespace RouteLister2.Models
             _context = context;
         }
 
-        public async Task GetCoordinates(ApplicationDbContext context)
-        {
+        //public async Task GetCoordinates(ApplicationDbContext context)
+        //{
 
-            string _address = "";
-            var address = _context.Address.ToList();
-            foreach (var item in address)
-            {
-                _address = item.Street + "+" + item.PostNumber + "+" + item.City;
-                string url = "http://maps.google.com/maps/api/geocode/xml?address=" + _address + "&sensor=false";
+        //    string _address = "";
+        //    var address = _context.Address.ToList();
+        //    foreach (var item in address)
+        //    {
+        //        _address = item.Street + "+" + item.PostNumber + "+" + item.City;
+        //        string url = "http://maps.google.com/maps/api/geocode/xml?address=" + _address + "&sensor=false";
 
-                //ingen serialisering här. Hämta datat och returna som long och lat
-                ApiDeserializer dserial = new ApiDeserializer();
-                var result = await dserial.GetPositionCoordinats(url);
-                //_coordinatsList = result;
-                if (_coordinatsList.Count() != 0)
-                {
-                    for (int i = 0; i < _coordinatsList.Count(); i++)
-                    {
-                        Coordinat coordinats = _context.Coordinats.SingleOrDefault(x => x.AddressId == item.Id);
-                        if (coordinats != null)
-                        {
-                            coordinats = AddCoordinatsToDb(i, _context);
-                            context.Add(coordinats);
-                        }
-                    }
-                }
-                await context.SaveChangesAsync();
-            }
-        }
+        //        //ingen serialisering här. Hämta datat och returna som long och lat
+        //        ApiDeserializer dserial = new ApiDeserializer();
+        //        var result = await dserial.GetPositionCoordinats(url);
+        //        //_coordinatsList = result;
+        //        if (_coordinatsList.Count() != 0)
+        //        {
+        //            for (int i = 0; i < _coordinatsList.Count(); i++)
+        //            {
+        //                Coordinat coordinats = _context.Coordinats.SingleOrDefault(x => x.AddressId == item.Id);
+        //                if (coordinats != null)
+        //                {
+        //                    coordinats = AddCoordinatsToDb(i, _context);
+        //                    context.Add(coordinats);
+        //                }
+        //            }
+        //        }
+        //        await context.SaveChangesAsync();
+        //    }
+        //}
 
         private Coordinat AddCoordinatsToDb(int i, ApplicationDbContext context)
         {
