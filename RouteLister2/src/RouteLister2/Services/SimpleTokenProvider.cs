@@ -106,18 +106,10 @@ namespace RouteLister2.Services
                 var user = await _userManager.FindByNameAsync(username);
                 if (user != null)
                 {
-                    //TODO add lockout
-                    var result = await _signInManager.PasswordSignInAsync(user,password,false,false);
-                    if (result.Succeeded)
-                    {
-                        return new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { });
-                    }
-                    //TODO
-                    else if (result.IsLockedOut) { }
-                    else if (result.IsNotAllowed) { }
-                    else if (result.RequiresTwoFactor) { }
-
+                    return new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { });
                 }
+
+                // Credentials are invalid, or account doesn't exist
                 return null;
             }
         }
