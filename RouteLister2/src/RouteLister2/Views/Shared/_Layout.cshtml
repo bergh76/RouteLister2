@@ -21,7 +21,7 @@
         <link href="~/css/custom.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
-    <environment names="Staging,Production">
+    @*<environment names="Staging,Production">
         <!-- DATATABLE CSS-->
         <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
         <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
@@ -40,7 +40,7 @@
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    </environment>
+    </environment>*@
 
 </head>
 <body>
@@ -79,7 +79,6 @@
     <div class="container body-content">
         @RenderBody()
 
-        <hr />
         <footer>
             <p>&copy; 2016 - RouteLister</p>
         </footer>
@@ -97,7 +96,7 @@
         <!--JQUERY -->
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <!-- DATATABELS -->
+        @*<!-- DATATABELS -->
         <script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
         <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
         <script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
@@ -110,7 +109,7 @@
         <script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
         <script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
         <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
-        <!-- END DATATABEL-BUTTONS -->
+        <!-- END DATATABEL-BUTTONS -->*@
     </environment>
     <environment names="Staging,Production">
 

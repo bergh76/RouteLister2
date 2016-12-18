@@ -63,15 +63,18 @@ namespace RouteLister2.Controllers
         }
 
         //[HttpPost]
-        public IActionResult MapRoute(string name, string address, string postnr, string city, float latitude, float longitude)
+        public IActionResult MapRoute(string name, string address, string postnr, string city)
         {
-            string pos = "Strömgatan 4 b, Kalmar"; //string.Format("{0}","{1}", latitude, longitude);
-            string result = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E"
-                + "&origin=" + pos
-                + "&destination=" + address + "," + postnr + " " + city + " ,Sverige";
-                //+ "&zoom=18";
-            var rmodel = new MapRouteViewModel(result);
+            //string pos = "Strömgatan 4 b, Kalmar"; //string.Format("{0}","{1}", latitude, longitude);
+            //string result = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E"
+            //    + "&origin=" + pos
+            //    + "&destination=" + address + "," + postnr + " " + city + " ,Sverige";
+            //    //+ "&zoom=18";
+            //string position = ;
+            string destination = address + "," + postnr + " " + city + " ,Sverige";
+            var rmodel = new MapRouteViewModel(destination);
             return View(rmodel);
+            //return View();
         }
         public async Task<IActionResult> List()
         {

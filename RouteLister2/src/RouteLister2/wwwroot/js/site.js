@@ -95,58 +95,191 @@
 })();
 
 
+//***** SIDENAV JQUERY *****//
+function openNav() {
+    document.getElementById("mySidenav").style.width = "400px";
+}
 
-//function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-//    var start = document.getElementById('start').value;
-//    var end = document.getElementById('end').value;
-//    directionsService.route({
-//        origin: start,
-//        destination: end,
-//        travelMode: 'DRIVING'
-//    }, function (response, status) {
-//        if (status === 'OK') {
-//            directionsDisplay.setDirections(response);
-//        } else {
-//            window.alert('Directions request failed due to ' + status);
-//        }
-//    });
-//}
-(function () {
-    //var key = "AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E";
-    if (!!navigator.geolocation) {
-        var map;
-        var latitude;
-        var longitude;
-        var mapOptions = {
-            //zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROA
-        };
-
-        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-        //navigator.geolocation.watchPosition(
-        //    (function (position) {
-
-            navigator.geolocation.getCurrentPosition(function (position) {
-
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+// This example requires the Places library. Include the libraries=places
+// parameter when you first load the API. For example:
+// <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places">
+var map;
+var directionsDisplay;
+var directionsService;
+function initMap() {
+     directionsDisplay = new google.maps.DirectionsRenderer;
+     directionsService = new google.maps.DirectionsService;
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
             var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: geolocate,
-                latitude: $('#latitude').val(position.coords.latitude),
-                longitude: $('#longitude').val(position.coords.longitude),
-                content:
-                    '<span><i class="fa fa-pin"></i></span>' +
-                    '<span>Latitude: ' + position.coords.latitude + '</span></br>' +
-                    '<span>Longitude: ' + position.coords.longitude + '</span>'
+            //console.log(geolocate);
+            map = new google.maps.Map(document.getElementById('map_canvas'), {
+                mapTypeControl: true,
+                //position: geolocate, /* must be outcomment otherwise no data shows on map*/
+                center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                zoom: 13
             });
-            map.setCenter(geolocate);
-            
-            })
-        ;
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var geocoder = new google.maps.Geocoder;
+            var infowindow = new google.maps.InfoWindow;
+            //console.log("Kartdata:\n", map);
+            new geocodeLatLng(geocoder, map, infowindow, latitude, longitude);
+           
+        })
 
-    } else {
-        document.getElementById('map_canvas').innerHTML = 'No Geolocation Support.';
+}
+
+
+function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
+    var placeId;
+    var address;
+    var input = latitude + "," + longitude;
+    //console.log("Input value latitude, longitude: n\{0}", input)
+    var latlngStr = input.split(',', 2);
+    var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+    geocoder.geocode({ 'location': latlng }, function (results, status) {
+        if (status === 'OK') {
+            if (results[0]) {
+                map.setZoom(11);
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map
+                });
+                // sets positioninfo to map NOT needed becaus data sets to textbox value
+                //infowindow.setContent(results[0].formatted_address);
+                //infowindow.open(map, marker);
+            } else {
+                window.alert('No results found');
+            }
+        } else {
+            window.alert('Geocoder failed due to: ' + status);
+        }
+        placeId = results[0].place_id;
+        address = results[0].formatted_address
+        //console.log(placeId);
+        //console.log(address);
+        //console.log("Adressdata:", marker.position);
+        //console.log(results[0])
+
+        // sets actual position to textboxvalue do not move otherwiser no data gets to function
+        document.getElementById('origin-input').value = address;
+        new AutocompleteDirectionsHandler(map, placeId, address);
+    });
+
+}
+
+//  @*@constructor*@ //
+function AutocompleteDirectionsHandler(map, placeId, address) {
+    this.map = map;
+    this.originPlaceId = null; // set placeid for actual position
+    this.destinationPlaceId = null;
+    this.travelMode = 'DRIVING';
+    var originInput = document.getElementById('origin-input');
+    var destinationInput = document.getElementById('destination-input');
+    var modeSelector = document.getElementById('mode-selector');
+    this.directionsService = new google.maps.DirectionsService;
+    this.directionsDisplay = new google.maps.DirectionsRenderer;
+    this.directionsDisplay.setMap(map);
+
+    var originAutocomplete = new google.maps.places.Autocomplete(
+        originInput, { placeIdOnly: true });
+
+    var destinationAutocomplete = new google.maps.places.Autocomplete(
+        destinationInput, { placeIdOnly: true });
+
+    this.setupClickListener('changemode-walking', 'WALKING');
+    this.setupClickListener('changemode-transit', 'TRANSIT');
+    this.setupClickListener('changemode-driving', 'DRIVING');
+
+    this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+    this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+    this.map.controls[google.maps.ControlPosition.LEFT].push(modeSelector);
+
+    new calculateAndDisplayRoute();
+ 
+
+}
+
+
+// Sets a listener on a radio button to change the filter type on Places
+// Autocomplete.
+AutocompleteDirectionsHandler.prototype.setupClickListener = function (id, mode) {
+    var radioButton = document.getElementById(id);
+    var me = this;
+    radioButton.addEventListener('click', function () {
+        me.travelMode = mode;
+        me.route();
+    });
+};
+
+AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (autocomplete, mode) {
+    var me = this;
+    autocomplete.bindTo('bounds', this.map);
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        if (!place.place_id) {
+            window.alert("Please select an option from the dropdown list.");
+            return;
+        }
+        if (mode === 'ORIG') {
+            me.originPlaceId = place.place_id;
+        } else {
+            me.destinationPlaceId = place.place_id;
+        }
+        me.route();
+    });
+
+};
+
+AutocompleteDirectionsHandler.prototype.route = function () {
+    if (!this.originPlaceId || !this.destinationPlaceId) {
+        return;
     }
+    var me = this;
 
-})();
+    this.directionsService.route({
+        origin: { 'placeId': this.originPlaceId },
+        destination: { 'placeId': this.destinationPlaceId },
+        travelMode: this.travelMode
+    }, function (response, status) {
+        if (status === 'OK') {
+            me.directionsDisplay.setDirections(response);
+        } else {
+            window.alert('Directions request failed due to ' + status);
+        }
+    });
+};
+
+function calculateAndDisplayRoute() {
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById('right-panel'));   
+    // SETS UP THE TRIPDETAIL IN RIGHT-PANEL    
+    var onChangeHandler = function () {
+        calculateAndDisplayRoute(directionsService, directionsDisplay);
+    };
+    document.getElementById('origin-input').addEventListener('change', onChangeHandler);
+    document.getElementById('destination-input').addEventListener('change', onChangeHandler);
+    var start = document.getElementById('origin-input').value;
+    var end = document.getElementById('destination-input').value;
+    directionsService.route({
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING'
+    },
+    function (response, status) {
+        if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+        } else {
+            window.alert('Directions request failed due to ' + status);
+        }
+    });
+   
+
+}

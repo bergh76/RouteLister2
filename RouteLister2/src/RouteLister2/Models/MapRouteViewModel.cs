@@ -8,10 +8,15 @@ namespace RouteLister2.Models
     public class MapRouteViewModel
     {
         public string Url { get; set; }
+        public string Position { get; set; }
+        public string Destination { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     
-        public MapRouteViewModel(string url)
+        public MapRouteViewModel(string destination)
         {
-            Url = url;
+            Destination = destination;
+            //Url = url;
         }
     }
 }

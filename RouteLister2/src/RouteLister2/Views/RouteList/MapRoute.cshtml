@@ -1,5 +1,21 @@
-﻿   @model MapRouteViewModel
-<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E"></script>
-@*https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder*@
-<iframe id="map_canvas" class="img-responsive" frameborder="0" style="border:0" src="@Model.Url"></iframe>
-@*<div id="map_canvas"></div>*@
+﻿@model MapRouteViewModel
+
+<input id="origin-input" class="controls" type="text" value="" placeholder="Enter an origin location" readonly>
+
+<input id="destination-input" class="controls" type="text" value="@Model.Destination" placeholder="Enter a destination location">
+<input hidden type="radio" name="type" id="changemode-walking">
+<input hidden type="radio" name="type" id="changemode-transit">
+<input hidden type="radio" name="type" id="changemode-driving" checked="checked">
+
+   
+
+<div id="map_canvas" onclick="closeNav()"></div>
+    <span id="mySidenav" class="sidenav">
+        <span id="right-panel"></span>
+    </span>
+
+    <span onclick="openNav()">
+        <span class="fa fa-info-circle fa-2x pull-right" style="padding-top:10px; cursor: pointer"></span>
+    </span>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places&callback=initMap"></script>
