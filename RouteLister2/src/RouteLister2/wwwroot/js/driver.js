@@ -22,17 +22,17 @@ var routeLister = (function () {
     var _connectionId;
 
     var Message = (function () {
-        var showAlert = function (name,message) {
-            alert(name+": "+message);
+        var showAlert = function (name, message) {
+            alert(name + ": " + message);
         }
 
         return {
-            alert :  showAlert
+            alert: showAlert
         }
     })();
     var setConnectionId = function (connectionId) {
-            routeLister._connectionId = connectionId;
-            routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);   
+        routeLister._connectionId = connectionId;
+        routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);
     };
     var setConnectionStatus = (function () {
         var changeStatus = function (status) {
@@ -41,7 +41,7 @@ var routeLister = (function () {
             var clientGraphicsStatus = true;
             var onlineCircle = $(".online");
             var offlineCircle = $(".offline-dim");
-            if (onlineCircle.length === 0 ) {
+            if (onlineCircle.length === 0) {
                 onlineCircle = $(".online-dim");
                 clientGraphicsStatus = false;
             }
@@ -71,17 +71,17 @@ var routeLister = (function () {
             }
 
         };
-        var disconnectFromServer = function(){
+        var disconnectFromServer = function () {
             routeLister.client(false);
             signalRClient.setConnectionStatus(false);
         };
         return {
-            client : changeStatus,
-            server : disconnectFromServer
+            client: changeStatus,
+            server: disconnectFromServer
         };
     })();
- 
-    
+
+
     var routeList = (function (routeListId) {
         //Since its one routelist per driver, reloading whole page
         var IdPrefix;
@@ -92,7 +92,7 @@ var routeLister = (function () {
         });
         return {
             refresh: reload,
-            IdPrefix : IdPrefix
+            IdPrefix: IdPrefix
         };
     })();
     //Regex to get id from a reference.
@@ -109,6 +109,7 @@ var routeLister = (function () {
         var addListener = function (listener) {
             checkbox.next('label').addListener(listener);
         };
+
         var NameId;
         var setNameId = function (name) {
             NameId = name;
@@ -168,11 +169,14 @@ var routeLister = (function () {
             server: requestOrderRowStatusChange,
             client: changeClientSideView,
             setNameId: setNameId,
-            IdPrefix : IdPrefix
+            IdPrefix: IdPrefix
         };
     })();
     var order = (function () {
+
+        var IdPrefix = "OrderId";
         var orderContainerId = "#orderContainer";
+        var listIndexClass = IdPrefix + "ListIndex"
         var getUrlAction;
 
         var addClientOrder = function (url) {
@@ -180,10 +184,13 @@ var routeLister = (function () {
                 type: "GET",
                 url: url
 
-               
+
             }).done(function (data) {
                 $(orderContainerId).append(data);
-                alert("added order!");
+                $("." + listIndexClass).each(function (index, element) {
+                    $(element).text(index + 1 + ".");
+                });
+                console.log("addedOrder")
                 //Adding listener to added OrderRows
                 //**Not needed probably since on click is global on the slider class is global
                 //$(data).on('click', '.slidah', function (e) {
@@ -197,14 +204,22 @@ var routeLister = (function () {
                 //
             });
         };
+        var removeClientOrder = function (id) {
+            $("#" + IdPrefix + id).hide("slow").done(
+                function () {
+                    $("#" + IdPrefix + id).remove();
+                }
+            );
+        }
         return {
             add: addClientOrder,
-            getUrl: getUrlAction
+            getUrl: getUrlAction,
+            remove: removeClientOrder
         };
     })();
 
 
-  
+
     return {
         stop: stopClient,
         token: idPrefix,
@@ -215,9 +230,9 @@ var routeLister = (function () {
         getId: getValueFromIdRef,
         setConnectionStatus: setConnectionStatus,
         setConnectionId: setConnectionId,
-        _connectionId : _connectionId,
+        _connectionId: _connectionId,
         tryingToReconnect: tryingToReconnect,
-        message : Message
+        message: Message
 
     };
 
@@ -287,8 +302,11 @@ signalRClient.client.newRouteListAdded = function () {
     routeLister.routeList.refresh();
 };
 
-signalRClient.client.addedOrder = function (id,url) {
-    routeLister.order.add(id,url);
+signalRClient.client.addedOrder = function (id, url) {
+    routeLister.order.add(id, url);
+};
+signalRClient.client.removedOrder = function (id, url) {
+    routeLister.order.remove(id);
 };
 
 signalRClient.client.message = function (message) {

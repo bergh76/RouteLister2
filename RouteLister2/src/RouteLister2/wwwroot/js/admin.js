@@ -26,27 +26,10 @@ var admin = (function () {
                 data: form.serialize(),
                 success: function (data) {
                     $("." + "row" + OrderId).find(".dropdown").each(function (index, element) {
-                        console.log(element);
-                        console.log($(element));
+                        //console.log(element);
+                        //console.log($(element));
                         $(element).val(valz).change();
                     });
-
-                    //$("#" + "row" + partOfId).replaceWith(data);
-                    ////Adding listener again to changed row
-                    //$("#" + "row" + partOfId).find(".changeRegNrButton").click(function (event) {
-                    //    admin.orderRow.setRegistrationNumber(event, $(this));
-                    //});
-                    ////Change all siblings with same id
-                    //var testing = $(".row" + OrderId);
-                    //if (event != undefined && event !=null ) {
-                    //    $(".row" + OrderId).each(function (index, element) {
-                    //        var replacer = $("#row" + partOfId).find(".dropdown option:selected").val();
-                    //        var testu = $(element).find(".dropdown select").text(replacer).change();
-                    //        var testier = $(element).find(".dropdown select").val(replacer).change();
-                    //        console.log($(element));
-                    //    });
-                    //}
-
                 },
                 error: function (data) {
                     console.log("something went wong");

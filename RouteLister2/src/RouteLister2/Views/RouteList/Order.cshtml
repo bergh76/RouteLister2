@@ -4,7 +4,7 @@
     <div hidden id="@Html.IdFor(x => x.OrderId)">@Model.OrderId</div>
     <div class="panel-heading collapsed col-md-12">
         <div class="col-lg-8 pull-left">
-            <p class="h5 text-left">@{@ViewBag.OrderRowNumber}. @Model.Description</p>
+            <p class="OrderIdListIndex listIndex h5 text-left">@{@ViewBag.OrderRowNumber}. </p><p class="h5 text-left"> @Model.Description</p>
         </div>
         <div class="col-lg-4">
             <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse@{@Model.OrderId}" aria-expanded="false" aria-controls="collapseTwo">

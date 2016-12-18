@@ -82,7 +82,8 @@ namespace RouteLister2.Controllers
                 return NotFound();
             }
 
-            var model = await _businessLayer.GetOrderRowViewModel(id.Value);
+            //var model = await _businessLayer.GetOrderRowViewModel(id.Value);
+            var model = await _businessLayer.GetOrderViewModel(id.Value);
 
             return PartialView(model);
         }
@@ -95,7 +96,6 @@ namespace RouteLister2.Controllers
             {
                 return View(model);
             }
-            model.Assigned = DateTime.Now;
             await _businessLayer.Insert(model);
             await SetUserDropDown();
             return RedirectToAction("Edit",new { id=model.Id });
@@ -132,7 +132,7 @@ namespace RouteLister2.Controllers
         private async Task SetUserDropDown(string id = null)
         {
       
-                ViewBag.UserDropDown = await _businessLayer.GetRegistrationNumberDropDown(id);
+                ViewBag.UserDropDown = await _businessLayer.GetUserRegistrationNumberDropDown(ApplicationUserId: id);
         }
 
 

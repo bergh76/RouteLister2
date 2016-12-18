@@ -104,24 +104,26 @@ namespace RouteLister2.Controllers
             if (newRouteList)
             {
                 //notify relevant driver that he has a new routeList
-                
-                var responce = await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).NewRouteListAdded();
+                await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).NewRouteListAdded();
             }
             else
             {
+                //Notify old client that he has lost a order
+                var oldClientId = await _businessLayer.GetUser(orderId: viewModel.OrderId);
+                await hubContext.Clients.Groups(new List<string>() { oldClientId.UserName }).RemovedOrder(viewModel.OrderId);
 
                 //Notify client that a new order has been placed on its routelist
-                var response = await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).AddedOrder(viewModel.OrderId,Url.Action("Order","RouteList"));
+                await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).AddedOrder(viewModel.OrderId,Url.Action("Order","RouteList"));
             }
             var clientNameToMessage = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _businessLayer.GetUser(regNr: viewModel.RegistrationNumber);
-            //Build url
-            var orderUrl = Url.Action("Order", "RouteList", viewModel.OrderId);
+            //Build url for getter
+            var orderUrl = Url.Action("Order", "RouteList", new { id=viewModel.OrderId });
             //Tells client to add order
             await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).AddedOrder(orderUrl);
-            //Send a message to all clients that a order has been added
-            await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till dig: " + user.UserName + "!: " + "lag till en order");
-            viewModel.RegNrDropDown = await _businessLayer.GetRegistrationNumberDropDown(RegistrationNumber:viewModel.RegistrationNumber);
+            //Send a message to all involved clients that a order has been added
+            await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till" + user.UserName);
+            viewModel.RegNrDropDown = await _businessLayer.GetUserRegistrationNumberDropDown(RegistrationNumber:viewModel.RegistrationNumber);
             return PartialView(viewModel);
         }
 
