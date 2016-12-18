@@ -15,6 +15,11 @@ using RouteLister2.Services;
 using AutoMapper;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.SignalR;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using RouteLister2.Services.SimpleTokenProvider;
+using Microsoft.Extensions.Options;
 
 namespace RouteLister2
 {
@@ -22,6 +27,8 @@ namespace RouteLister2
     {
         public Startup(IHostingEnvironment env)
         {
+            
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -97,6 +104,41 @@ namespace RouteLister2
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            // secretKey contains a secret passphrase only your server knows
+            //TODO change
+            var secretKey = "mysupersecret_secretkey!123";
+            //Creating signinKey
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+            //Creating token validation parameters
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                // The signing key must match!
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = signingKey,
+
+                // Validate the JWT Issuer (iss) claim
+                ValidateIssuer = true,
+                ValidIssuer = "ExampleIssuer",
+
+                // Validate the JWT Audience (aud) claim
+                ValidateAudience = true,
+                ValidAudience = "ExampleAudience",
+
+                // Validate the token expiry
+                ValidateLifetime = true,
+
+                // If you want to allow a certain amount of clock drift, set that here:
+                //TODO investigate
+                ClockSkew = TimeSpan.Zero
+            };
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                TokenValidationParameters = tokenValidationParameters
+            });
+            //Seeding user
             seedUser.SeedAdminUser();
             if (env.IsDevelopment())
             {
@@ -119,7 +161,21 @@ namespace RouteLister2
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                                name: "apiCulture",
+                                template: "api/{controller}/{id?}"
+);
             });
+            //Adding token provider
+            var options = new TokenProviderOptions
+            {
+                Audience = "ExampleAudience",
+                Issuer = "ExampleIssuer",
+                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
+            };
+            //Registering token provider middleware
+            app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
+
             app.UseWebSockets();
             app.UseSignalR();
         }

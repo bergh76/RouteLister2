@@ -320,6 +320,7 @@ namespace RouteLister2.Models
 
 
 
+
         public async Task<IEnumerable<RouteListViewModel>> GetAllRouteLists()
         {
             var result = await _repo.Get<RouteList>(null, null, x => x.ApplicationUser).ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider).ToListAsync();
