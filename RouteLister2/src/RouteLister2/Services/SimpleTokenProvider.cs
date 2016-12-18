@@ -118,14 +118,6 @@ namespace RouteLister2.Services
                     else if (result.RequiresTwoFactor) { }
 
                 }
-
-                // DON'T do this in production, obviously!
-                if (username == "default" && password == "Asdf1234*")
-                {
-                    return new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { });
-                }
-
-                // Credentials are invalid, or account doesn't exist
                 return null;
             }
         }
