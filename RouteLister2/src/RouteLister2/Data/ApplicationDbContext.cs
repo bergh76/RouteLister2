@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RouteLister2.Models;
-using static RouteLister2.Models.MapRouteGetLonLat;
 
 namespace RouteLister2.Data
 {
@@ -36,6 +35,5 @@ namespace RouteLister2.Data
         public DbSet<Parcel> Parcels { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<UserConnectionStatus> UsersConnectionStatus { get; set; }
-        public DbSet<Coordinat> Coordinats { get; set; }
     }
 }

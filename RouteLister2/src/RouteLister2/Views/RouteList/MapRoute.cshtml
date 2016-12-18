@@ -1,7 +1,6 @@
-﻿@model MapRouteViewModel
-
+﻿@model RouteLister2.Models.MapRouteViewModel.MapRouteViewModel
+@*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places&callback=initMap"></script>*@
 <input id="origin-input" class="controls" type="text" value="" placeholder="Enter an origin location" readonly>
-
 <input id="destination-input" class="controls" type="text" value="@Model.Destination" placeholder="Enter a destination location">
 <input hidden type="radio" name="type" id="changemode-walking">
 <input hidden type="radio" name="type" id="changemode-transit">
@@ -11,13 +10,12 @@
 <div id="canvas-wrap">
     <div id="map_canvas" onclick="closeNav()"></div>
     <div id="overlay">
+        <div class="loader"></div>
         <span onclick="openNav()">
-            <span class="text-info fa fa-info-circle fa-3x pull-right" style="padding-top:10px; cursor: pointer"></span>
+            <span class="fa fa-info-circle fa-3x pull-right" style="padding-top:10px; cursor: pointer"></span>
         </span>
     </div>
 </div>
 <div id="mySidenav" class="sidenav">
     <div id="right-panel"></div>
 </div>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places&callback=initMap"></script>

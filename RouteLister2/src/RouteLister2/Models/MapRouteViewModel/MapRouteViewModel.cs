@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RouteLister2.Models
+namespace RouteLister2.Models.MapRouteViewModel
 {
     public class MapRouteViewModel
     {

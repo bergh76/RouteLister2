@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using RouteLister2.Models;
+using RouteLister2.Models.MapRouteViewModel;
 using System.Threading.Tasks;
 
 namespace RouteLister2.Controllers
@@ -65,22 +66,19 @@ namespace RouteLister2.Controllers
         //[HttpPost]
         public IActionResult MapRoute(string name, string address, string postnr, string city)
         {
-            //string pos = "Strömgatan 4 b, Kalmar"; //string.Format("{0}","{1}", latitude, longitude);
-            //string result = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E"
-            //    + "&origin=" + pos
-            //    + "&destination=" + address + "," + postnr + " " + city + " ,Sverige";
-            //    //+ "&zoom=18";
-            //string position = ;
+
             string destination = address + "," + postnr + " " + city + " ,Sverige";
             var rmodel = new MapRouteViewModel(destination);
             return View(rmodel);
-            //return View();
         }
+
+
         public async Task<IActionResult> List()
         {
             var result = await _businessLayer.GetAllRouteLists();
             return View(result);
         }
+
         private async Task SetUserDropDown(string id = null)
         {
             if (string.IsNullOrEmpty(id))

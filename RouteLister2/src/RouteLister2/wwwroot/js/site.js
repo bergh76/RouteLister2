@@ -95,15 +95,27 @@
 })();
 
 
-//***** SIDENAV JQUERY *****//
+//*****/* SIDENAV JQUERY *\*********//
 function openNav() {
     document.getElementById("mySidenav").style.width = "400px";
 }
-
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
-// This example requires the Places library. Include the libraries=places
+//*****/* END SIDENAV JQUERY *\*********//
+
+
+
+//*****/* GOOGLE MAP PRELOADER *\*********//
+$(window).load(function () {
+    $(".loader").fadeOut("slow").ready;
+})
+//*****/* END GOOGLE MAP PRELOADER *\*********//
+
+
+//*****/* GOOGLE MAP *\*********//
+//
+// This requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places">
 var map;
@@ -112,25 +124,25 @@ var directionsService;
 function initMap() {
      directionsDisplay = new google.maps.DirectionsRenderer;
      directionsService = new google.maps.DirectionsService;
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-            var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            //console.log(geolocate);
-            map = new google.maps.Map(document.getElementById('map_canvas'), {
-                mapTypeControl: true,
-                //position: geolocate, /* must be outcomment otherwise no data shows on map*/
-                center: { lat: position.coords.latitude, lng: position.coords.longitude },
-                zoom: 13
-            });
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var geocoder = new google.maps.Geocoder;
-            var infowindow = new google.maps.InfoWindow;
-            //console.log("Kartdata:\n", map);
-            new geocodeLatLng(geocoder, map, infowindow, latitude, longitude);
-           
-        })
+     navigator.geolocation.watchPosition(
+         function (position) {
+             var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+             //console.log(geolocate);
+             map = new google.maps.Map(document.getElementById('map_canvas'), {
+                 mapTypeControl: true,
+                 //position: geolocate, /* must be outcomment otherwise no waypointdata shows on map*/
+                 center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                 zoom: 13
+             });
 
+             var latitude = position.coords.latitude;
+             var longitude = position.coords.longitude;
+             var geocoder = new google.maps.Geocoder;
+             var infowindow = new google.maps.InfoWindow;
+             //console.log("Kartdata:\n", map);
+
+             new geocodeLatLng(geocoder, map, infowindow, latitude, longitude);
+         })
 }
 
 
@@ -141,9 +153,12 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
     //console.log("Input value latitude, longitude: n\{0}", input)
     var latlngStr = input.split(',', 2);
     var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    geocoder.geocode({ 'location': latlng }, function (results, status) {
-        if (status === 'OK') {
-            if (results[0]) {
+    geocoder.geocode({ 'location': latlng }, function (results, status)
+    {
+        if (status === 'OK')
+        {
+            if (results[0])
+            {
                 map.setZoom(11);
                 var marker = new google.maps.Marker({
                     position: latlng,
@@ -152,10 +167,12 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
                 // sets positioninfo to map NOT needed becaus data sets to textbox value
                 //infowindow.setContent(results[0].formatted_address);
                 //infowindow.open(map, marker);
-            } else {
+            } else
+            {
                 window.alert('Destination kunde inte hittas');
             }
-        } else {
+        } else
+        {
             window.alert('Ett fel uppstod: \n. Vänligen kontrollera destinationen:' + status);
         }
         placeId = results[0].place_id;
@@ -175,7 +192,7 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
 //  @*@constructor*@ //
 function AutocompleteDirectionsHandler(map, placeId, address) {
     this.map = map;
-    this.originPlaceId = null; // set placeid for actual position
+    this.originPlaceId = null; 
     this.destinationPlaceId = null;
     this.travelMode = 'DRIVING';
     var originInput = document.getElementById('origin-input');
@@ -225,7 +242,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (au
     autocomplete.addListener('place_changed', function () {
         var place = autocomplete.getPlace();
         if (!place.place_id) {
-            window.alert("Please select an option from the dropdown list.");
+            window.alert("Du har inte valt någon adress.");
             return;
         }
         if (mode === 'ORIG') {
@@ -259,7 +276,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
 function calculateAndDisplayRoute() {
     directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById('right-panel'));   
+    directionsDisplay.setPanel(document.getElementById('right-panel'));
     // SETS UP THE TRIPDETAIL IN RIGHT-PANEL    
     var onChangeHandler = function () {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
@@ -280,6 +297,5 @@ function calculateAndDisplayRoute() {
             window.alert('Ett fel uppstod: \n. Vänligen kontrollera destinationen:' + status);
         }
     });
-   
-
 }
+//*****/* END GOOGLE MAP *\*********//

@@ -36,7 +36,7 @@ namespace RouteLister2.Models
                              UserRole = u.Roles
                                         .Where(x => x.RoleId == ur.RoleId)
                                         .Select(x => r.Name)
-                                        .ToArray(),
+                                        .ToList(),
                              
                              Phone = u.PhoneNumber
                          };

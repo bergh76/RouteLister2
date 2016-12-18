@@ -22,7 +22,6 @@ namespace RouteLister2.Services
         private IHostingEnvironment _host;
 
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
-        //public List<Coordinat> _coordinatsList { get; set; }
 
         public DataImports([FromServices] ApplicationDbContext context, IHostingEnvironment host)
         {
@@ -241,14 +240,5 @@ namespace RouteLister2.Services
                         }
             };
         }
-
-
-        // Get Coordinates 
-        // ToDo: Not working need more reseach on API to get the 
-        //public async Task GetCoordinates()
-        //{
-        //    var coord = new MapRouteGetLonLat(_context);
-        //    await coord.GetCoordinates(_context);
-        //}
     }
 }
