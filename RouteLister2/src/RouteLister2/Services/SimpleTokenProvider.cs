@@ -59,7 +59,7 @@ namespace RouteLister2.Services
             {
                 var username = context.Request.Form["username"];
                 var password = context.Request.Form["password"];
-
+                
                 var identity = await GetIdentity(username, password);
                 if (identity == null)
                 {
@@ -106,6 +106,7 @@ namespace RouteLister2.Services
                 var user = await _userManager.FindByNameAsync(username);
                 if (user != null)
                 {
+                    //Creates claimsidentity for user with Token reference principal
                     return new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { });
                 }
 

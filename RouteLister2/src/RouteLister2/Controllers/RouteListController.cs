@@ -124,11 +124,13 @@ namespace RouteLister2.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> Test2()
+        public async Task<IActionResult> AngularOrderRowLine()
         {
             ViewBag.Test = "Funkar";
-            return PartialView();
+            return View();
         }
+
+
         private async Task SetUserDropDown(string id = null)
         {
       

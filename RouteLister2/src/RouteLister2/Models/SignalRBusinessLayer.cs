@@ -121,7 +121,13 @@ namespace RouteLister2.Models
             }
             return false;
         }
-
+        public IQueryable<OrderRow> GetOrderRows(int? OrderId = null, int? Id=null)
+        {
+            var result = _repo.Get<OrderRow>();
+            result = OrderId.HasValue ? result.Where(x => x.OrderId == OrderId.Value) : result;
+            result = Id.HasValue ? result.Where(x => x.Id == Id.Value) : result;
+            return result;
+        }
 
         public async Task<OrderRowViewModel> GetOrderRowViewModel(int? id = null)
         {
@@ -216,7 +222,7 @@ namespace RouteLister2.Models
 
         public async Task<List<SelectListItem>> GetOrdersDropDown(int? id)
         {
-            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString() +x.Id, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
         }
 
         public async Task<List<SelectListItem>> GetOrderRowStatusDropDown(int? id)
@@ -312,7 +318,9 @@ namespace RouteLister2.Models
 
             var result = _repo.Get<RouteList>(
                 x => x.ApplicationUser.RegistrationNumber == RegistrationNumber && 
-                x.Assigned.HasValue,null,  x =>x.ApplicationUser)
+                x.Assigned.HasValue,
+                x=>x.OrderByDescending(y=>y.Created).ThenByDescending(y=>y.Assigned).ThenByDescending(y=>y.Orders.Count),  
+                x =>x.ApplicationUser, x=>x.Orders)
                 .ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
 
             return await result.FirstOrDefaultAsync();

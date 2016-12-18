@@ -1,0 +1,127 @@
+﻿@inject UserManager<ApplicationUser> UserManager
+@*<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.1.min.js"></script>*@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+@*<script src="~/signalr/hubs"></script>*@
+<script src="~/js/site.js"></script>
+<script src="~/js/RouteListApp.js"></script>
+<script src="~/js/orderRowFactory.js"></script>
+<script src="~/js/orderRowController.js"></script>
+<script src="~/js/routeListFactory.js"></script>
+<script src="~/js/routeListController.js"></script>
+<script>
+    @*function loadin(){
+        app.value("regnr",@{
+            var user = await UserManager.GetUserAsync(Context.User);
+            @user.RegistrationNumber
+                });
+    };*@
+</script>
+
+
+
+<div ng-app="RouteListApp">
+    <table ng-controller="orderRowController">
+        <tr ng-repeat="orderRow in orderRows">
+            <td hidden class="id">{{orderRow.orderRowId}}</td>
+            <td><h5>{{orderRow.count}}</h5></td>
+            <td><h5>{{orderRow.parcelNumber}}</h5></td>
+            <td><h5>{{orderRow.parcelName}}</h5></td>
+            <td>
+                <div class="slideThree">
+                    <input type="checkbox" id="orderrow{{orderRow.orderRowId}}" name="check2" ng-checked="{{orderRow.orderRowStatus}}" />
+                    <label for="orderrow{{orderRow.orderRowId}}"> Plockad</label>
+                </div>
+                <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+            </td>
+        </tr>
+    </table>
+
+
+    <div ng-controller="routeListController">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <span class="h3"><i class="fa fa-list-ol"></i>Utkörningslista {{routeList.title}} <span class="pull-right" id="clock"></span></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <!-- start accordion -->
+                    <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+
+
+
+                        <div class="panel" ng-repeat="order in routeList.orders">
+                            <div class="panel-heading collapsed col-md-12">
+                                <div class="col-lg-8 pull-left">
+                                    <p class="h5 text-left">{{$index+1}} {{order.description}}</p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse{{orders.id}}" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-info-circle fa-2x"></i>
+                                    </span>
+                                    <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                    <span class="btn btn-sm btn-primary"><i class="fa fa-map-o fa-2x"></i></span>
+                                    <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+                                </div>
+                            </div>
+                            <div id="collapse{{orders.id}}" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body">
+                                    <!--Customer Detail Data Start-->
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <p><h6>Namn: {{order.name}}</h6></p>
+                                            <p><h6>Address: {{order.address}}</h6> </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p><h6>PostNr: {{order.postNumber}}</h6> </p>
+                                            <p><h6>Stad: {{order.city}}</h6></p>
+                                        </div>
+                                        <div class="col-md-4" ng-repeat="phonenumber in list.order.phoneNumbers">
+                                            <p><h6><i class="fa fa-phone"></i> #{{$index+1}}: {{phonenumber}}</h6> </p>
+                                        </div>
+                                        <div class="col-md-12">
+
+                                            <h5>Leveranstyp: <strong>{{order.deliveryTypeName}}</strong></h5>
+                                        </div>
+                                    </div><!--Customer Detail Data End-->
+
+                                    <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                        <table style="width:100%" id="myTable" class="table table-striped dt-responsive dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="datatable-buttons_info">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th><h4>Antal</h4></th>
+                                                    <th><h4>KollieId</h4></th>
+                                                    <th><h4>Artikel</h4></th>
+                                                    <th><h4>Plockad</h4></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="orderrow in order.orderRows">
+                                                <tr>
+                                                    <td hidden class="id">{{orderrow.orderRowid}}</td>
+                                                    <td><h5>{{orderrow.count}}</h5></td>
+                                                    <td><h5>{{orderrow.parcelNumber}}</h5></td>
+                                                    <td><h5>{{orderrow.parcelName}}</h5></td>
+                                                    <td>
+                                                        <div class="slideThree">
+                                                            <input type="checkbox" id="orderrow{{orderrow.id}}" name="check2" ng-checked="{{orderrow.orderRowStatus}}" />
+                                                            <label for="orderrow{{orderrow.id}}"> Plockad</label>
+                                                        </div>
+                                                        <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <span class="h4 pull-right">Total antal kollie {{orders.totalCount}} st</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- end of accordion -->
+                </div>
+            </div>
+        </div>
+        <div id="loadingDiv" class="hidden"></div>
+    </div>
+</div>

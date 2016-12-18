@@ -2,6 +2,11 @@
 /// <reference path="js/admin.js" />
 /// <reference path="js/driver.js" />
 /// <reference path="js/jsunittests.js" />
+/// <reference path="js/orderrowfactory - copy.js" />
+/// <reference path="js/routedetail - copy.js" />
+/// <reference path="js/routelistapp.js" />
+/// <reference path="js/routelistfactory.js" />
+/// <reference path="js/routelistordercontroller.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />

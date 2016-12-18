@@ -6,29 +6,35 @@ using Microsoft.AspNetCore.Mvc;
 using RouteLister2.Models;
 using RouteLister2.Models.RouteListerViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using RouteLister2.Models.OrderRowViewModels;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RouteLister2.Controllers
 {
-    [Route("/api/v1/RouteList")]
-    public class ListController : Controller
+    [Route("/api/v1/orderRow")]
+    public class APIOrderRowController : Controller
     {
         private SignalRBusinessLayer _businessLayer;
+        private IMapper _mapper;
 
-        public ListController([FromServices] SignalRBusinessLayer businessLayer)
+        public APIOrderRowController(
+            [FromServices] SignalRBusinessLayer businessLayer, 
+            [FromServices] IMapper mapper)
         {
             _businessLayer = businessLayer;
+            _mapper = mapper;
         }
         // GET: api/values
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Get()
+        public async Task<JsonResult> Get()
         {
-            string regNr = (await _businessLayer.GetUser(name: HttpContext.User.Identity.Name)).RegistrationNumber;
-
-            var viewModel = await _businessLayer.GetDriversRouteListForToday(regNr);
-            return Ok(viewModel);
+            var result = _businessLayer.GetOrderRows().ProjectTo<OrderRowViewModel>(_mapper.ConfigurationProvider);
+            return Json(await result.ToListAsync());
         }
 
         // GET api/values/5
