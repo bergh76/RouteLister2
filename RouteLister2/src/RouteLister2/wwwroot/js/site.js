@@ -153,10 +153,10 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
                 //infowindow.setContent(results[0].formatted_address);
                 //infowindow.open(map, marker);
             } else {
-                window.alert('No results found');
+                window.alert('Destination kunde inte hittas');
             }
         } else {
-            window.alert('Geocoder failed due to: ' + status);
+            window.alert('Ett fel uppstod: \n. Vänligen kontrollera destinationen:' + status);
         }
         placeId = results[0].place_id;
         address = results[0].formatted_address
@@ -252,7 +252,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         if (status === 'OK') {
             me.directionsDisplay.setDirections(response);
         } else {
-            window.alert('Directions request failed due to ' + status);
+            window.alert('Ett fel uppstod: \n. Vänligen kontrollera destinationen:' + status);
         }
     });
 };
@@ -277,7 +277,7 @@ function calculateAndDisplayRoute() {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
         } else {
-            window.alert('Directions request failed due to ' + status);
+            window.alert('Ett fel uppstod: \n. Vänligen kontrollera destinationen:' + status);
         }
     });
    

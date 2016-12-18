@@ -44,7 +44,7 @@
 
 </head>
 <body>
-    <section class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -75,15 +75,15 @@
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
-    </section>
-    <section class="container body-content">
+    </div>
+    <div class="container body-content">
         @RenderBody()
         <section>
             <footer>
                 <p>&copy; 2016 - RouteLister</p>
             </footer>
         </section>
-    </section>
+    </div>
     
 
     @* testing *@
