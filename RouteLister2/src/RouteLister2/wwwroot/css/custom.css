@@ -59,7 +59,7 @@ html, body, #map_canvas {
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
-  /*margin-left: 12px;*/
+  margin-left: 12px;
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
   width: 200px;
@@ -118,9 +118,9 @@ html, body, #map_canvas {
  .sidenav {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    z-index: inherit;
+    /*z-index: 1;*/
     width: 0;
-    /*position: page;*/
+    position: absolute;
     top: 50px;
     right: -1px;
     overflow: hidden !important;
