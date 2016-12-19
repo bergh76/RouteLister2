@@ -16,8 +16,6 @@ var admin = (function () {
             var valz = yousuck.val();
             var OrderId = next.prev().find("#OrderId").val();
             //}
-            //Get id to change, lazymode here. not a good method to generate a unique id.
-
             var partOfId = referens.attr("id").replace("changeRegNrButton", "");
             var form = $("#" + "form" + partOfId);
             $.ajax({

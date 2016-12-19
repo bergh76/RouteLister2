@@ -57,8 +57,7 @@ namespace RouteLister2.Controllers
                 var result = _businessLayer.GetAll<OrderRow>().Include(x=>x.Order).Include(x=>x.Parcel).ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
                
                 List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
-                List<SelectListItem> dropDown = await _businessLayer.GetUserRegNrDropDown();
-                dropDown.Append(new SelectListItem());
+                List<SelectListItem> dropDown = await _businessLayer.GetRegistrationNrOnlyDropDown();
                 foreach (var item in outResult)
                 {
                     //Hack to set index for dropdown, haven't figured out how to map a dropdown with automapper yet or if its possible at all
@@ -123,7 +122,7 @@ namespace RouteLister2.Controllers
             await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).AddedOrder(orderUrl);
             //Send a message to all involved clients that a order has been added
             await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till" + user.UserName);
-            viewModel.RegNrDropDown = await _businessLayer.GetUserRegistrationNumberDropDown(RegistrationNumber:viewModel.RegistrationNumber);
+            viewModel.RegNrDropDown = await _businessLayer.GetApplicationUserDropDown(RegistrationNumber:viewModel.RegistrationNumber);
             return PartialView(viewModel);
         }
 

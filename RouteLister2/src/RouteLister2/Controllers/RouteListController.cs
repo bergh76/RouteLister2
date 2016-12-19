@@ -132,7 +132,7 @@ namespace RouteLister2.Controllers
         private async Task SetUserDropDown(string id = null)
         {
       
-                ViewBag.UserDropDown = await _businessLayer.GetUserRegistrationNumberDropDown(ApplicationUserId: id);
+                ViewBag.UserDropDown = await _businessLayer.GetApplicationUserDropDown(ApplicationUserId: id);
         }
 
 

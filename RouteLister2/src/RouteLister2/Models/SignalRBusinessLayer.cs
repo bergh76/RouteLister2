@@ -74,14 +74,7 @@ namespace RouteLister2.Models
             return await _repo.Get<Address>().Select(x => new SelectListItem() { Text = x.PostNumber + " " + x.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
         }
 
-        public async Task<List<SelectListItem>> GetUserRegNrDropDown(string SelectedRegnr = null)
-        {
-            if (string.IsNullOrEmpty(SelectedRegnr))
-            {
-                return await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber }).ToListAsync();
-            }
-            return await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber, Selected = x.RegistrationNumber == SelectedRegnr }).ToListAsync();
-        }
+      
 
         public async Task<OrderDetailViewModel> GetOrderViewModel(int? id = null)
         {
@@ -312,7 +305,7 @@ namespace RouteLister2.Models
 
             var result = _repo.Get<RouteList>(
                 x => x.ApplicationUser.RegistrationNumber == RegistrationNumber && 
-                x.Assigned.HasValue,null,  x =>x.ApplicationUser)
+                x.Assigned.HasValue,x=>x.OrderByDescending(y=>y.Created),  x =>x.ApplicationUser)
                 .ProjectTo<RouteListViewModel>(_mapper.ConfigurationProvider);
 
             return await result.FirstOrDefaultAsync();
@@ -326,7 +319,7 @@ namespace RouteLister2.Models
             return result;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetRegistrationNumberDropDown(string ApplicationUserId = null, string RegistrationNumber = null)
+        public async Task<IEnumerable<SelectListItem>> GetUserRegistrationNumberDropDown(string ApplicationUserId = null, string RegistrationNumber = null)
         {
             var result = _repo.Get<ApplicationUser>(null, null, null);
             List<SelectListItem> users;
@@ -342,7 +335,7 @@ namespace RouteLister2.Models
             users.Insert(0,new SelectListItem() { });
             return users;
         }
-        public async Task<IEnumerable<SelectListItem>> GetUserRegistrationNumberDropDown(string ApplicationUserId = null, string RegistrationNumber = null)
+        public async Task<IEnumerable<SelectListItem>> GetApplicationUserDropDown(string ApplicationUserId = null, string RegistrationNumber = null)
         {
             var result = _repo.Get<ApplicationUser>(null, null, null);
             List<SelectListItem> users;
@@ -357,6 +350,13 @@ namespace RouteLister2.Models
 
             users.Insert(0, new SelectListItem() { });
             return users;
+        }
+        public async Task<List<SelectListItem>> GetRegistrationNrOnlyDropDown(string SelectedRegnr = null)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem());
+            list.AddRange(await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber, Selected = x.RegistrationNumber == SelectedRegnr }).ToListAsync());
+            return list;
         }
 
 
