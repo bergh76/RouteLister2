@@ -63,6 +63,7 @@ namespace RouteLister2.Controllers
                     //Hack to set index for dropdown, haven't figured out how to map a dropdown with automapper yet or if its possible at all
                     dropDown[dropDown.IndexOf(dropDown.Where(x => x.Value == item.RegistrationNumber).SingleOrDefault())].Selected = true;
                     item.RegNrDropDown = dropDown.ToList();
+                    dropDown[dropDown.IndexOf(dropDown.Where(x => x.Value == item.RegistrationNumber).SingleOrDefault())].Selected = false;
                 }
                 return View(outResult);
             }
@@ -119,8 +120,8 @@ namespace RouteLister2.Controllers
             var orderUrl = Url.Action("Order", "RouteList", new { id=viewModel.OrderId });
             //Tells client to add order
             await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).AddedOrder(orderUrl);
-            //Send a message to all involved clients that a order has been added
-            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till" + newUser.UserName);
+            //Send a message to all involved clients that a order has been added. Should be done in added order really but hey, testing
+            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).Message(Newtonsoft.Json.JsonConvert.SerializeObject(new { userName = HttpContext.User.Identity.Name , time = DateTime.Now, text="Tillagd order" }));
             viewModel.RegNrDropDown = await _businessLayer.GetRegistrationNrOnlyDropDown(SelectedRegnr:viewModel.RegistrationNumber);
             return PartialView(viewModel);
         }

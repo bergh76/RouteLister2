@@ -363,11 +363,18 @@ namespace RouteLister2.Models
             users.Insert(0, new SelectListItem() { });
             return users;
         }
-        public async Task<List<SelectListItem>> GetRegistrationNrOnlyDropDown(string SelectedRegnr = null)
+        public async Task<List<SelectListItem>> GetRegistrationNrOnlyDropDown(string SelectedRegnr)
         {
             List<SelectListItem> list = new List<SelectListItem>();
-            list.Add(new SelectListItem());
+            list.Insert(0,new SelectListItem());
             list.AddRange(await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber, Selected = x.RegistrationNumber == SelectedRegnr }).ToListAsync());
+            return list;
+        }
+        public async Task<List<SelectListItem>> GetRegistrationNrOnlyDropDown()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Insert(0, new SelectListItem());
+            list.AddRange(await _repo.Get<ApplicationUser>().Select(x => new SelectListItem() { Text = x.RegistrationNumber, Value = x.RegistrationNumber }).ToListAsync());
             return list;
         }
 

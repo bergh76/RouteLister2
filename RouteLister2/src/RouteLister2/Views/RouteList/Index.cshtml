@@ -6,6 +6,32 @@
         <div class="x_panel">
             <div class="x_title">
                 <span class="h3"><i class="fa fa-list-ol"></i> @Model.Title <span class="pull-right" id="clock"></span></span>
+
+                <a data-toggle="modal" data-target="#exampleModal">
+
+                    <!--Needs some real data to work - JUST A MOCKUP -->
+
+                    <i class="fa fa-envelope fa-lg message-envelope animated jello"><span class="badge message-count">0</span></i>
+
+                </a>
+                <!--MODAL FOR MESSAGES-->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Send message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -42,11 +68,11 @@
             </div>
         </div>
     </div>
-                                        }
-                                        else
-                                        {
-                                            <h1>Ingen lista tilldelad ännu</h1>
-                                        }
+    }
+    else
+    {
+        <h1>Ingen lista tilldelad ännu</h1>
+    }
 
 <div id="loadingDiv" class="hidden"></div>
 @section Scripts {

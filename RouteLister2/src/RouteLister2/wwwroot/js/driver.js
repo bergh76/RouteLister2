@@ -310,8 +310,30 @@ signalRClient.client.removedOrder = function (id, url) {
 };
 
 signalRClient.client.message = function (message) {
-    routeLister.message.alert(message);
+    addPost(message);
 };
+
+//function addPostsList(posts) {
+//    $.each(posts, function (index) {
+//        var post = posts[index];
+//        addPost(post);
+//    });
+//}
+
+function addPost(post) {
+    $("#postsList").append(
+        '<div><span class="pull-left"><i class="fa fa-circle me"></i><strong>' + post.userName + '</strong><span class="text-muted">' + post.time + ' </span></span></span><br>'
+            + '<div class="message-data">'
+                + '<span class="message other-message float-right">' + post.text + '</span>'
+            + ' </div>'
+            + '<span><button class="btn btn-success btn-margin-20">OK</button></span>'
+        + '</div>'
+        );
+    $(".message-count").text(($(".message-count").text() + 1));
+}
+
+
+signalRClient.client.publishPost = addPost;
 
 
 
