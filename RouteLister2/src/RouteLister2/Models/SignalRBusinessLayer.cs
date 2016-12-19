@@ -179,27 +179,37 @@ namespace RouteLister2.Models
 
         public async Task<IEnumerable<SelectListItem>> GetContactsDropDown(int? id)
         {
-            return await _repo.Get<Contact>().Select(x => new SelectListItem() { Text = x.FirstName + " " + x.LastName, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<Contact>().Select(x => new SelectListItem() { Text = x.FirstName + " " + x.LastName, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0,new SelectListItem());
+            return result;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetOrderTypDropDown(int? id)
         {
-            return await _repo.Get<OrderType>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<OrderType>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0, new SelectListItem());
+            return result;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetRouteListDropDown(int? id)
         {
-            return await _repo.Get<RouteList>().Select(x => new SelectListItem() { Text = x.Title, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<RouteList>().Select(x => new SelectListItem() { Text = x.Title, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0, new SelectListItem());
+            return result;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetOrderStatusDropDown(int? id)
         {
-            return await _repo.Get<OrderStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<OrderStatus>().Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0, new SelectListItem());
+            return result;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetDestinationDropDown(int? id)
         {
-            return await _repo.Get<Destination>(null, null, x => x.Address, x => x.Contact).Select(x => new SelectListItem() { Text = x.Contact.FirstName + " " + x.Contact.LastName + " " + x.Address.City + " " + x.Address.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<Destination>(null, null, x => x.Address, x => x.Contact).Select(x => new SelectListItem() { Text = x.Contact.FirstName + " " + x.Contact.LastName + " " + x.Address.City + " " + x.Address.Street, Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0, new SelectListItem());
+            return result;
         }
 
         public async Task AddUser(ApplicationUser applicationUser)
@@ -209,7 +219,9 @@ namespace RouteLister2.Models
 
         public async Task<List<SelectListItem>> GetOrdersDropDown(int? id)
         {
-            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString() + x.Id.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            var result = await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString() + x.Id.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            result.Insert(0, new SelectListItem());
+            return result;
         }
 
         public async Task<List<SelectListItem>> GetOrderRowStatusDropDown(int? id)
