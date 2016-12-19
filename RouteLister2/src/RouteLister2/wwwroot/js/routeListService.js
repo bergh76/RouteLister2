@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
 
-    var serviceId = 'routeListFactory';
+    var serviceId = 'routeListService';
 
-    angular.module('RouteListApp').factory(serviceId,
+    angular.module('RouteListApp').service(serviceId,
         ['$http', routeListFactory]);
 
     function routeListFactory($http) {
@@ -19,4 +19,3 @@
         return service;
     }
 })();
-

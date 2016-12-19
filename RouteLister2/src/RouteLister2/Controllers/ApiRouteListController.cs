@@ -16,12 +16,12 @@ using RouteLister2.Models.OrderRowViewModels;
 namespace RouteLister2.Controllers
 {
     [Route("/api/v1/orderRow")]
-    public class APIOrderRowController : Controller
+    public class ApiRouteListController : Controller
     {
         private SignalRBusinessLayer _businessLayer;
         private IMapper _mapper;
 
-        public APIOrderRowController(
+        public ApiRouteListController(
             [FromServices] SignalRBusinessLayer businessLayer, 
             [FromServices] IMapper mapper)
         {

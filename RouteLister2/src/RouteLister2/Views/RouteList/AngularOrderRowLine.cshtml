@@ -4,8 +4,8 @@
 @*<script src="~/signalr/hubs"></script>*@
 <script src="~/js/site.js"></script>
 <script src="~/js/RouteListApp.js"></script>
-<script src="~/js/orderRowFactory.js"></script>
-<script src="~/js/orderRowController.js"></script>
+@*<script src="~/js/orderRowFactory.js"></script>
+<script src="~/js/orderRowController.js"></script>*@
 <script src="~/js/routeListFactory.js"></script>
 <script src="~/js/routeListController.js"></script>
 <script>
@@ -20,7 +20,7 @@
 
 
 <div ng-app="RouteListApp">
-    <table ng-controller="orderRowController">
+    @*<table ng-controller="orderRowController">
         <tr ng-repeat="orderRow in orderRows">
             <td hidden class="id">{{orderRow.orderRowId}}</td>
             <td><h5>{{orderRow.count}}</h5></td>
@@ -29,12 +29,12 @@
             <td>
                 <div class="slideThree">
                     <input type="checkbox" id="orderrow{{orderRow.orderRowId}}" name="check2" ng-checked="{{orderRow.orderRowStatus}}" />
-                    <label for="orderrow{{orderRow.orderRowId}}"> Plockad</label>
+                    <label for="orderrow{{orderRow.orderRowId}}"></label>
                 </div>
                 <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
             </td>
         </tr>
-    </table>
+    </table>*@
 
 
     <div ng-controller="routeListController">
@@ -105,14 +105,14 @@
                                                     <td>
                                                         <div class="slideThree">
                                                             <input type="checkbox" id="orderrow{{orderrow.id}}" name="check2" ng-checked="{{orderrow.orderRowStatus}}" />
-                                                            <label for="orderrow{{orderrow.id}}"> Plockad</label>
+                                                            <label for="orderrow{{orderrow.id}}"></label>
                                                         </div>
                                                         <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span class="h4 pull-right">Total antal kollie {{orders.totalCount}} st</span>
+                                        <span class="h4 pull-right">Total antal kollie {{order.totalCount}} st</span>
                                     </div>
                                 </div>
                             </div>
