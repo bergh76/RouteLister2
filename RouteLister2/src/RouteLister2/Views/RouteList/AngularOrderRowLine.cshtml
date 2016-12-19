@@ -57,7 +57,7 @@
                                     <p class="h5 text-left">{{$index+1}} {{order.description}}</p>
                                 </div>
                                 <div class="col-lg-4">
-                                    <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse{{orders.id}}" aria-expanded="false" aria-controls="collapseTwo">
+                                    <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse{{order.orderId}}" aria-expanded="false" aria-controls="collapseTwo">
                                         <i class="fa fa-info-circle fa-2x"></i>
                                     </span>
                                     <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
@@ -65,7 +65,7 @@
                                     <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
                                 </div>
                             </div>
-                            <div id="collapse{{orders.id}}" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                            <div id="collapse{{order.orderId}}" class="col-md-12 panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                                 <div class="panel-body">
                                     <!--Customer Detail Data Start-->
                                     <div class="col-md-12">
