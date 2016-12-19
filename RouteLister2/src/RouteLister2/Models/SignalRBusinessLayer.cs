@@ -209,7 +209,7 @@ namespace RouteLister2.Models
 
         public async Task<List<SelectListItem>> GetOrdersDropDown(int? id)
         {
-            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
+            return await _repo.Get<Order>().Select(x => new SelectListItem() { Text = x.DestinationId.ToString() + x.OrderTypeId.ToString() + x.OrderStatusId.ToString() + x.Id.ToString(), Value = x.Id.ToString(), Selected = x.Id == id }).ToListAsync();
         }
 
         public async Task<List<SelectListItem>> GetOrderRowStatusDropDown(int? id)

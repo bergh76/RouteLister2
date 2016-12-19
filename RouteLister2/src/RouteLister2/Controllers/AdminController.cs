@@ -110,19 +110,18 @@ namespace RouteLister2.Controllers
                 //Notify old client that he has lost a order
                 var oldClientId = await _businessLayer.GetUser(orderId: viewModel.OrderId);
                 await hubContext.Clients.Groups(new List<string>() { oldClientId.UserName }).RemovedOrder(viewModel.OrderId);
-
-                //Notify client that a new order has been placed on its routelist
-                await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).AddedOrder(viewModel.OrderId,Url.Action("Order","RouteList"));
             }
-            var clientNameToMessage = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _businessLayer.GetUser(regNr: viewModel.RegistrationNumber);
+            //
+            //var clientNameToMessage = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //User assigned
+            var newUser = await _businessLayer.GetUser(regNr: viewModel.RegistrationNumber);
             //Build url for getter
             var orderUrl = Url.Action("Order", "RouteList", new { id=viewModel.OrderId });
             //Tells client to add order
-            await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).AddedOrder(orderUrl);
+            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).AddedOrder(orderUrl);
             //Send a message to all involved clients that a order has been added
-            await hubContext.Clients.Clients(_mapping.GetConnections(user.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till" + user.UserName);
-            viewModel.RegNrDropDown = await _businessLayer.GetApplicationUserDropDown(RegistrationNumber:viewModel.RegistrationNumber);
+            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).Message(HttpContext.User.Identity.Name+" har lagt till en order till" + newUser.UserName);
+            viewModel.RegNrDropDown = await _businessLayer.GetRegistrationNrOnlyDropDown(SelectedRegnr:viewModel.RegistrationNumber);
             return PartialView(viewModel);
         }
 
