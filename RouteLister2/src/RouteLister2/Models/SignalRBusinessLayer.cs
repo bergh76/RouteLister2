@@ -81,11 +81,15 @@ namespace RouteLister2.Models
             return await _repo.Get<Order>(x => x.Id == id).ProjectTo<OrderDetailViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> RegisterOrderToDriver(string regNr, int orderId)
+        public async Task<bool> RegisterOrderToDriver(string regNr, int? orderId)
         {
+            if (!orderId.HasValue)
+            {
+                return false;
+            }
             bool newRouteList = false;
             //Gets the order that needs to be assigned to a driver
-            var order = await _repo.GetAsync<Order>(orderId);
+            var order = await _repo.GetAsync<Order>(orderId.Value);
 
             //Gets the user
             ApplicationUser user = await GetUser(regNr: regNr);
@@ -112,6 +116,13 @@ namespace RouteLister2.Models
                 await _repo.UpdateAsync(order);
                 return newRouteList;
             }
+            else
+            {
+                //Removes users routelist from order
+                order.RouteListId = null;
+                await _repo.UpdateAsync(order);
+            }
+
             return false;
         }
 

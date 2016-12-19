@@ -186,16 +186,27 @@ var routeLister = (function () {
 
 
             }).done(function (data) {
-                $(orderContainerId).append(data);
-                $("." + listIndexClass).each(function (index, element) {
-                    $(element).text(index + 1 + ".");
-                });
-                console.log("addedOrder")
-                //Adding listener to added OrderRows
-                //**Not needed probably since on click is global on the slider class is global
-                //$(data).on('click', '.slidah', function (e) {
-                //    routeLister.orderRow.server(event);
-                //});
+                //Check if order exists already?
+                var dataOrderId = $(data).find(".panel").prop("id");
+                //if not, append data
+                if (!dataOrderId) {
+
+                    $(orderContainerId).append(data);
+                    //rebuilding index
+                    $("." + listIndexClass).each(function (index, element) {
+                        $(element).text(index + 1 + ".");
+                    });
+                    console.log("addedOrder")
+                    //Adding listener to added OrderRows
+                    //**Not needed probably since on click is global on the slider class is global
+                    //$(data).on('click', '.slidah', function (e) {
+                    //    routeLister.orderRow.server(event);
+                    //});
+                }
+                else {
+                    //if exists, replace
+                    $("#" + dataOrderId).replaceWith(data);
+                }
 
             }).fail(function (data) {
                 //Show errormessage
@@ -205,11 +216,9 @@ var routeLister = (function () {
             });
         };
         var removeClientOrder = function (id) {
-            $("#" + IdPrefix + id).hide("slow").done(
-                function () {
-                    $("#" + IdPrefix + id).remove();
-                }
-            );
+            $("#" + IdPrefix + id).hide("slow", function () {
+                $("#" + IdPrefix + id).remove();
+            });
         }
         return {
             add: addClientOrder,
@@ -305,13 +314,11 @@ signalRClient.client.newRouteListAdded = function () {
 signalRClient.client.addedOrder = function (id, url) {
     routeLister.order.add(id, url);
 };
-signalRClient.client.removedOrder = function (id, url) {
+signalRClient.client.removedOrder = function (id) {
     routeLister.order.remove(id);
 };
 
-signalRClient.client.message = function (message) {
-    addPost(message);
-};
+
 
 //function addPostsList(posts) {
 //    $.each(posts, function (index) {
@@ -319,21 +326,31 @@ signalRClient.client.message = function (message) {
 //        addPost(post);
 //    });
 //}
-
+//Cba to incorporate
 function addPost(post) {
+    var buttonId = 'message' + $(".message-count").text();
     $("#postsList").append(
         '<div><span class="pull-left"><i class="fa fa-circle me"></i><strong>' + post.userName + '</strong><span class="text-muted">' + post.time + ' </span></span></span><br>'
             + '<div class="message-data">'
                 + '<span class="message other-message float-right">' + post.text + '</span>'
             + ' </div>'
-            + '<span><button class="btn btn-success btn-margin-20">OK</button></span>'
+            + '<span><button class="btn btn-success btn-margin-20" id='+buttonId+ '>OK</button></span>'
         + '</div>'
         );
-    $(".message-count").text(($(".message-count").text() + 1));
+    $(".message-count").text((Number($(".message-count").text()) + 1));
+    //add click-listener to ok button
+    
+    $('#' + buttonId).click(function () {
+        //hide button
+        $(this).hide();
+        //Decrease count
+        $(".message-count").text((Number($(".message-count").text()) - 1));
+    });
 }
 
-
-signalRClient.client.publishPost = addPost;
+signalRClient.client.message = function (message) {
+    addPost(message);
+};
 
 
 

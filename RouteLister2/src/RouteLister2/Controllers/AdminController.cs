@@ -46,7 +46,7 @@ namespace RouteLister2.Controllers
 
         }
         public async Task<IActionResult> Index(
-            JsonDataListImports jsonData, 
+            JsonDataListImports jsonData,
             ParcelListFromCompanyViewModel parcel)
         {
             if (ModelState.IsValid)
@@ -54,8 +54,8 @@ namespace RouteLister2.Controllers
                 //Uncommented import since webapi is non-existant.
                 //await jsonData.GetParcelData(_context);
 
-                var result = _businessLayer.GetAll<OrderRow>().Include(x=>x.Order).Include(x=>x.Parcel).ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
-               
+                var result = _businessLayer.GetAll<OrderRow>().Include(x => x.Order).Include(x => x.Parcel).ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);
+
                 List<ParcelListFromCompanyViewModel> outResult = await result.ToListAsync();
                 List<SelectListItem> dropDown = await _businessLayer.GetRegistrationNrOnlyDropDown();
                 foreach (var item in outResult)
@@ -67,7 +67,7 @@ namespace RouteLister2.Controllers
                 }
                 return View(outResult);
             }
-            
+
             return RedirectToAction("Error");
         }
 
@@ -76,7 +76,7 @@ namespace RouteLister2.Controllers
             return View();
         }
 
-    
+
 
         public IActionResult Message()
         {
@@ -94,11 +94,11 @@ namespace RouteLister2.Controllers
 
                 return View(viewModel);
             }
-
+            //Getting hub
             var hubContext = _connectionManager.GetHubContext<DriverHub>();
-
-            
             //Getting applicationUser
+            var oldClientId = await _businessLayer.GetUser(orderId: viewModel.OrderId);
+            //Checking if we need a new routelist created and assigned
             bool newRouteList = await _businessLayer.RegisterOrderToDriver(viewModel.RegistrationNumber, viewModel.OrderId);
 
             if (newRouteList)
@@ -106,23 +106,31 @@ namespace RouteLister2.Controllers
                 //notify relevant driver that he has a new routeList
                 await hubContext.Clients.Groups(new List<string>() { viewModel.RegistrationNumber }).NewRouteListAdded();
             }
-            else
+            //If row is assigned to a order, client needs to be notified of change
+            else if (viewModel.OrderId.HasValue)
             {
                 //Notify old client that he has lost a order
-                var oldClientId = await _businessLayer.GetUser(orderId: viewModel.OrderId);
-                await hubContext.Clients.Groups(new List<string>() { oldClientId.UserName }).RemovedOrder(viewModel.OrderId);
+
+                if (oldClientId != null)
+                {
+                    await hubContext.Clients.Clients(_mapping.GetConnections(oldClientId.UserName).ToList()).RemovedOrder(viewModel.OrderId);
+                    await hubContext.Clients.Clients(_mapping.GetConnections(oldClientId.UserName).ToList()).Message(Newtonsoft.Json.JsonConvert.SerializeObject(new { userName = HttpContext.User.Identity.Name, time = DateTime.Now, text = "Tagit order: "+viewModel.OrderId }));
+                }
             }
-            //
             //var clientNameToMessage = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //User assigned
+            //User getting the new order
             var newUser = await _businessLayer.GetUser(regNr: viewModel.RegistrationNumber);
-            //Build url for getter
-            var orderUrl = Url.Action("Order", "RouteList", new { id=viewModel.OrderId });
-            //Tells client to add order
-            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).AddedOrder(orderUrl);
-            //Send a message to all involved clients that a order has been added. Should be done in added order really but hey, testing
-            await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).Message(Newtonsoft.Json.JsonConvert.SerializeObject(new { userName = HttpContext.User.Identity.Name , time = DateTime.Now, text="Tillagd order" }));
-            viewModel.RegNrDropDown = await _businessLayer.GetRegistrationNrOnlyDropDown(SelectedRegnr:viewModel.RegistrationNumber);
+            if (newUser != null)
+            {
+                //Build url for getter
+                var orderUrl = Url.Action("Order", "RouteList", new { id = viewModel.OrderId });
+                //Tells client to add order
+                var addedOrderResponse = await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).AddedOrder(orderUrl);
+                //Send a message to all involved clients that a order has been added. Should be done in added order really but hey, testing
+                var clientMessageResponse = await hubContext.Clients.Clients(_mapping.GetConnections(newUser.UserName).ToList()).Message(new { userName = HttpContext.User.Identity.Name, time = DateTime.Now, text = "Tillagd order" });
+            }
+            //Add dropdowns again
+            viewModel.RegNrDropDown = await _businessLayer.GetRegistrationNrOnlyDropDown(SelectedRegnr: viewModel.RegistrationNumber);
             return PartialView(viewModel);
         }
 

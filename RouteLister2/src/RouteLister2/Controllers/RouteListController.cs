@@ -48,7 +48,7 @@ namespace RouteLister2.Controllers
                 var viewModel = await _businessLayer.GetDriversRouteListForToday(regNr);
                 return View(viewModel);
             }
-            return View();
+            return RedirectToAction("Index","Admin");
      
         }
         public async Task<IActionResult> IndexPartial()
