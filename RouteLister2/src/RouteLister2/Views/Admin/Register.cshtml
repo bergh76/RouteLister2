@@ -29,7 +29,6 @@
                         <div class="panel-body">
                             <form asp-controller="Admin" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                                 @*<div asp-validation-summary="All" class="text-danger"></div>*@
-                                <span class="col-lg-12 text-center"><span class="alert-danger">@ViewBag.UserExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <select name="role" class="form-control placeholder" asp-items="ViewBag.UserRole"></select>
@@ -37,21 +36,19 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-12">
-                                        <input asp-for="UserName" class="form-control" placeholder="Namn" />
+                                        <input asp-for="UserName" class="form-control" placeholder="Namn" id="userName" />
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.RegnrExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">
-                                        <input asp-for="RegNr" class="form-control" placeholder="Regnr" />
+                                        <input asp-for="RegNr" class="form-control" placeholder="Regnr" id="regnr" />
                                         <span asp-validation-for="RegNr" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <span class="col-lg-12 text-center"><span class="badge badge-waring alert-danger">@ViewBag.EmailExists</span></span>
                                 <div class="form-group">
                                     <div class="col-lg-12">
-                                        <input asp-for="Email" class="form-control" placeholder="Epost" />
+                                        <input asp-for="Email" class="form-control" placeholder="Epost" if="email"/>
                                         <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -80,7 +77,7 @@
             </div>
         </div>
         <div class="col-lg-9">
-            @await Component.InvokeAsync("UsersInSystem")
+                @await Component.InvokeAsync("UsersInSystem")
         </div>
     </div>
 </div>

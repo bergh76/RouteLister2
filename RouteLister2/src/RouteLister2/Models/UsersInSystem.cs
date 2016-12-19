@@ -13,12 +13,11 @@ namespace RouteLister2.Models
     {
         private readonly ApplicationDbContext _context;
         public List<SystemUsersViewModel> UserList { get; set; }
-
-
         public UsersInSystem([FromServices] ApplicationDbContext context)
         {
             _context = context;
         }
+
 
         public async Task<List<SystemUsersViewModel>> GetAllUsers()
         {
@@ -33,11 +32,9 @@ namespace RouteLister2.Models
                              Email = u.Email,
                              IsAccountLocked = u.LockoutEnabled,
                              LoginCount = u.Logins.Count(),
-                             UserRole = u.Roles
+                             _role = u.Roles
                                         .Where(x => x.RoleId == ur.RoleId)
-                                        .Select(x => r.Name)
-                                        .ToList(),
-                             
+                                        .Select(x => r.Name).ToList(),                             
                              Phone = u.PhoneNumber
                          };
 

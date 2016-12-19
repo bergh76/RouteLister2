@@ -20,18 +20,19 @@ namespace RouteLister2.Services
 
         private ApplicationDbContext _context;
         private IHostingEnvironment _host;
-
         private static List<ParcelListFromCompanyViewModel> _parcelList = new List<ParcelListFromCompanyViewModel>();
 
         public DataImports([FromServices] ApplicationDbContext context, IHostingEnvironment host)
         {
             _context = context;
             _host = host;
+
+
         }
 
         public DataImports() { }
 
-        public async Task GetParcelData()
+        public async Task ImportParcelData()
         {
             if (!string.IsNullOrEmpty(url))
             {
@@ -40,6 +41,10 @@ namespace RouteLister2.Services
                     ApiDeserializer dserial = new ApiDeserializer();
                     var dataOut = await dserial.GetApiListItems(url);
                     _parcelList = dataOut.ToList();
+                    //int pcount = _parcelList.Count();
+                    //Result = pcount - _dbcount;
+                    //if (Result < 0)
+                    //    Result = 0;
                     await JsonApiDataImport();
                 }
                 catch (Exception ex)
@@ -47,9 +52,7 @@ namespace RouteLister2.Services
                     new ArgumentException(ex.Message, ex.InnerException);
                 }
             }
-
-            // Uri to external data from ie. API
-        }        
+        }
 
         private async Task JsonApiDataImport()
         {
@@ -145,26 +148,16 @@ namespace RouteLister2.Services
             return new RouteList()
             {
                 Created = DateTime.Now,
-                
+
             };
         }
-
-        //ToDo: Add seed to service in
-        //private OrderStatus AddOrderStatusToDb()
-        //{
-        //    return new OrderStatus()
-        //    {
-        //        Description = "Ordern finns på lager",
-        //        Name = "Lagerförd",
-        //        Priority = 3
-        //    };
-        //}
 
         private Order AddOrderToDb(int i, int destinId, int orderTypeId, int routeListId)
         {
             return new Order()
             {
                 DestinationId = destinId,
+                // status is seeded. can be a problem if id differ in database (ie. if deletion of data an new adds)
                 OrderStatusId = 2,
                 OrderTypeId = orderTypeId,
                 RouteListId = routeListId,
@@ -216,13 +209,13 @@ namespace RouteLister2.Services
         {
             //if (!context.Address.Where(x => x.Street == _parcelList[i].Adress).Any())
             //{
-                return new Address()
-                {
-                    City = _parcelList[i].City,
-                    Street = _parcelList[i].Adress,
-                    County = _parcelList[i].Country,
-                    PostNumber = _parcelList[i].PostNr
-                };
+            return new Address()
+            {
+                City = _parcelList[i].City,
+                Street = _parcelList[i].Adress,
+                County = _parcelList[i].Country,
+                PostNumber = _parcelList[i].PostNr
+            };
             //}
             // ToDo: Need return value so function can return 
         }
@@ -240,5 +233,7 @@ namespace RouteLister2.Services
                         }
             };
         }
+
+
     }
 }

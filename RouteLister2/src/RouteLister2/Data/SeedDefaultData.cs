@@ -15,18 +15,8 @@ namespace RouteLister2.Data
         private readonly UserManager<ApplicationUser> _userManager;
 
         private IServiceProvider _serviceProvider;
-
-
-        public SeedDefaultData(
-            //ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-            //_context = context;
-            _userManager = userManager;
-
-        }
+        public SeedDefaultData(UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider)
+        { _serviceProvider = serviceProvider; _userManager = userManager; }
 
         private static string[] GetRoles()
         {

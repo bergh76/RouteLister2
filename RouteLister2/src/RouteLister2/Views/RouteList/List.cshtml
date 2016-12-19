@@ -2,8 +2,10 @@
 
 @if (Model != null)
 {
+
     @for (int f = 0; f < Model.Count(); f++)
     {
+        <div class="loader"></div> <!--SHOWS A LOADER ON PAGE LOAD -->
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -13,16 +15,16 @@
                 <div class="x_content">
 
                     <!-- start accordion -->
-                    <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                    <section class="accordion" id="accordion" role="tablist" aria-multiselectable="true">                        
                         @if (Model[f] != null)
-                    {
+                        {
 
                             @if (Model[f].Orders != null)
-                        {
+                            {
                                 @for (int i = 0; i < Model[f].Orders.Count; i++)
                                 {
                                     <div class="panel">
-                                        <div hidden id="@Html.IdFor(x=>x[f].Orders[i])">@Model[f].Orders[i]</div>
+                                        <div hidden id="@Html.IdFor(x => x[f].Orders[i])">@Model[f].Orders[i]</div>
                                         <div class="panel-heading collapsed col-md-12">
                                             <div class="col-lg-8 pull-left">
                                                 <p class="h5 text-left">@(i + 1) @Model[f].Orders[i].Description</p>
@@ -30,19 +32,19 @@
                                             <div class="col-lg-4">
                                                 @using (Html.BeginForm("MapRoute", "RouteList"))
                                                 {
-                                                     <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse@(Html.IdFor(x=>x[f].Orders[i]))" aria-expanded="false" aria-controls="collapseTwo">
-                                                         <i class="fa fa-info-circle fa-2x"></i>
-                                                     </span>
-                                                     <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
-                                                     <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
-                                                     <span><button type="submit" class="btn btn-sm btn-default fa fa-map-o fa-2x"></button></span>
-                                                     <input hidden name="latitude" id="latitude" value="latitude" />
-                                                     <input hidden name="longitude" id="longitude" value="longitude" />
-                                                     <input hidden name="name" value="@Model[f].Orders[i].Name" />
-                                                     <input hidden name="address" value="@Model[f].Orders[i].Address" />
-                                                     <input hidden name="postnr" value="@Model[f].Orders[i].PostNumber" />
-                                                     <input hidden name="city" value="@Model[f].Orders[i].City" />
-                                                     <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
+                                                    <span class="btn btn-sm btn-info" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapse@(Html.IdFor(x => x[f].Orders[i]))" aria-expanded="false" aria-controls="collapseTwo">
+                                                        <i class="fa fa-info-circle fa-2x"></i>
+                                                    </span>
+                                                    <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                                    <span class="btn btn-sm btn-success"><i class="fa fa-phone fa-2x"></i></span>
+                                                    <span><button type="submit" class="btn btn-sm btn-default fa fa-map-o fa-2x"></button></span>
+                                                    <input hidden name="latitude" id="latitude" value="latitude" />
+                                                    <input hidden name="longitude" id="longitude" value="longitude" />
+                                                    <input hidden name="name" value="@Model[f].Orders[i].Name" />
+                                                    <input hidden name="address" value="@Model[f].Orders[i].Address" />
+                                                    <input hidden name="postnr" value="@Model[f].Orders[i].PostNumber" />
+                                                    <input hidden name="city" value="@Model[f].Orders[i].City" />
+                                                    <span class="btn btn-sm btn-danger"><i class="fa fa-check-circle fa-2x"></i></span>
                                                 }
                                             </div>
                                         </div>
@@ -87,31 +89,30 @@
                                                         <tbody>
                                                             @for (int k = 0; k < Model[f].Orders[i].OrderRows.Count; k++)
                                                             {
-                                                            <tr>
-                                                                <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
-                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
-                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
-                                                                <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
-                                                                <td>
-                                                                    <div class="slideThree">
-                                                                        @{
-                                                                            var isChecked = "checked='checked'";
-                                                                            @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
-                                                                            {
-                                                                                isChecked = null;
+                                                                <tr>
+                                                                    <td hidden class="id" id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowId)">@Model[f].Orders[i].OrderRows[k].OrderRowId</td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].Count)"><h5>@Model[f].Orders[i].OrderRows[k].Count</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelNumber)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelNumber</h5></td>
+                                                                    <td id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].ParcelName)"><h5>@Model[f].Orders[i].OrderRows[k].ParcelName</h5></td>
+                                                                    <td>
+                                                                        <div class="slideThree">
+                                                                            @{
+                                                                                var isChecked = "checked='checked'";
+                                                                                @if (!@Model[f].Orders[i].OrderRows[k].OrderRowStatus)
+                                                                                {
+                                                                                    isChecked = null;
 
+                                                                                }
                                                                             }
-                                                                        }
-                                                                        <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
+                                                                            <input type="checkbox" value=@Model[f].Orders[i].OrderRows[k].OrderRowId name="check2" @isChecked id="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)" />
 
-                                                                        <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
-                                                                    </div>
-                                                                    <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
-                                                                </td>
+                                                                            <label for="@Html.IdFor(x => x[f].Orders[i].OrderRows[k].OrderRowStatus)"></label>
+                                                                        </div>
+                                                                        <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+                                                                    </td>
+                                                                </tr>
 
-                                                            </tr>
-
-                                                                            }
+                                                                                }
                                                         </tbody>
                                                     </table>
                                                     <span class="h4 pull-right">Total antal kollie @Model[f].Orders[i].TotalCount st</span>
@@ -120,17 +121,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                                                            }
-                                                                            }
-                                                                            }
+                                                                                }
+                                                                                }
+                                                                                }
                     </section>
                     <!-- end of accordion -->
                 </div>
             </div>
         </div>
 
-                                                                            }
-                                                                            }
+                                                                               }
+                                                                                }
 <div id="loadingDiv" class="hidden"></div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }

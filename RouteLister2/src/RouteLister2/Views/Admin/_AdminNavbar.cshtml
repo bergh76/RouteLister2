@@ -30,12 +30,17 @@
                         </ul>
                     </li>
                     <li><a asp-area="" asp-controller="Admin" asp-action="Message">Meddelande</a></li>
-
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Link</a></li>
+                @if (ViewBag.ImportedParcels > 0)
+            {
+                    <div class="animated slideInRight"><span class="badge-count success h6">Hämtade nya leveranser: @ViewBag.ImportedParcels</span></div>
+                }
+                <ul class="nav navbar-nav navbar-right form-inline">
+                    <li>
+                        <a asp-action="DownloadRouteList" asp-controller="Admin" onclick="ShowProgress()"><span class="btn btn-sm btn-success fa fa-download"></span></a>
+                    </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span><span class="fa fa-cogs"></span> Settings</span><span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="btn btn-default fa fa-cogs"><span class="caret"></span></span></a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="Admin" asp-action="Register"><span><i class="fa fa-user-plus"></i> Skapa användare</span></a>
                             <li><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Redigera användare</a></li>
@@ -43,6 +48,7 @@
                         </ul>
                     </li>
                 </ul>
+
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>

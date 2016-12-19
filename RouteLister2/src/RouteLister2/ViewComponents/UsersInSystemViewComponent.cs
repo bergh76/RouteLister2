@@ -21,6 +21,7 @@ namespace RouteLister2.ViewComponents
             public async Task<IViewComponentResult> InvokeAsync()
         {
             ViewData["UserRole"] = new SelectList(_context.Roles, "Name", "Name");
+            //ViewBag.Message = UserSettings._message;
             UsersInSystem users = new UsersInSystem(_context);
             users.UserList = await users.GetAllUsers();
             return View(users);

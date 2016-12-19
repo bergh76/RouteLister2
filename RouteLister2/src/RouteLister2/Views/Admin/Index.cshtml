@@ -3,106 +3,110 @@
     ViewData["Title"] = "LOGISTIKBOLAGET || Paketlista-" + DateTime.Now.ToString("yyyy-MM-dd");
 }
 
-@{Html.RenderPartial("_AdminNavbar");}
+    @{Html.RenderPartial("_AdminNavbar");}
 
-<section class="admin-container panel panel-default x_panel">
-    <div class="panel-heading x_title">
-        <span class="h3">
-            <i class="fa fa-list-ol"></i> Paketlista - @DateTime.Now.ToString("yyyy-MM-dd")
-        </span>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-            <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
-                <thead>
-                    <tr class="text-center">
-                        @*<th><h6></h6></th>*@
-                        <th><h6>Antal</h6></th>
-                        <th><h6>KollieId</h6></th>
-                        <th><h6>Levdatum</h6></th>
-                        <th><h6>Namn</h6></th>
-                        <th><h6>Adress</h6></th>
-                        <th><h6>City</h6></th>
-                        <th><h6>Postnr</h6></th>
-                        <th><h6>Tele</h6></th>
-                        <th><h6>Distributör</h6></th>
-                        <th><h6>Artikel</h6></th>
-                        <th><h6>Leveranstyp</h6></th>
-                        <th><h6>Bil</h6></th>
-                        <th></th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    @{foreach (var item in Model)
-                        {
-                            @Html.Partial("AdminRowPartial", item)
-                        }
-                    }
-                </tbody>
-            </table>
+    <section class="admin-container panel panel-default x_panel">
+        <div class="panel-heading x_title">
+            <span class="h3">
+                <i class="fa fa-list-ol"></i> Paketlista - @DateTime.Now.ToString("yyyy-MM-dd")
+            </span>
+            <div class="clearfix"></div>
         </div>
-    </div>
-</section>
+        <div class="x_content">
+                <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="download-spinner" align="center">
+                        <h4>Vänligen vänta, data hämtas!</h4>                        
+                        <div><img src="../images/preloaders/preloader_2.gif" alt="" /></div>
+                    </div>
+                    <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
+                        <thead>
+                            <tr class="text-center">
+                                @*<th><h6></h6></th>*@
+                                <th><h6>Antal</h6></th>
+                                <th><h6>KollieId</h6></th>
+                                <th><h6>Levdatum</h6></th>
+                                <th><h6>Namn</h6></th>
+                                <th><h6>Adress</h6></th>
+                                <th><h6>City</h6></th>
+                                <th><h6>Postnr</h6></th>
+                                <th><h6>Tele</h6></th>
+                                <th><h6>Distributör</h6></th>
+                                <th><h6>Artikel</h6></th>
+                                <th><h6>Leveranstyp</h6></th>
+                                <th><h6>Bil</h6></th>
+                                <th></th>
+                            </tr>
 
-@section Scripts{
-    @{await Html.RenderPartialAsync("_AdminScriptsPartial"); }
-    <script type="text/javascript">
-        // < datatables API start
-        $(document).ready(function () {
-            $('#deliverytable').DataTable({
-                dom: 'B<"clear"><lf<t>ip>',
-                buttons: [{ extend: 'copy', text: 'Kopiera', },
+                        </thead>
+                        <tbody>
+                            @{foreach (var item in Model)
+                                {
+                                    @Html.Partial("AdminRowPartial", item)
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </section>
+<div class="loader"></div>
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_AdminScriptsPartial"); }
+        <script type="text/javascript">
+            // < datatables API start
+            $(document).ready(function () {
+                $('#deliverytable').DataTable({
+                    dom: 'B<"clear"><lf<t>ip>',
+                    buttons: [{ extend: 'copy', text: 'Kopiera', },
+                        {
+                            extend: 'excel',
+                            text: 'Excel',
+                            exportOptions: { modifier: { page: 'current' } },
+                        },
                     {
-                        extend: 'excel',
-                        text: 'Excel',
-                        exportOptions: { modifier: { page: 'current' } },
+                        //extend: 'pdf',
+                        extend: 'pdfHtml5',
+                        text: 'Pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
                     },
-                {
-                    //extend: 'pdf',
-                    extend: 'pdfHtml5',
-                    text: 'Pdf',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL'
-                },
-                ],
-                "language": {
-                    "lengthMenu": "Visa _MENU_ rader per sida",
-                    "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
-                    "info": "_PAGE_ av _PAGES_",
-                    "infoEmpty": "Datatabellen är tom",
-                    "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
-                },
-                "processing": true,
-                "order": [[2, "asc"], [6, 'asc']]
-            })
+                    ],
+                    "language": {
+                        "lengthMenu": "Visa _MENU_ rader per sida",
+                        "zeroRecords": "Din sökning gav inget - försök med ett annat sökord",
+                        "info": "_PAGE_ av _PAGES_",
+                        "infoEmpty": "Datatabellen är tom",
+                        "infoFiltered": "(filtrerdad på _MAX_ antal poster)"
+                    },
+                    "processing": true,
+                    "order": [[2, "asc"], [6, 'asc']]
+                })
 
-        });
-        // datatables API end
+            });
+            // datatables API end
 
-        // < clock functionality START
-        function startTime() {
-            var today = new Date();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            document.getElementById('clock').innerHTML =
-                h + ":" + m + ":" + s;
-            var t = setTimeout(startTime, 500);
-        }
-        function checkTime(i) {
-            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
-            return i;
-        }
-        // < clock functionality END
+            // < clock functionality START
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('clock').innerHTML =
+                    h + ":" + m + ":" + s;
+                var t = setTimeout(startTime, 500);
+            }
+            function checkTime(i) {
+                if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+                return i;
+            }
+            // < clock functionality END
 
 
-        $(".changeRegNrButton").click(function (event) {
-            admin.orderRow.setRegistrationNumber(event, $(this));
-        });
-    </script>
-}
+            $(".changeRegNrButton").click(function (event) {
+                admin.orderRow.setRegistrationNumber(event, $(this));
+            });
+        </script>
+    }
 

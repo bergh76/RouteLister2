@@ -1,168 +1,190 @@
 ﻿
 @model RouteLister2.Models.UsersInSystem
 
-
-<div class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingTwo">
-            <h4 class="panel-title">
-                <span class="h4">
-                    <i class="fa fa-users text-primary"></i> Befintliga användare <span class="text-success">@ViewData["StatusMessage"]</span>
-                    <span class="pull-right">
-                        <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                            <i class="fa fa-chevron-down"></i>
-                        </a>
-                    </span>
-                </span>
-            </h4>
-        </div>
-        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
-            <div class="panel-body">
-                <table class="table-useradmin">
-                    <thead>
-                        <tr>
-                            <th style="width:2%">#</th>
-                            <th style="width:5%"></th>
-                            <th style="width:15%">Namn</th>
-                            <th style="width:15%">Roll</th>
-                            <th style="width:20%">Epost</th>
-                            <th style="width:15%">Tele</th>
-                            <th style="width:15%">Låst Konto</th>
-                            <th style="width:15%">Inloggning</th>
-                            <th style="width:5%"></th>
-                        </tr>
-                    </thead>
-                </table>
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                  @{ int count = 1;}
-                    @{foreach (var item in Model.UserList)
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <span class="h4">
+                        <i class="fa fa-users text-primary"></i> Befintliga användare 
+                        @if (!string.IsNullOrEmpty(ViewBag.Message))
                         {
-                            <div class="panel panel-default-useradmin">
-                                <div class="panel-heading-useradmin" role="tab" id="heading @item.Id">
-                                    <table class="table-useradmin table-width table-hover">
-                                        <tbody>
-                                        <tr class="text-left">
-                                            <td style="width:2%">@count</td>                                           
-                                            <td style="width:5%">
-                                                <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true" aria-controls="collapseOne"></button>
-                                            </td>
-                                            <td style="width:15%">@item.UserName</td>
-                                            <td style="width:15%">@item.UserRole</td>
-                                            <td style="width:20%">@item.Email</td>
-                                            <td style="width:15%">@item.Phone</td>
-                                            @if (item.IsAccountLocked != true)
-                                            {
-                                                <td style="width:15%">@item.IsAccountLocked</td>
-                                            }
-                                            else
-                                            {
-                                                <td style="width:15%"><span class="animated shake"><i class="fa fa-exclamation"></i>@item.IsAccountLocked</span></td>
-                                            }
-                                            <td style="width:15%">@item.LoginCount</td>
-                                            <td style="width:5%">
-                                                <form asp-controller="Admin" asp-action="DeleteUser" method="post" class="form-horizontal">
-                                                    <input type="text" name="Id" value="@item.Id" hidden />
-                                                    <button type="submit" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <span class="h6 badge-count animated fadeIn"> @ViewBag.Message</span>
+                        }
+                       
+                        <span class="pull-right">
+                            <a class="btn btn-xs btn-default" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        </span>
+                    </span>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <table class="table-useradmin">
+                        <thead>
+                            <tr>
+                                <th style="width:2%">#</th>
+                                <th style="width:5%"></th>
+                                <th style="width:15%">Namn</th>
+                                <th style="width:15%">Roll</th>
+                                <th style="width:20%">Epost</th>
+                                <th style="width:15%">Tele</th>
+                                <th style="width:15%">Låst Konto</th>
+                                <th style="width:15%">Inloggning</th>
+                                <th style="width:5%"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        @{ int count = 1;}
+                        @{for (int i = 0; i < Model.UserList.Count(); i++)
+                            {
 
-                                <div id="@item.Id" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading @item.Id">
-                                    <div class="panel-body">
-                                        <div class="h4 col-lg-12 alert-danger"><i class="fa fa-edit"> </i>Redigera användarkonton</div>
-                                        <div class="col-lg-7">
-                                            <form asp-controller="Admin" asp-action="UpdateUser" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                                                <div asp-validation-summary="All" class="text-danger"></div>
-                                                <div class="form-group-sm">
-                                                    <div class="form-group">
-                                                        <input value="@item.Id" hidden name="Id" />
-                                                        <label asp-for="@item.UserName" class="col-md-2 control-label"></label>
-                                                        <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.UserName" class="form-control" type="text" name="username" />
-                                                            <span asp-validation-for="@item.UserName" class="text-danger"></span>
+                                //} foreach(var item in Model.UserList)
+                                //{
+                                <div class="panel panel-default-useradmin">
+                                    <div class="panel-heading-useradmin" role="tab" id="heading @Model.UserList[i].Id">
+                                        <div class="download-spinner" align="center">
+                                            <h4>Vänligen vänta, data hämtas!</h4>
+                                            <div><img src="../images/preloaders/preloader_2.gif" alt="" /></div>
+                                        </div>
+                                        <table class="table-useradmin table-width table-hover">
+                                            <tbody>
+                                                <tr class="text-left">
+                                                    <td style="width:2%">@count </td>
+                                                    <td style="width:5%">
+                                                        <button class="btn btn-xs btn-primary fa fa-edit" data-toggle="collapse" data-parent="#accordion" href="#@Model.UserList[i].Id" aria-expanded="true" aria-controls="collapseOne"></button>
+                                                    </td>
+                                                    <td style="width:15%">@Model.UserList[i].UserName</td>
+                                                    <td style="width:15%">@Model.UserList[i].UserRole</td>
+                                                    <td style="width:20%">@Model.UserList[i].Email</td>
+                                                    <td style="width:15%">@Model.UserList[i].Phone</td>
+                                                    @if (Model.UserList[i].IsAccountLocked != true)
+                                                    {
+                                                        <td style="width:15%">@Model.UserList[i].IsAccountLocked</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="width:15%"><span class="text-danger"><i class="fa fa-exclamation animated shake"></i>@Model.UserList[i].IsAccountLocked</span></td>
+                                                    }
+                                                    <td style="width:15%">@Model.UserList[i].LoginCount</td>
+                                                    <td style="width:5%">
+                                                        <form asp-controller="Admin" asp-action="DeleteUser" method="post" class="form-horizontal">
+                                                            <input type="text" name="Id" value="@Model.UserList[i].Id" hidden />
+                                                            <button type="submit"  onclick="ShowProggess()" class="btn btn-xs btn-danger fa fa-remove btn-margin-r-4" />
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div id="@Model.UserList[i].Id" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="heading @Model.UserList[i].Id">
+                                        <div class="panel-body">
+                                            <div class="h4 col-lg-12 alert-danger"><i class="fa fa-edit"> </i>Redigera användarkonton</div>
+                                            <div class="col-lg-7">
+                                                <form asp-controller="Admin" asp-action="UpdateUser" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                                    <div class="form-group-sm">
+
+                                                        <div class="form-group">
+                                                            <input value="@Model.UserList[i].Id" hidden name="Id" />
+                                                            <label asp-for="@Model.UserList[i].UserName" class="col-md-2 control-label"></label>
+
+                                                            <div class="col-lg-offset-0 col-md-12">
+                                                                <input asp-for="@Model.UserList[i].UserName" class="form-control" type="text" name="username" />
+                                                                <span asp-validation-for="@Model.UserList[i].UserName" class="text-danger"></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label asp-for="@item.UserRole" class="col-md-2 control-label"></label>
-                                                        <div class="col-lg-offset-0 col-md-12">
-                                                            <select name="roles" class="form-control placeholder" asp-items="ViewBag.UserRole"></select>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="@Model.UserList[i].UserRole" class="col-md-2 control-label"></label>
+
+                                                            <div class="col-lg-offset-0 col-md-12">
+                                                                <select name="roles" class="form-control placeholder" asp-items="ViewBag.UserRole"></select>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label asp-for="@item.Email" class="col-md-2 control-label"></label>
-                                                        <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.Email" class="form-control" type="text" name="email" />
-                                                            <span asp-validation-for="@item.Email"></span>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="@Model.UserList[i].Email" class="col-md-2 control-label"></label>
+
+                                                            <div class="col-lg-offset-0 col-md-12">
+                                                                <input asp-for="@Model.UserList[i].Email" class="form-control" type="text" name="email" />
+                                                                <span asp-validation-for="@Model.UserList[i].Email"></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label asp-for="@item.Phone" class="col-md-2 control-label"></label>
-                                                        <div class="col-lg-offset-0 col-md-12">
-                                                            <input asp-for="@item.Phone" class="form-control" type="text" name="phone"/>
-                                                            <span asp-validation-for="@item.Phone" class="text-danger"></span>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="@Model.UserList[i].Phone" class="col-md-2 control-label"></label>
+
+                                                            <div class="col-lg-offset-0 col-md-12">
+                                                                <input asp-for="@Model.UserList[i].Phone" class="form-control" type="text" name="phone" />
+                                                                <span asp-validation-for="@Model.UserList[i].Phone" class="text-danger"></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label asp-for="@item.IsAccountLocked" class="col-md-2 control-label"></label>
-                                                        <div class="col-lg-offset-0 col-md-12">
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input asp-for="@item.IsAccountLocked" type="checkbox" name="islocked"> [Ja/Nej]
-                                                                </label>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="@Model.UserList[i].IsAccountLocked" class="col-md-2 control-label"></label>
+
+                                                            <div class="col-lg-offset-0 col-md-12">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input asp-for="@Model.UserList[i].IsAccountLocked" type="checkbox" name="islocked"> [Ja/Nej]
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Register</button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                                <button type="submit" class="btn btn-success"><span class="fa fa-edit"></span> Register</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                </form>
+                                            </div>
 
-                                        <div class="col-lg-5">
-                                            <form asp-controller="Manage" asp-action="SetNewPassWord" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                                                <div asp-validation-summary="All" class="text-danger"></div>
-                                                <div class="form-group-sm">
-                                                    <div class="form-group">
-                                                        <label>Nytt lösenord</label>
-                                                        <div class="col-lg-12">
-                                                            <input name="newPW" class="form-control" placeholder="Lösenord" />
-                                                            @*<span asp-validation-for="Password" class="text-danger"></span>*@
+                                            <div class="col-lg-5">
+                                                <form asp-controller="Manage" asp-action="SetNewPassWord" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                                    <div class="form-group-sm">
+                                                        <div class="form-group">
+                                                            <label>Nytt lösenord</label>
+                                                            <div class="col-lg-12">
+                                                                <input name="newPW" class="form-control" placeholder="Lösenord" />
+                                                                @*<span asp-validation-for="Password" class="text-danger"></span>*@
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="form-group">
-                                                        <label>Repetera nytt lösenord</label>
-                                                        <div class="col-lg-12">
-                                                            <input name="newPW" class="form-control" placeholder="Repetera Lösenord" />
-                                                            <span class="text-danger"></span>
+                                                        <div class="form-group">
+                                                            <label>Repetera nytt lösenord</label>
+                                                            <div class="col-lg-12">
+                                                                <input name="newPW" class="form-control" placeholder="Repetera Lösenord" />
+                                                                <span class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <button type="submit" class="btn btn-warning"><span class="fa fa-save"></span> Uppdatera</button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-warning"><span class="fa fa-save"></span> Uppdatera</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            count++;
-                                                }
-                    }
+                                count++;
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@section Scripts {
-<link href="~/lib/animate.css/animate.css" rel="stylesheet" />
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
+    @section Scripts {
+        <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    }

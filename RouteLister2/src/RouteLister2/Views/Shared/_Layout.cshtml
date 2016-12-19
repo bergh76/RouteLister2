@@ -21,26 +21,15 @@
         <link href="~/css/custom.css" rel="stylesheet" />
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
-    @*<environment names="Staging,Production">
-        <!-- DATATABLE CSS-->
-        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
-        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-        <link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
-        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
-        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
-        <!-- END DATATABLE CSS-->
-        <!-- DATATABLE BUTTONS CSS-->
-        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
-        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
-        <!-- END DATATABLE BUTTONS CSS-->
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link href="~/css/custom.css" rel="stylesheet" />
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-    </environment>*@
+        <link href="~/css/custom.min.css" rel="stylesheet" />
+        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/css/site.min.css" rel="stylesheet" />
+    </environment>
 
 </head>
 <body>
@@ -63,26 +52,22 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="RouteList" asp-action="List">RouteLists</a></li>
-
+                    <li><a asp-area="" asp-controller="RouteList" asp-action="List" class="text-uppercase">RouteLists</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                    <li><a asp-area="" asp-controller="Admin" asp-action="Index" class="text-uppercase">Admin</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
-        <section>
+         @RenderBody()
+        <div>
             <footer>
                 <p>&copy; 2016 - RouteLister</p>
             </footer>
-        </section>
+        </div>
     </div>
     
 
@@ -98,33 +83,7 @@
         <!--JQUERY -->
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places&callback=initMap"></script>
 
-        @*<!-- DATATABELS -->
-        <script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
-        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
-        <script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
-        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
-        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
-        <!-- END DATATABELS -->
-        <!-- DATATABEL-BUTTONS -->
-        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
-        <script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
-        <script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
-        <script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
-        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
-        <!-- END DATATABEL-BUTTONS -->*@
-    </environment>
-    <environment names="Staging,Production">
-
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
         <!-- DATATABELS -->
         <script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
         <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
@@ -139,7 +98,18 @@
         <script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
         <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
         <!-- END DATATABEL-BUTTONS -->
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     </environment>
 
     @RenderSection("scripts", required: false)

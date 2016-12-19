@@ -1,5 +1,4 @@
 ﻿@model RouteLister2.Models.MapRouteViewModel.MapRouteViewModel
-@*<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAX19N6_xtYwKuIBgNgfqWvCoH6yqIZm8E&libraries=places&callback=initMap"></script>*@
 <input id="origin-input" class="controls" type="text" value="" placeholder="Enter an origin location" readonly>
 <input id="destination-input" class="controls" type="text" value="@Model.Destination" placeholder="Enter a destination location">
 <input hidden type="radio" name="type" id="changemode-walking">
@@ -19,3 +18,6 @@
 <div id="mySidenav" class="sidenav">
     <div id="right-panel"></div>
 </div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_MapRouteScriptsPartial"); }
+}

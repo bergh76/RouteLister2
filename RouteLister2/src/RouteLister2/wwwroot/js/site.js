@@ -104,13 +104,25 @@ function closeNav() {
 }
 //*****/* END SIDENAV JQUERY *\*********//
 
-
-
-//*****/* GOOGLE MAP PRELOADER *\*********//
+//*****/* PAGE PRELOADER *\*********//
+//// Wait for window load
 $(window).load(function () {
-    $(".loader").fadeOut("slow").ready;
-})
-//*****/* END GOOGLE MAP PRELOADER *\*********//
+    $(".loader").fadeOut("slow").domManip.ready;
+});
+
+$(".download-spinner").hide();
+// SPINNER FOR DATADOWNLOAD \\
+function ShowProgress() {
+    setTimeout(function () {
+        var loading = $(".download-spinner");
+        loading.show();
+    },  $(document).ready(function () {
+        $(".download-spinner").fadeOut("slow");        
+    })
+    )
+}
+
+//*****/* END PAGE PRELOADER *\*********//
 
 
 //*****/* GOOGLE MAP *\*********//
@@ -124,7 +136,7 @@ var directionsService;
 function initMap() {
      directionsDisplay = new google.maps.DirectionsRenderer;
      directionsService = new google.maps.DirectionsService;
-     navigator.geolocation.watchPosition(
+     navigator.geolocation.getCurrentPosition(
          function (position) {
              var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
              //console.log(geolocate);
@@ -189,7 +201,6 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
 
 }
 
-//  @*@constructor*@ //
 function AutocompleteDirectionsHandler(map, placeId, address) {
     this.map = map;
     this.originPlaceId = null; 
@@ -208,9 +219,10 @@ function AutocompleteDirectionsHandler(map, placeId, address) {
     var destinationAutocomplete = new google.maps.places.Autocomplete(
         destinationInput, { placeIdOnly: true });
 
-    this.setupClickListener('changemode-walking', 'WALKING');
-    this.setupClickListener('changemode-transit', 'TRANSIT');
-    this.setupClickListener('changemode-driving', 'DRIVING');
+    //// 
+    //this.setupClickListener('changemode-walking', 'WALKING');
+    //this.setupClickListener('changemode-transit', 'TRANSIT');
+    //this.setupClickListener('changemode-driving', 'DRIVING');
 
     this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
     this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
@@ -227,14 +239,14 @@ function AutocompleteDirectionsHandler(map, placeId, address) {
 
 // Sets a listener on a radio button to change the filter type on Places
 // Autocomplete.
-AutocompleteDirectionsHandler.prototype.setupClickListener = function (id, mode) {
-    var radioButton = document.getElementById(id);
-    var me = this;
-    radioButton.addEventListener('click', function () {
-        me.travelMode = mode;
-        me.route();
-    });
-};
+//AutocompleteDirectionsHandler.prototype.setupClickListener = function (id, mode) {
+//    var radioButton = document.getElementById(id);
+//    var me = this;
+//    radioButton.addEventListener('click', function () {
+//        me.travelMode = mode;
+//        me.route();
+//    });
+//};
 
 AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (autocomplete, mode) {
     var me = this;
