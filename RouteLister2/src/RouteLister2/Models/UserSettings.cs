@@ -30,21 +30,20 @@ namespace RouteLister2.Models
             string role, string returnUrl = null)
         {
             var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationNumber = model.RegNr };
-            var exist = context.Users.Any(x => x.UserName == user.UserName);
-            var emailExists = context.Users.Any(x => x.Email == user.Email);
-            var regnrExists = context.Users.Any(x => x.RegistrationNumber == user.RegistrationNumber);
+            bool exist = context.Users.Any(x => x.UserName == user.UserName);
+            bool emailExists = context.Users.Any(x => x.Email == user.Email);
+            bool regnrExists = context.Users.Any(x => x.RegistrationNumber == user.RegistrationNumber);
 
             var result = await userManager.CreateAsync(user, model.Password);
 
-            // Gets role from View and pars to Array  
-            string tempRole = role;
-            string[] roleArray = new string[] { tempRole };
+            //// Gets role from View and pars to Array  
+            //string tempRole = role;
+            ////string[] roleArray = new string[] { tempRole };
             var addRole = await userManager.AddToRoleAsync(user, role.ToUpper());
             // Calls the method for setting the role to actual useraccount
-            if (result.Succeeded) { _message = ""; return user; }            
+            if (result.Succeeded) { _message = ""; return user; }
             return user;
         }
-
         internal async Task<ApplicationUser> SetNewPassword(ApplicationDbContext context, ApplicationUser user, string newPW, string userID)
         {
             var password = new PasswordHasher<ApplicationUser>();
