@@ -219,34 +219,16 @@ function AutocompleteDirectionsHandler(map, placeId, address) {
     var destinationAutocomplete = new google.maps.places.Autocomplete(
         destinationInput, { placeIdOnly: true });
 
-    //// 
-    //this.setupClickListener('changemode-walking', 'WALKING');
-    //this.setupClickListener('changemode-transit', 'TRANSIT');
-    //this.setupClickListener('changemode-driving', 'DRIVING');
-
     this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
     this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
 
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
-    this.map.controls[google.maps.ControlPosition.LEFT].push(modeSelector);
 
     new calculateAndDisplayRoute();
  
 
 }
-
-
-// Sets a listener on a radio button to change the filter type on Places
-// Autocomplete.
-//AutocompleteDirectionsHandler.prototype.setupClickListener = function (id, mode) {
-//    var radioButton = document.getElementById(id);
-//    var me = this;
-//    radioButton.addEventListener('click', function () {
-//        me.travelMode = mode;
-//        me.route();
-//    });
-//};
 
 AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (autocomplete, mode) {
     var me = this;

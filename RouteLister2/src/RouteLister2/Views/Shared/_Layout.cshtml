@@ -4,7 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RouteLister</title>
+    <environment names="Development">
+        <!--JQUERY -->
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <!--JQUERY -->
+        <!-- DATATABLE CSS-->
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.dataTables.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/media/css/dataTables.bootstrap.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Responsive/css/responsive.jqueryui.min.css" rel="stylesheet" />
+        <!-- END DATATABLE CSS-->
+        <!-- DATATABLE BUTTONS CSS-->
+        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables-1.10.12/extensions/Buttons/css/buttons.jqueryui.min.css" rel="stylesheet" />
+        <!-- END DATATABLE BUTTONS CSS-->
 
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/animate.css/animate.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="~/css/custom.css" rel="stylesheet" />
+
+    </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
@@ -70,7 +92,29 @@
         const idPrefix = "@RouteLister2.Services.TokenService._idToken";
         const idPrefixRegex = "@RouteLister2.Services.TokenService._idTokenRegex";
     </script>
+    <environment names="Development">
 
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <!-- DATATABELS -->
+        <script src="~/lib/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/media/js/dataTables.bootstrap.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.jqueryui.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+        <!-- END DATATABELS -->
+        <!-- DATATABEL-BUTTONS -->
+        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/PdfMaker/pdfmake.min.js"></script>
+        <script src="~/lib/DataTables-1.10.12/jszip/dist/jszip.js"></script>
+        <script src="~/lib/DataTables-1.10.12/PdfMaker/vfs_fonts.js"></script>
+        <script src="~/lib/DataTables-1.10.12/extensions/Buttons/js/buttons.html5.js"></script>
+        <!-- END DATATABEL-BUTTONS -->
+
+    </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"

@@ -80,7 +80,7 @@ namespace RouteLister2.Controllers
                         //Redirects users of Adminrole to adminpage if userRole = true
                         return RedirectToAction(nameof(AdminController.Index), "Admin");
                     //Redirects users of Userrole to Home/Index
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                    return RedirectToAction(nameof(RouteListController.List), "RouteList");
                 }
                 if (result.RequiresTwoFactor)
                 {

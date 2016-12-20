@@ -1,4 +1,4 @@
-﻿{
+{
 
   "testRunner": "xunit",
   "dependencies": {
@@ -11,7 +11,8 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "AutoMapper": "5.2.0",
     "Microsoft.DotNet.InternalAbstractions": "1.0.500-preview2-1-003177",
-    "RouteLister2": "1.0.0-*"
+    "RouteLister2": "1.0.0-*",
+    "WebApi": "1.0.0-*"
   },
 
   "frameworks": {

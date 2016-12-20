@@ -37,13 +37,14 @@ namespace RouteLister2.Models
             var result = await userManager.CreateAsync(user, model.Password);
 
             //// Gets role from View and pars to Array  
-            //string tempRole = role;
-            ////string[] roleArray = new string[] { tempRole };
+            string tempRole = role;
+            string[] roleArray = new string[] { tempRole };
             var addRole = await userManager.AddToRoleAsync(user, role.ToUpper());
             // Calls the method for setting the role to actual useraccount
             if (result.Succeeded) { _message = ""; return user; }
             return user;
         }
+
         internal async Task<ApplicationUser> SetNewPassword(ApplicationDbContext context, ApplicationUser user, string newPW, string userID)
         {
             var password = new PasswordHasher<ApplicationUser>();
@@ -101,18 +102,13 @@ namespace RouteLister2.Models
                 }
                 else if (!result.Succeeded)
                 {
-                    _message = "Ett fel uppstod " + user.UserName + result.ToString(); 
+                    _message = "Ett fel uppstod " + user.UserName + result.ToString();
                 }
                 else
                 {
                     _message = "";
                 }
             }
-            
         }
-
-      
     }
-
-
 }

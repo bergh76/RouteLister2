@@ -34,6 +34,8 @@ namespace RouteLister2.Controllers
         private readonly ILogger _logger;
         private IHostingEnvironment _host;
         private IDataImports _data;
+
+
         // GET: /<controller>/
         //[Authorize(Roles ="Admin")]
         public AdminController(
@@ -56,8 +58,7 @@ namespace RouteLister2.Controllers
 
 
         public async Task<IActionResult> Index()
-        {
-           
+        {           
             if (ModelState.IsValid)
             {                
                 var result = _context.OrderRows.ProjectTo<ParcelListFromCompanyViewModel>(_mapper.ConfigurationProvider);                
@@ -99,7 +100,7 @@ namespace RouteLister2.Controllers
         [AllowAnonymous]
         public virtual JsonResult CheckUserNameExists(string userName)
         {
-            //Check in database via Usermanager that particular user name is exist or not
+            //Check in database via Usermanager that particular user name exists or not
             bool userExists = _userManager.Users.Any(u => u.UserName == userName);
             if(userExists !=false)
                 return Json("Användarnamnet är redan registrerat!");
@@ -109,7 +110,7 @@ namespace RouteLister2.Controllers
         [AllowAnonymous]
         public virtual JsonResult CheckEmailExists(string email)
         {
-            //Check in database via Usermanager that particular email is exist or not
+            //Check in database via Usermanager that particular email exists or not
             bool emailExists = _userManager.Users.Any(u => u.Email == email);
             if (emailExists != false)
                 return Json("Eposten är redan registrerad!");
@@ -119,7 +120,7 @@ namespace RouteLister2.Controllers
         [AllowAnonymous]
         public virtual JsonResult CheckRegNrExists(string regnr)
         {
-            //Check in database via Usermanager that particular email is exist or not
+            //Check in database via Usermanager that particular email exists or not
             bool regnrExists = _userManager.Users.Any(u => u.RegistrationNumber == regnr);
             if(regnrExists !=false)
                 return Json("Registreringsnumret är redan registrerat!");
