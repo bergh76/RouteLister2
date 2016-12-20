@@ -86,7 +86,7 @@ namespace RouteLister2
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SeedDefaultData seedUser)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)//, SeedDefaultData seedUser)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -100,7 +100,6 @@ namespace RouteLister2
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.SeedUserData();
             app.UseStaticFiles();
 
             app.UseIdentity();
@@ -114,6 +113,7 @@ namespace RouteLister2
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             app.UseSignalR();
+            ApplicationDbContext.SeedDefaultData(app);
         }
     }
 }
