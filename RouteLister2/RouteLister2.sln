@@ -14,6 +14,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RouteLister2", "src\RouteLi
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "RouteList2XUnitTests", "src\RouteList2XUnitTests\RouteList2XUnitTests.xproj", "{4504715D-E738-4676-88D2-789FD809C17B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebApi", "..\..\WebApi\src\WebApi\WebApi.xproj", "{EF53F83D-39BB-4640-A49A-E841C3915C79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{4504715D-E738-4676-88D2-789FD809C17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4504715D-E738-4676-88D2-789FD809C17B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4504715D-E738-4676-88D2-789FD809C17B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF53F83D-39BB-4640-A49A-E841C3915C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF53F83D-39BB-4640-A49A-E841C3915C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF53F83D-39BB-4640-A49A-E841C3915C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF53F83D-39BB-4640-A49A-E841C3915C79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,5 +41,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F221710E-D511-4339-8E2C-8E72F0CECD96} = {F5B6023E-8AC0-4565-A836-9C46AD8AB68C}
 		{4504715D-E738-4676-88D2-789FD809C17B} = {F5B6023E-8AC0-4565-A836-9C46AD8AB68C}
+		{EF53F83D-39BB-4640-A49A-E841C3915C79} = {F5B6023E-8AC0-4565-A836-9C46AD8AB68C}
 	EndGlobalSection
 EndGlobal
