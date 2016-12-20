@@ -43,7 +43,6 @@ namespace RouteLister2
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddTransient<SeedDefaultData>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -91,7 +90,6 @@ namespace RouteLister2
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            seedUser.SeedAdminUser();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -102,7 +100,7 @@ namespace RouteLister2
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.SeedUserData();
             app.UseStaticFiles();
 
             app.UseIdentity();

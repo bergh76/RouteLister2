@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using RouteLister2.Data;
 using RouteLister2.Models;
+using Microsoft.AspNetCore.Builder;
 
 namespace RouteLister2.Data
 {
@@ -22,9 +23,11 @@ namespace RouteLister2.Data
         {
             return new string[] { "Admin", "User" }; // add the users to seed "Editor", "Buyer", "Business", "Seller", "Subscriber" };
         }
-        public async void SeedAdminUser()
+        public static async void SeedAdminUser(IApplicationBuilder app)
         {
-            var dbContext = _serviceProvider.GetService<ApplicationDbContext>();
+            var dbContext = app.ApplicationServices.GetService<ApplicationDbContext>();
+
+            //var dbContext = _serviceProvider.GetService<ApplicationDbContext>();
             string[] roles = GetRoles();
             foreach (string role in roles)
             {
@@ -61,17 +64,27 @@ namespace RouteLister2.Data
                 //});
             }
 
-            await UserSettings.AssignRoles(_userManager, user.Email, roles);
+            await AssignRoles(app, user.Email, roles);
             await dbContext.SaveChangesAsync();
-            await SeedOrderRowStatusToDbAsync();
-            await SeedOrderStatusToDbAsync();
+            await SeedOrderRowStatusToDbAsync(app);
+            await SeedOrderStatusToDbAsync(app);
 
 
         }
-
-        public async Task SeedOrderRowStatusToDbAsync()
+        public static async Task<IdentityResult> AssignRoles(IApplicationBuilder app, string email, string[] roles)
         {
-            var context = _serviceProvider.GetService<ApplicationDbContext>();
+            UserManager<ApplicationUser> _userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            var result = await _userManager.AddToRolesAsync(user, roles);
+
+            return result;
+        
+        }
+
+
+        public static async Task SeedOrderRowStatusToDbAsync(IApplicationBuilder app)
+        {
+            var context = app.ApplicationServices.GetService<ApplicationDbContext>();
             if (context.OrderRowStatus.Count() == 0)
             {
                 var addOrderStatus = new OrderRowStatus();
@@ -86,9 +99,9 @@ namespace RouteLister2.Data
 
         }
 
-        public async Task SeedOrderStatusToDbAsync()
+        public static async Task SeedOrderStatusToDbAsync(IApplicationBuilder app)
         {
-            var context = _serviceProvider.GetService<ApplicationDbContext>();
+            var context = app.ApplicationServices.GetService<ApplicationDbContext>();
             if (context.OrderStatus.Count() == 0)
             {
                 var addOrderStatus = new OrderStatus();
