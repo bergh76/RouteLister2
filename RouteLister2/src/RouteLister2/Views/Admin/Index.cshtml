@@ -10,14 +10,12 @@
             <span class="h3">
                 <i class="fa fa-list-ol"></i> Paketlista - @DateTime.Now.ToString("yyyy-MM-dd")
             </span>
+            
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
                 <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                    <div class="download-spinner" align="center">
-                        <h4>Vänligen vänta, data hämtas!</h4>                        
-                        <div><img src="../images/preloaders/preloader_2.gif" alt="" /></div>
-                    </div>
+                   
                     <table style="width:100%" id="deliverytable" class="table dt-responsive dataTable no-footer dtr-inline collapsed table-hover" role="grid" aria-describedby="datatable-buttons_info">
                         <thead>
                             <tr class="text-center">
@@ -49,7 +47,11 @@
                 </div>
             </div>
     </section>
-<div class="loader"></div>
+<div class="download-spinner" align="center">
+    <h4>Vänligen vänta, data hämtas!</h4>
+    <div><img src="../images/preloaders/preloader_2.gif" alt="" /></div>
+</div>
+@*<div class="loader"></div>*@
     @section Scripts{
         @{await Html.RenderPartialAsync("_AdminScriptsPartial"); }
         <script type="text/javascript">
