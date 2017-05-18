@@ -1,0 +1,24 @@
+﻿@*@model RouteLister2.Models.RouteListerViewModels.RouteListViewModel
+
+<div id="topContainer">
+
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+    <script>
+   //Item(index,id, idRef, urlAction,listUrl, detailsUrl,editUrl,createUrl,deleteUrl,type, cref,parent);
+    var rList = new Item(0,
+        @Model.DeliveryListId,
+        '@Html.IdFor(x => x.DeliveryListId)',
+        '@Url.Action("Index","RouteList")',
+        '@Url.Action("Index", "RouteList")',
+        '@Url.Action("Index", "RouteList")',
+        '@Url.Action("Edit", "RouteList")',
+        '@Url.Action("Create", "RouteList")',
+        '@Url.Action("Delete", "RouteList")',
+        'topContainer',
+        null);
+        rList.update();
+    </script>
+}*@

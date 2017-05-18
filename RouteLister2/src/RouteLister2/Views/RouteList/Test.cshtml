@@ -1,0 +1,46 @@
+﻿@model RouteLister2.Models.OrderRowViewModels.OrderRowViewModel
+
+
+<div id="containah">
+    <div id="@Html.IdFor(x=>x.OrderRowId)@{@Model.OrderRowId}">
+        <div>@Model.OrderRowId</div>
+        <div><h5>@Model.Count</h5></div>
+        <div><h5>@Model.ParcelNumber</h5></div>
+        <div><h5>@Model.ParcelName</h5></div>
+        <div>
+            <div class="slideThree">
+                @{
+                    var isChecked = "checked='checked'";
+                    @if (!@Model.OrderRowStatus)
+                    {
+                        isChecked = null;
+
+                    }
+                }
+                <input type="checkbox" value=@Model.OrderRowId name="check2" @isChecked id="orderRowStatusBox@{@Model.OrderRowId}" />
+
+                <label class="slidah" for="@Html.IdFor(x => x.OrderRowStatus)"></label>
+            </div>
+            <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+        </div>
+    </div>
+    <button id="addButton">
+        AddNewOne
+    </button>
+    @section Scripts{
+    <script>
+        $(document).ready(function(){
+        //Creating a item, with id's and reference
+            var viewModel = new item('@Html.IdFor(x=>x.OrderRowId)', '@Url.Action("Test2","RouteList")', 'containah');
+        //configuring the item
+            
+
+            $("#addButton").click(function(event){
+               viewModel.add(@(Model.OrderRowId+1));
+                console.log("test");
+            });
+        });
+    </script>
+    }
+</div>
+@Html.Partial("Test2", Model)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace RouteLister2.Models
@@ -6,7 +7,7 @@ namespace RouteLister2.Models
     public class Order
     {
         public int Id { get; set; }
-        public int RouteListId { get; set; }
+        public int? RouteListId { get; set; }
         public RouteList RouteList { get; set; }
         public List<OrderRow> OrderRows { get; set; }
         public OrderStatus OrderStatus { get; set; }

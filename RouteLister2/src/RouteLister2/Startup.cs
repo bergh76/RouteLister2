@@ -14,6 +14,7 @@ using RouteLister2.Models;
 using RouteLister2.Services;
 using AutoMapper;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
 
 namespace RouteLister2
 {
@@ -51,7 +52,7 @@ namespace RouteLister2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+         
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -68,6 +69,7 @@ namespace RouteLister2
             
             services.AddTransient<SignalRBusinessLayer>();
             services.AddTransient<RouteListerRepository>();
+            
 
             //Things needed for SignalR, like a ContractResolver
             var settings = new JsonSerializerSettings();
@@ -78,12 +80,15 @@ namespace RouteLister2
             services.Add(new ServiceDescriptor(typeof(JsonSerializer),
                          provider => serializer,
                          ServiceLifetime.Transient));
+            services.AddSingleton<ConnectionMapping<string>>();
 
             //SignalR
             services.AddSignalR(options =>
             {
                 options.Hubs.EnableDetailedErrors = true;
             });
+            services.AddMvc();
+
 
         }
 
@@ -109,13 +114,13 @@ namespace RouteLister2
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseWebSockets();
             app.UseSignalR();
         }
     }

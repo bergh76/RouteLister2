@@ -7,7 +7,7 @@ namespace RouteLister2.Models.RouteListerViewModels
 {
     public class RouteListViewModel
     {
-        public DateTime Assigned { get; set; }
+        public DateTime? Assigned { get; set; }
         public int DeliveryListId { get; set; }
         public string RegNr { get; set; }
         public string Title { get; set; }

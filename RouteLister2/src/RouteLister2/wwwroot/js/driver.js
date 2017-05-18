@@ -21,9 +21,18 @@ var routeLister = (function () {
     //Request signalr server to change status on a order
     var _connectionId;
 
+    var Message = (function () {
+        var showAlert = function (name, message) {
+            alert(name + ": " + message);
+        }
+
+        return {
+            alert: showAlert
+        }
+    })();
     var setConnectionId = function (connectionId) {
-            routeLister._connectionId = connectionId;
-            routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);   
+        routeLister._connectionId = connectionId;
+        routeLister.setConnectionStatus.client(routeLister._connectionId !== undefined);
     };
     var setConnectionStatus = (function () {
         var changeStatus = function (status) {
@@ -32,7 +41,7 @@ var routeLister = (function () {
             var clientGraphicsStatus = true;
             var onlineCircle = $(".online");
             var offlineCircle = $(".offline-dim");
-            if (onlineCircle.length === 0 ) {
+            if (onlineCircle.length === 0) {
                 onlineCircle = $(".online-dim");
                 clientGraphicsStatus = false;
             }
@@ -62,19 +71,29 @@ var routeLister = (function () {
             }
 
         };
-        var disconnectFromServer = function(){
+        var disconnectFromServer = function () {
             routeLister.client(false);
             signalRClient.setConnectionStatus(false);
         };
         return {
-            client : changeStatus,
-            server : disconnectFromServer
+            client: changeStatus,
+            server: disconnectFromServer
         };
     })();
- 
-    //TODO
+
+
     var routeList = (function (routeListId) {
-    
+        //Since its one routelist per driver, reloading whole page
+        var IdPrefix;
+        var reload = (function () {
+            //Reloading page
+            location.reload();
+
+        });
+        return {
+            refresh: reload,
+            IdPrefix: IdPrefix
+        };
     })();
     //Regex to get id from a reference.
     //The number at the end of a id reference is the id(
@@ -82,7 +101,15 @@ var routeLister = (function () {
         var id = routeLister.idRegex.match(idRef);
         return id;
     };
-    var orderRow = (function () {
+    var orderRow = (function (rowId) {
+        var Id = rowId;
+        //Default
+        var IdPrefix = "OrderRowId";
+        //Adds listeners to toggleable items
+        var addListener = function (listener) {
+            checkbox.next('label').addListener(listener);
+        };
+
         var NameId;
         var setNameId = function (name) {
             NameId = name;
@@ -92,22 +119,22 @@ var routeLister = (function () {
             //Always stop the event
             routeLister.stop(event);
             if (routeLister._connectionId) {
+                //Dont allow user to click on it till its working
                 $(event.target).prop('disabled', true);
                 if (event.type === "click") {
                     //Remove all listeners
                     $(event.target).unbind("click");
-                    var idValue = $(event.target).val();
+                    //Inputbox
+                    var inputBox = $(event.target).prev('input');
+                    var idValue = inputBox.val();
                     //console.log(idValue);
-                    var checkBoxId = $(event.target).attr("id");
-                    //console.log(checkBoxId);
-                    ///sets the idName that client funktion uses + token to change later on
-                    //Gets id number from id reference
-                    //var id = routeLister.getId(orderRowId);
+                    var checkBoxId = inputBox.attr("id");
+                    //???
                     NameId = "#" + checkBoxId;
                     //Asks server to change status on orderRow
                     signalRClient.server.changeStatusOnOrderRow(idValue, checkBoxId);
                     //Show waiting message for client while server works
-                    var spinner = $(event.target).parents().siblings('.fa-spin');
+                    var spinner = inputBox.parents().siblings('.fa-spin');
                     spinner.removeClass("hidden");
                     //TODO
                 }
@@ -125,8 +152,8 @@ var routeLister = (function () {
             //TODO
             //Focus on changed item
             checkbox.focus();
-            //Add click listener again
-            checkbox.click(function (event) {
+            //Add click listener again to the correct event
+            checkbox.next('label').click(function (event) {
                 routeLister.orderRow.server(event);
             });
             //Enable checkbox again
@@ -141,26 +168,67 @@ var routeLister = (function () {
         return {
             server: requestOrderRowStatusChange,
             client: changeClientSideView,
-            setNameId: setNameId
+            setNameId: setNameId,
+            IdPrefix: IdPrefix
         };
     })();
     var order = (function () {
-        //Request signalr server to change status on a order
-        var requestOrderRowStatusChange = function (orderRowId) {
 
-        };
-        //Clientside change
-        var changeClientSideView = function (orderRowStatusId) {
+        var IdPrefix = "OrderId";
+        var orderContainerId = "#orderContainer";
+        var listIndexClass = IdPrefix + "ListIndex"
+        var getUrlAction;
 
+        var addClientOrder = function (url) {
+            $.ajax({
+                type: "GET",
+                url: url
+
+
+            }).done(function (data) {
+                //Check if order exists already?
+                var dataOrderId = $(data).find(".panel").prop("id");
+                //if not, append data
+                if (!dataOrderId) {
+
+                    $(orderContainerId).append(data);
+                    //rebuilding index
+                    $("." + listIndexClass).each(function (index, element) {
+                        $(element).text(index + 1 + ".");
+                    });
+                    console.log("addedOrder")
+                    //Adding listener to added OrderRows
+                    //**Not needed probably since on click is global on the slider class is global
+                    //$(data).on('click', '.slidah', function (e) {
+                    //    routeLister.orderRow.server(event);
+                    //});
+                }
+                else {
+                    //if exists, replace
+                    $("#" + dataOrderId).replaceWith(data);
+                }
+
+            }).fail(function (data) {
+                //Show errormessage
+
+            }).always(function (date) {
+                //
+            });
         };
+        var removeClientOrder = function (id) {
+            $("#" + IdPrefix + id).hide("slow", function () {
+                $("#" + IdPrefix + id).remove();
+            });
+        }
         return {
-            server: requestOrderRowStatusChange,
-            client: changeClientSideView
+            add: addClientOrder,
+            getUrl: getUrlAction,
+            remove: removeClientOrder
         };
     })();
 
 
-  
+
     return {
         stop: stopClient,
         token: idPrefix,
@@ -171,8 +239,9 @@ var routeLister = (function () {
         getId: getValueFromIdRef,
         setConnectionStatus: setConnectionStatus,
         setConnectionId: setConnectionId,
-        _connectionId : _connectionId,
-        tryingToReconnect: tryingToReconnect
+        _connectionId: _connectionId,
+        tryingToReconnect: tryingToReconnect,
+        message: Message
 
     };
 
@@ -186,6 +255,7 @@ var signalRClient = $.connection.driverHub;
 //Regex used to extract idToken
 
 $.connection.hub.logging = true;
+
 external.loadingScreen.show();
 $.connection.hub.start().done(function () {
     console.log("connected");
@@ -237,7 +307,50 @@ signalRClient.client.disableEverything = function () {
     //Enable all gui touchy touchy
 };
 
+signalRClient.client.newRouteListAdded = function () {
+    routeLister.routeList.refresh();
+};
 
+signalRClient.client.addedOrder = function (id, url) {
+    routeLister.order.add(id, url);
+};
+signalRClient.client.removedOrder = function (id) {
+    routeLister.order.remove(id);
+};
+
+
+
+//function addPostsList(posts) {
+//    $.each(posts, function (index) {
+//        var post = posts[index];
+//        addPost(post);
+//    });
+//}
+//Cba to incorporate
+function addPost(post) {
+    var buttonId = 'message' + $(".message-count").text();
+    $("#postsList").append(
+        '<div><span class="pull-left"><i class="fa fa-circle me"></i><strong>' + post.userName + '</strong><span class="text-muted">' + post.time + ' </span></span></span><br>'
+            + '<div class="message-data">'
+                + '<span class="message other-message float-right">' + post.text + '</span>'
+            + ' </div>'
+            + '<span><button class="btn btn-success btn-margin-20" id='+buttonId+ '>OK</button></span>'
+        + '</div>'
+        );
+    $(".message-count").text((Number($(".message-count").text()) + 1));
+    //add click-listener to ok button
+    
+    $('#' + buttonId).click(function () {
+        //hide button
+        $(this).hide();
+        //Decrease count
+        $(".message-count").text((Number($(".message-count").text()) - 1));
+    });
+}
+
+signalRClient.client.message = function (message) {
+    addPost(message);
+};
 
 
 

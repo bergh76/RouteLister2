@@ -85,7 +85,7 @@ namespace RouteLister2.Data
                .ForMember(x => x.City, opt => opt.MapFrom(t => t.Order.Destination.Address.City))
                .ForMember(x => x.Country, opt => opt.MapFrom(t => t.Order.Destination.Address.County))
                .ForMember(x => x.CollieId, opt => opt.MapFrom(t => t.Parcel.ParcelNumber))
-               //Set deliverydate to when the administrator assigns a driver it
+               //Set deliverydate to when a administrator assigns a driver it
                .ForMember(x => x.DeliveryDate, opt => opt.MapFrom(t => t.Order.RouteList.Assigned))
                .ForMember(x => x.DeliveryType, opt => opt.MapFrom(t => t.Order.OrderType.Name))
                //This needs to be added to the model, ill add it to parcel i guess? since its the distributor you get the parcel from?
@@ -97,12 +97,11 @@ namespace RouteLister2.Data
                 //If contact has more than 1 phone number, assign 2nd one to phoneTwo. ignore others
                .ForMember(x => x.PhoneTwo, opt => opt.MapFrom(t=>(t.Order.Destination.Contact.PhoneNumbers.Count >1 ? t.Order.Destination.Contact.PhoneNumbers.Select(y=>y.Number).Skip(1).FirstOrDefault() : "")))
                .ForMember(x => x.RegistrationNumber, opt => opt.MapFrom(t => t.Order.RouteList.ApplicationUser.RegistrationNumber))
-                .ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id))
+               .ForMember(x => x.OrderId, opt => opt.MapFrom(t => t.OrderId))
+               .ForMember(x => x.OrderRowId, opt => opt.MapFrom(t => t.Id))
                .ForAllOtherMembers(x => x.Ignore())
                ;
-
-
-
+         
         }
     }
 }

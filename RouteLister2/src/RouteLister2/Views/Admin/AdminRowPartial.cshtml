@@ -1,5 +1,5 @@
 ﻿@model RouteLister2.Models.ParcelListFromCompanyViewModel.ParcelListFromCompanyViewModel
-<tr id="row@{@Model.CollieId}">
+<tr id="row@{@Model.OrderRowId}" class="row@{@Model.OrderId}">
     @*<td></td>*@
     <td>@Model.ArticleAmount</td>
     <td>@Model.CollieId</td>
@@ -20,16 +20,29 @@
     <td>@Model.DeliveryType</td>
     <td>
         @* Lazy mode on Id here *@
-        <form asp-action="Edit" asp-controller="Admin" id="form@{@Model.CollieId}" asp-route-id="@Model.Id">
+        <form asp-action="AdminRowPartial" asp-controller="Admin" id="form@{@Model.OrderRowId}" asp-route-id="@Model.OrderId" method="post">
            @* same here *@
-            <select class="dropdown" asp-for="@Model.RegistrationNumber" asp-items="@Model.RegNrDropDown" id="dropdown@{@Model.CollieId} "></select>
+            <select class="dropdown" asp-for="@Model.RegistrationNumber" asp-items="@Model.RegNrDropDown" id="dropdown@{@Model.OrderRowId} "></select>
             @* same here *@
-            <input class="hidden" asp-for="@Model.CollieId" id="value@{@Model.CollieId}" />
-            <input class="hidden" asp-for="@Model.Id" />
+            <input class="hidden" asp-for="@Model.CollieId"/>
+            <input class="hidden" asp-for="@Model.LastName" />
+            <input class="hidden" asp-for="@Model.FirstName" />
+            <input class="hidden" asp-for="@Model.Adress" />
+            <input class="hidden" asp-for="@Model.City" />
+            <input class="hidden" asp-for="@Model.PostNr" />
+            <input class="hidden" asp-for="@Model.PhoneOne" />
+            <input class="hidden" asp-for="@Model.Distributor" />
+            <input class="hidden" asp-for="@Model.ArticleName" />
+            <input class="hidden" asp-for="@Model.DeliveryType" />
+            <input class="hidden" asp-for="@Model.DeliveryDate" />
+            <input class="hidden" asp-for="@Model.ArticleAmount" />
+            <input class="hidden" asp-for="@Model.OrderId" />
+            <input class="hidden" asp-for="@Model.OrderRowId" />
+            <input class="hidden" asp-for="@Model.RegistrationNumber" />
             <input class="hidden" type="button" />
         </form>
     </td>
     <td>
-        <button class="btn btn-xs btn-success changeRegNrButton" id="changeRegNrButton@{@Model.CollieId}" type="submit"><i class="fa fa-check"></i></button>
+        <button class="btn btn-xs btn-success changeRegNrButton" id="changeRegNrButton@{@Model.OrderRowId}" type="submit"><i class="fa fa-check"></i></button>
     </td>
 </tr>

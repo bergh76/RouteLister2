@@ -1,0 +1,35 @@
+﻿@model RouteLister2.Models.OrderRowViewModels.OrderRowViewModel
+
+
+<tr id="@Html.IdFor(x=>x.OrderRowId)@{@Model.OrderRowId}">
+    <td class="hidden">@Model.OrderRowId</td>
+    <td><h5>@Model.Count</h5></td>
+    <td><h5>@Model.ParcelNumber</h5></td>
+    <td><h5>@Model.ParcelName</h5></td>
+    <td>
+        <div class="slideThree">
+            @{
+                var isChecked = "checked='checked'";
+                @if (!@Model.OrderRowStatus)
+                {
+                    isChecked = null;
+
+                }
+            }
+            <input type="checkbox" value=@Model.OrderRowId name="check2" @isChecked id="orderRowStatusBox@{@Model.OrderRowId}" />
+
+            <label class="slidah" for="@Html.IdFor(x => x.OrderRowStatus)"></label>
+        </div>
+        <div class="fa fa-spinner fa-spin hidden" style="font-size:1em"></div>
+    </td>
+</tr>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_SignalRScriptsPartial"); }
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            routeLister.orderRow.IdPrefix='@Html.IdFor(x => x.OrderRowId)';
+        });
+    </script>
+}
